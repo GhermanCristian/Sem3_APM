@@ -1,11 +1,17 @@
 package model;
 
-public class CherryTree implements TreeInterface {
+public class CherryTree implements Tree {
 	private int age;
+	private final String TYPE = "cherry";
 	
 	@Override
-	public boolean isOlderThan3Years() {
-		return this.age >= TreeInterface.TREE_AGE;
+	public int getAge() {
+		return this.age;
+	}
+	
+	@Override
+	public String getType() {
+		return this.TYPE;
 	}
 	
 	@Override
