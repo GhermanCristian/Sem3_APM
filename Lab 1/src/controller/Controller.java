@@ -58,19 +58,14 @@ public class Controller {
 		return this.repo.getAllElements();
 	}
 	
-	public DynamicArray getAllTreesOlderThan() {
+	public DynamicArray getAllTreesOlderThan() throws Exception{
 		DynamicArray allElements = this.repo.getAllElements();
 		DynamicArray filteredList = new DynamicArray();
 		
 		for(int pos = 0; pos < allElements.getSize(); pos++) {
-			try {
-				Tree crtTree = allElements.getElementAtPosition(pos);
-				if (crtTree.getAge() > Tree.TREE_AGE) {
-					filteredList.insert(crtTree);
-				}
-			}
-			catch (Exception e) {
-				System.out.println(e.getMessage());
+			Tree crtTree = allElements.getElementAtPosition(pos);
+			if (crtTree.getAge() > Tree.TREE_MINIMUM_AGE) {
+				filteredList.insert(crtTree);
 			}
 		}
 		

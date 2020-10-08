@@ -71,7 +71,12 @@ public class MenuUI {
 			}
 			
 			else if (choice == 4) {
-				this.printArray(this.controller.getAllTreesOlderThan());
+				try {
+					this.printArray(this.controller.getAllTreesOlderThan());
+				}
+				catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
 			}
 			
 			else {

@@ -6,7 +6,7 @@ public class MemoryRepository implements Repository {
 	private DynamicArray elements;
 	
 	public MemoryRepository() {
-		elements = new DynamicArray();
+		this.elements = new DynamicArray();
 	}
 	
 	public void addElement(Tree newElement) {
