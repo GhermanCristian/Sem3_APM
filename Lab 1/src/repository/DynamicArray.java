@@ -1,5 +1,7 @@
 package repository;
 
+import exceptions.InvalidPositionException;
+import exceptions.NonexistentElementException;
 import model.Tree;
 
 public class DynamicArray {
@@ -32,7 +34,7 @@ public class DynamicArray {
 		this.elements[this.currentSize++] = newElement;
 	}
 	
-	public void remove(Tree element) throws Exception {
+	public void remove(Tree element) throws NonexistentElementException {
 		for(int pos = 0; pos < this.currentSize; pos++) {
 			if (this.elements[pos].getAge() == element.getAge() && this.elements[pos].getType().equals(element.getType())) {
 				// shift all the elements by one position to the left
@@ -44,16 +46,16 @@ public class DynamicArray {
 			}
 		}
 		// element was not found => it doesn't exist
-		throw new Exception("Element doesn't exist");
+		throw new NonexistentElementException();
 	}
 	
 	public int getSize() {
 		return this.currentSize;
 	}
 	
-	public Tree getElementAtPosition(int pos) throws Exception {
+	public Tree getElementAtPosition(int pos) throws InvalidPositionException {
 		if (pos >= this.currentSize || pos < 0) {
-			throw new Exception("Invalid position");
+			throw new InvalidPositionException();
 		}
 		
 		return this.elements[pos];

@@ -24,6 +24,7 @@ public class MenuUI {
 	
 	public void start() {
 		int choice;
+		String choiceString;
 		Scanner myInput = new Scanner(System.in);
 		
 		while (true) {
@@ -33,7 +34,15 @@ public class MenuUI {
 			System.out.println("3. Show all trees");
 			System.out.println("4. Show all trees older than 3 years");
 			
-			choice = myInput.nextInt();
+			choice = -1; // a default value which will only remain if the input is invalid
+			choiceString = myInput.next();
+			try {
+				choice = Integer.parseInt(choiceString);
+			}
+			catch (Exception e) {
+				System.out.println(e.getMessage());
+				continue;
+			}
 			
 			if (choice == 0) {
 				System.out.println("Program execution has ended");
@@ -44,8 +53,8 @@ public class MenuUI {
 				System.out.print("Type (apple, pear, cherry): ");
 				String treeType = myInput.next();
 				System.out.print("Age: ");
-				int treeAge = myInput.nextInt();
 				try {
+					int treeAge = myInput.nextInt();
 					this.controller.addElement(treeType, treeAge);
 				}
 				catch (Exception e) {
@@ -57,8 +66,8 @@ public class MenuUI {
 				System.out.print("Type (apple, pear, cherry): ");
 				String treeType = myInput.next();
 				System.out.print("Age: ");
-				int treeAge = myInput.nextInt();
 				try {
+					int treeAge = myInput.nextInt();
 					this.controller.removeElement(treeType, treeAge);
 				}
 				catch (Exception e) {

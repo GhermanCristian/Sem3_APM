@@ -3,6 +3,9 @@ package controller;
 import repository.DynamicArray;
 import repository.MemoryRepository;
 import repository.Repository;
+import exceptions.InvalidPositionException;
+import exceptions.InvalidTreeException;
+import exceptions.NonexistentElementException;
 import model.AppleTree;
 import model.CherryTree;
 import model.PearTree;
@@ -15,7 +18,7 @@ public class Controller {
 		repo = new MemoryRepository();
 	}
 	
-	public void addElement(String treeSpecies, int treeAge) throws Exception{
+	public void addElement(String treeSpecies, int treeAge) throws InvalidTreeException {
 		Tree newTree;
 		
 		if (treeSpecies.equals("apple")) {
@@ -28,14 +31,14 @@ public class Controller {
 			newTree = new CherryTree(treeAge);
 		}
 		else {
-			throw new Exception("Invalid tree type");
+			throw new InvalidTreeException();
 		}
 		
 		this.repo.addElement(newTree);
 	}
 	
 	// it only removes the first occurence of the tree (if it exists)
-	public void removeElement(String treeSpecies, int treeAge) throws Exception {
+	public void removeElement(String treeSpecies, int treeAge) throws NonexistentElementException, InvalidTreeException {
 		Tree newTree;
 		
 		if (treeSpecies.equals("apple")) {
@@ -48,7 +51,7 @@ public class Controller {
 			newTree = new CherryTree(treeAge);
 		}
 		else {
-			throw new Exception("Invalid tree type");
+			throw new InvalidTreeException();
 		}
 		
 		this.repo.removeElement(newTree);
@@ -58,7 +61,7 @@ public class Controller {
 		return this.repo.getAllElements();
 	}
 	
-	public DynamicArray getAllTreesOlderThan() throws Exception{
+	public DynamicArray getAllTreesOlderThan() throws InvalidPositionException {
 		DynamicArray allElements = this.repo.getAllElements();
 		DynamicArray filteredList = new DynamicArray();
 		

@@ -1,5 +1,6 @@
 package repository;
 
+import exceptions.NonexistentElementException;
 import model.Tree;
 
 public class MemoryRepository implements Repository {
@@ -13,7 +14,7 @@ public class MemoryRepository implements Repository {
 		this.elements.insert(newElement);
 	}
 	
-	public void removeElement(Tree element) throws Exception {
+	public void removeElement(Tree element) throws NonexistentElementException {
 		this.elements.remove(element);
 	}
 	
