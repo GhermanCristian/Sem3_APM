@@ -10,14 +10,17 @@ public class MemoryRepository implements Repository {
 		this.elements = new DynamicArray();
 	}
 	
+	@Override
 	public void addElement(Tree newElement) {
 		this.elements.insert(newElement);
 	}
 	
+	@Override
 	public void removeElement(Tree element) throws NonexistentElementException {
 		this.elements.remove(element);
 	}
 	
+	@Override
 	public DynamicArray getAllElements() {
 		return this.elements;
 	}

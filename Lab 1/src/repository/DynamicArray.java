@@ -34,6 +34,7 @@ public class DynamicArray {
 		this.elements[this.currentSize++] = newElement;
 	}
 	
+	// removes first occurence of an element
 	public void remove(Tree element) throws NonexistentElementException {
 		for(int pos = 0; pos < this.currentSize; pos++) {
 			if (this.elements[pos].getAge() == element.getAge() && this.elements[pos].getType().equals(element.getType())) {

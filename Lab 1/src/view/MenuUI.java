@@ -8,6 +8,10 @@ public class MenuUI {
 	private Controller controller;
 	
 	private void printArray(DynamicArray crtArray) {
+		if (crtArray.getSize() == 0) {
+			System.out.println("empty");
+			return;
+		}
 		for(int pos = 0; pos < crtArray.getSize(); pos++) {
 			try {
 				System.out.println(crtArray.getElementAtPosition(pos).getStringRepresentation());
