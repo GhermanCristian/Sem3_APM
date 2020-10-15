@@ -3,7 +3,7 @@ package model.ADT;
 import java.util.Collection;
 import java.util.HashMap;
 
-class MyDictionary<TKey, TValue> implements DictionaryInterface<TKey, TValue>{
+public class MyDictionary<TKey, TValue> implements DictionaryInterface<TKey, TValue>{
 	private HashMap<TKey, TValue> dictionary;
 	
 	public MyDictionary() {
@@ -38,7 +38,6 @@ class MyDictionary<TKey, TValue> implements DictionaryInterface<TKey, TValue>{
 		for (TKey key : allKeys) {
 			representation += (key.toString() + ": " + this.dictionary.get(key).toString() + "\n");
 		}
-		representation += "\n";
 		
 		return representation;
 	}

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-class MyList<TElem> implements ListInterface<TElem> {	
+public class MyList<TElem> implements ListInterface<TElem> {	
 	private List<TElem> list;
 	
 	public MyList() {
@@ -32,7 +32,6 @@ class MyList<TElem> implements ListInterface<TElem> {
 		for(TElem elem : this.list) {
 			representation += (elem.toString() + "\n");
 		}
-		representation += "\n";
 		return representation;
 	}
 

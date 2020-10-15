@@ -3,12 +3,11 @@ package model.ADT;
 import java.util.Collection;
 import java.util.HashMap;
 
-interface DictionaryInterface<TKey, TValue> {
+public interface DictionaryInterface<TKey, TValue> {
 	public int size();
 	public boolean isDefined(TKey key);
 	public boolean exists(TValue value);
 	public boolean isEmpty();
-	public String toString();
 	public void update(TKey key, TValue newValue);
 	public void insert(TKey key, TValue newValue);
 	public void clear();

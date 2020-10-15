@@ -2,7 +2,7 @@ package model.ADT;
 
 import java.util.Stack;
 
-class MyStack<TElem> implements StackInterface<TElem>{
+public class MyStack<TElem> implements StackInterface<TElem>{
 	private Stack<TElem> stack;
 	
 	public MyStack() {

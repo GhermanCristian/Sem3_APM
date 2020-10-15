@@ -1,6 +1,6 @@
 package model.ADT;
 
-interface StackInterface<TElem> {
+public interface StackInterface<TElem> {
 	public int size();
 	public void clear();
 	public void push(TElem newElem);
