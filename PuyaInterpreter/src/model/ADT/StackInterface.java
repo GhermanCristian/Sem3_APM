@@ -1,9 +1,9 @@
 package model.ADT;
 
 interface StackInterface<TElem> {
-	TElem pop();
-	void push(TElem newElem);
-	TElem top();
-	int size();
-	void clear();
+	public int size();
+	public void clear();
+	public void push(TElem newElem);
+	public TElem pop();
+	public TElem top();
 }

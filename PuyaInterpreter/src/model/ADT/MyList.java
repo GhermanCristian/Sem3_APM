@@ -1,32 +1,19 @@
 package model.ADT;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ListIterator;
 
-class MyList<TElem> implements ListInterface<TElem> {
-	// I am using linkedlist instead of arraylist because we are using this structure for "Out" - a list of messages
-	// the operation that is usually done with Out is adding an element at the end / getting the last element (hopefully)
-	
-	// I am not doing List<> l = new LinkedList<>() because I need some methods from LL which are not available to List (getFirst, getLast)
-	private LinkedList<TElem> list;
+class MyList<TElem> implements ListInterface<TElem> {	
+	private List<TElem> list;
 	
 	public MyList() {
-		this.list = new LinkedList<TElem>();
+		this.list = new ArrayList<TElem>();
 	}
 
 	@Override
 	public void addLast(TElem newElem) {
 		this.list.add(newElem);
-	}
-
-	@Override
-	public TElem getFirst() {
-		return this.list.getFirst();
-	}
-
-	@Override
-	public TElem getLast() {
-		return this.list.getLast();
 	}
 
 	@Override
@@ -37,6 +24,16 @@ class MyList<TElem> implements ListInterface<TElem> {
 	@Override
 	public ListIterator<TElem> getIterator() {
 		return this.list.listIterator();
+	}
+	
+	@Override
+	public String toString() {
+		String representation = "";
+		for(TElem elem : this.list) {
+			representation += (elem.toString() + "\n");
+		}
+		representation += "\n";
+		return representation;
 	}
 
 	@Override

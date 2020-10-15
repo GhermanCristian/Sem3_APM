@@ -3,11 +3,10 @@ package model.ADT;
 import java.util.ListIterator;
 
 interface ListInterface<TElem> {
-	void addLast(TElem newElem);
-	TElem getFirst();
-	TElem getLast();
-	boolean remove(TElem elem);
-	ListIterator<TElem> getIterator();
-	int size();
-	void clear();
+	public void addLast(TElem newElem);
+	public boolean remove(TElem elem);
+	public ListIterator<TElem> getIterator();
+	public String toString();
+	public int size();
+	public void clear();
 }

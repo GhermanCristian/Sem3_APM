@@ -10,11 +10,15 @@ class MyStack<TElem> implements StackInterface<TElem>{
 	}
 
 	@Override
-	// add exceptions!!
-	public TElem pop() {
-		return this.stack.pop();
+	public int size() {
+		return this.stack.size();
 	}
 
+	@Override
+	public void clear() {
+		this.stack.clear();
+	}
+	
 	@Override
 	public void push(TElem newElem) {
 		this.stack.push(newElem);
@@ -24,14 +28,9 @@ class MyStack<TElem> implements StackInterface<TElem>{
 	public TElem top() {
 		return this.stack.peek();
 	}
-
+	
 	@Override
-	public int size() {
-		return this.stack.size();
-	}
-
-	@Override
-	public void clear() {
-		this.stack.clear();
+	public TElem pop() {
+		return this.stack.pop();
 	}
 }
