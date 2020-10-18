@@ -41,5 +41,13 @@ public class IfStatement implements StatementInterface{
 		
 		return crtState;
 	}
+	
+	public String toString() {
+		String representation = "";
+		representation += ("if ("+ this.conditionalExpression.toString() + "){\n");
+		representation += (this.trueConditionStatement.toString() + "\n}\n");
+		representation += ("else {" + this.falseConditionStatement.toString() + "\n}");
+		return representation;
+	}
 
 }
