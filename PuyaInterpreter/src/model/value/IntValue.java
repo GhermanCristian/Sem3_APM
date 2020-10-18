@@ -20,6 +20,7 @@ public class IntValue implements ValueInterface{
 		return representation;
 	}
 	
+	@Override
 	public TypeInterface getType() {
 		return new IntType();
 	}

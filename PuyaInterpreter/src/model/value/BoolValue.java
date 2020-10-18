@@ -20,6 +20,7 @@ public class BoolValue implements ValueInterface {
 		return representation;
 	}
 	
+	@Override
 	public TypeInterface getType() {
 		return new BoolType();
 	}
