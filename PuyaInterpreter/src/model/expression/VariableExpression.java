@@ -1,6 +1,6 @@
 package model.expression;
 
-import model.ADT.MyDictionary;
+import model.ADT.DictionaryInterface;
 import model.value.ValueInterface;
 
 public class VariableExpression implements ExpressionInterface{
@@ -11,7 +11,7 @@ public class VariableExpression implements ExpressionInterface{
 	}
 
 	@Override
-	public ValueInterface evaluate(MyDictionary<String, ValueInterface> symbolTable) throws Exception {
+	public ValueInterface evaluate(DictionaryInterface<String, ValueInterface> symbolTable) throws Exception {
 		return symbolTable.getValue(this.variableName);
 	}
 }

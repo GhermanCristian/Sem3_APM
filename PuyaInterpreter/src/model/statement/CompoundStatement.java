@@ -8,7 +8,7 @@ public class CompoundStatement implements StatementInterface {
 	private StatementInterface secondStatement;
 	
 	@Override
-	public ProgramState execute(ProgramState crtState) {
+	public ProgramState execute(ProgramState crtState) throws Exception{
 		StackInterface <StatementInterface> stack = crtState.getExecutionStack();
 		stack.push(this.secondStatement);
 		stack.push(this.firstStatement);
