@@ -7,8 +7,12 @@ import model.expression.ExpressionInterface;
 import model.value.ValueInterface;
 
 public class PrintStatement implements StatementInterface {
-	private ExpressionInterface expressionToPrint;
+	private final ExpressionInterface expressionToPrint;
 
+	public PrintStatement(ExpressionInterface expressionToPrint) {
+		this.expressionToPrint = expressionToPrint;
+	}
+	
 	@Override
 	public ProgramState execute(ProgramState crtState) throws Exception{
 		ListInterface<ValueInterface> output = crtState.getOutput();

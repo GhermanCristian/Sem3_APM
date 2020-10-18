@@ -4,8 +4,13 @@ import model.ProgramState;
 import model.ADT.StackInterface;
 
 public class CompoundStatement implements StatementInterface {
-	private StatementInterface firstStatement;
-	private StatementInterface secondStatement;
+	private final StatementInterface firstStatement;
+	private final StatementInterface secondStatement;
+	
+	public CompoundStatement(StatementInterface firstStatement, StatementInterface secondStatement) {
+		this.firstStatement = firstStatement;
+		this.secondStatement = secondStatement;
+	}
 	
 	@Override
 	public ProgramState execute(ProgramState crtState) throws Exception{
