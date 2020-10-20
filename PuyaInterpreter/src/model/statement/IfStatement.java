@@ -1,5 +1,6 @@
 package model.statement;
 
+import exception.InvalidTypeException;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
 import model.ADT.StackInterface;
@@ -36,7 +37,7 @@ public class IfStatement implements StatementInterface{
 			}
 		}
 		else {
-			throw new Exception("Conditional expression is not boolean");
+			throw new InvalidTypeException("Conditional expression is not boolean");
 		}
 		
 		return crtState;

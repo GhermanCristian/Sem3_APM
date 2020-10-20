@@ -1,5 +1,7 @@
 package model.statement;
 
+import exception.AlreadyDefinedVariableException;
+import exception.InvalidTypeException;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
 import model.type.BoolType;
@@ -25,7 +27,7 @@ public class VariableDeclarationStatement implements StatementInterface{
 		DictionaryInterface<String, ValueInterface> symbolTable = crtState.getSymbolTable();
 		
 		if (symbolTable.isDefined(this.variableName) == true) {
-			throw new Exception("Variable " + this.variableName + " is already defined");
+			throw new AlreadyDefinedVariableException("Variable " + this.variableName + " is already defined");
 		}
 		
 		if (this.variableType.equals(new IntType())) { // variable is of type int
@@ -37,7 +39,7 @@ public class VariableDeclarationStatement implements StatementInterface{
 		// I'm not sure if this part will ever be reached, because I'm already being given a TypeInterface (which should be valid)
 		// but just in case...
 		else {
-			throw new Exception("Invalid type when trying to declare " + this.variableName);
+			throw new InvalidTypeException("Invalid type when trying to declare " + this.variableName);
 		}
 		
 		return crtState;

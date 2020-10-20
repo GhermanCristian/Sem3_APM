@@ -1,5 +1,7 @@
 package model.statement;
 
+import exception.InvalidTypeException;
+import exception.UndefinedVariableException;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
 import model.expression.ExpressionInterface;
@@ -20,7 +22,7 @@ public class AssignmentStatement implements StatementInterface{
 		DictionaryInterface<String, ValueInterface> symbolTable = crtState.getSymbolTable();
 		
 		if (symbolTable.isDefined(this.variableName) == false) {
-			throw new Exception("Variable " + this.variableName + " is not defined");
+			throw new UndefinedVariableException("Variable " + this.variableName + " is not defined");
 		}
 		
 		// the value of the new expression (the one we want to assign to the existing variable)
@@ -33,7 +35,7 @@ public class AssignmentStatement implements StatementInterface{
 			symbolTable.update(this.variableName, newExpressionValue);
 		}
 		else {
-			throw new Exception("Type of " + this.variableName + " doesn't match type of expression");
+			throw new InvalidTypeException("Type of " + this.variableName + " doesn't match type of expression");
 		}
 		
 		return crtState;

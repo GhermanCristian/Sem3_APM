@@ -1,5 +1,7 @@
 package model.expression;
 
+import exception.InvalidOperatorException;
+import exception.InvalidTypeException;
 import model.ADT.DictionaryInterface;
 import model.type.BoolType;
 import model.value.BoolValue;
@@ -8,12 +10,12 @@ import model.value.ValueInterface;
 public class LogicalExpression implements ExpressionInterface{
 	private final ExpressionInterface firstExp;
 	private final ExpressionInterface secondExp;
-	private final int operand;
+	private final int operator;
 	
-	public LogicalExpression(ExpressionInterface firstExp, ExpressionInterface secondExp, int operand) throws Exception {
+	public LogicalExpression(ExpressionInterface firstExp, ExpressionInterface secondExp, int operator){
 		this.firstExp = firstExp;
 		this.secondExp = secondExp;
-		this.operand = operand;
+		this.operator = operator;
 	}
 
 	@Override
@@ -27,24 +29,24 @@ public class LogicalExpression implements ExpressionInterface{
 				boolean firstBoolean = ((BoolValue)firstVal).getValue();
 				boolean secondBoolean = ((BoolValue)secondVal).getValue();
 				
-				if (this.operand == 0) {
+				if (this.operator == 0) {
 					return new BoolValue(firstBoolean && secondBoolean);
 				}
-				if (this.operand == 1) {
+				if (this.operator == 1) {
 					return new BoolValue(firstBoolean || secondBoolean);
 				}
 				else { // If I check the correctness of the operand before this (eg. in the controller/repo), I could just have case 1 as else
-					throw new Exception("Invalid operand");
+					throw new InvalidOperatorException();
 				}
 			}
 			
 			else {
-				throw new Exception("Second operand not a boolean");
+				throw new InvalidTypeException("Second operand not a boolean");
 			}
 		}
 		
 		else {
-			throw new Exception("First operand not a boolean");
+			throw new InvalidTypeException("First operand not a boolean");
 		}
 	}
 }
