@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import exception.EmptyADTException;
+
 public class MyList<TElem> implements ListInterface<TElem> {	
 	private List<TElem> list;
 	
@@ -43,5 +45,14 @@ public class MyList<TElem> implements ListInterface<TElem> {
 	@Override
 	public void clear() {
 		this.list.clear();
+	}
+
+	@Override
+	public TElem pop() throws Exception{
+		int size = this.list.size();
+		if (size == 0) {
+			throw new EmptyADTException("Empty list");
+		}
+		return this.list.remove(size - 1);
 	}
 }
