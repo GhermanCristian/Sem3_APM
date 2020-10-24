@@ -21,8 +21,8 @@ public class ProgramState {
 		this.executionStack = stack;
 		this.symbolTable = symbolTable;
 		this.output = output;
-		//this.originalProgram = deepCopy(program);
-		stack.push(program);
+		//this.originalProgram = program.deepCopy();
+		this.executionStack.push(program);
 	}
 	
 	public StackInterface<StatementInterface> getExecutionStack(){

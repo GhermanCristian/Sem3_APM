@@ -25,7 +25,7 @@ public class Controller implements ControllerInterface{
 	}
 
 	@Override
-	public void fullProgramExecution() throws Exception{
+	public ProgramState fullProgramExecution() throws Exception{
 		ProgramState crtProgramState = this.repository.getCurrentProgramState();
 		StackInterface<StatementInterface> executionStack = crtProgramState.getExecutionStack();
 		while(executionStack.size() > 0) {
@@ -34,6 +34,12 @@ public class Controller implements ControllerInterface{
 			this.oneStepExecution(crtProgramState);
 		}
 		
+		return crtProgramState;
+	}
+
+	@Override
+	public void addProgramState(ProgramState newProgramState) {
+		this.repository.addProgramState(newProgramState);
 	}
 
 }
