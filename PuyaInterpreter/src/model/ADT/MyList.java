@@ -55,4 +55,18 @@ public class MyList<TElem> implements ListInterface<TElem> {
 		}
 		return this.list.remove(size - 1);
 	}
+
+	@Override
+	public boolean isEmpty() {
+		return this.list.isEmpty();
+	}
+
+	@Override
+	public TElem getLast() throws Exception {
+		int size = this.list.size();
+		if (size == 0) {
+			throw new EmptyADTException("Empty list");
+		}
+		return this.list.get(size - 1);
+	}
 }

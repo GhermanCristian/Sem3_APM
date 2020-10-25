@@ -9,4 +9,6 @@ public interface ListInterface<TElem> {
 	public ListIterator<TElem> getIterator();
 	public int size();
 	public void clear();
+	public boolean isEmpty();
+	public TElem getLast() throws Exception;
 }

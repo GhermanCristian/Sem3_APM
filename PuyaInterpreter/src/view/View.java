@@ -1,6 +1,5 @@
 package view;
 
-import java.util.ListIterator;
 import java.util.Scanner;
 import controller.Controller;
 import controller.ControllerInterface;
@@ -27,13 +26,6 @@ public class View {
 	
 	public View() {
 		this.controller = new Controller();
-	}
-	
-	private void printOutput(ListInterface<ValueInterface> output) {
-		System.out.println("Program output: ");
-		for (ListIterator<ValueInterface> i = output.getIterator(); i.hasNext();) {
-			System.out.println(i.next());
-		}
 	}
 	
 	public void start() {
@@ -73,7 +65,7 @@ public class View {
 			else if(choice == 2) {
 				try {
 					ProgramState finishedProgramState = this.controller.fullProgramExecution();
-					this.printOutput(finishedProgramState.getOutput());
+					System.out.println(finishedProgramState.getOutput());
 				}
 				catch (Exception e) {
 					System.out.println(e.getMessage());

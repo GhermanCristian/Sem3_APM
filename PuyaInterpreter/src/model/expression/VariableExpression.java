@@ -1,5 +1,6 @@
 package model.expression;
 
+import exception.UndefinedVariableException;
 import model.ADT.DictionaryInterface;
 import model.value.ValueInterface;
 
@@ -12,6 +13,9 @@ public class VariableExpression implements ExpressionInterface{
 
 	@Override
 	public ValueInterface evaluate(DictionaryInterface<String, ValueInterface> symbolTable) throws Exception {
+		if (symbolTable.isDefined(this.variableName) == false) {
+			throw new UndefinedVariableException("Variable " + this.variableName + " is not defined");
+		}
 		return symbolTable.getValue(this.variableName);
 	}
 }

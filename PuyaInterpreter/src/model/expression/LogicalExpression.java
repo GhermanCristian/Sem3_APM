@@ -23,7 +23,7 @@ public class LogicalExpression implements ExpressionInterface{
 		ValueInterface firstVal, secondVal;
 		firstVal = this.firstExp.evaluate(symbolTable);
 		
-		if (firstVal.getType() == new BoolType()) {
+		if (firstVal.getType().equals(new BoolType())) {
 			secondVal = this.secondExp.evaluate(symbolTable);
 			if (secondVal.getType().equals(new BoolType())) {
 				boolean firstBoolean = ((BoolValue)firstVal).getValue();

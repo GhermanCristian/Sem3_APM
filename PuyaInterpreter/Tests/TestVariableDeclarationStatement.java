@@ -73,6 +73,7 @@ public class TestVariableDeclarationStatement{
 		
 		try {
 			s2.execute(crtState);
+			fail("Variable already exists");
 		}
 		catch (Exception e){
 			assertTrue(true);
