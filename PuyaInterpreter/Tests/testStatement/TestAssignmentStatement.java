@@ -1,3 +1,4 @@
+package testStatement;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.*;
@@ -9,12 +10,15 @@ import model.ADT.MyDictionary;
 import model.ADT.MyList;
 import model.ADT.MyStack;
 import model.ADT.StackInterface;
+import model.expression.ArithmeticExpression;
+import model.expression.ExpressionInterface;
 import model.expression.ValueExpression;
 import model.statement.AssignmentStatement;
 import model.statement.StatementInterface;
 import model.statement.VariableDeclarationStatement;
 import model.type.BoolType;
 import model.type.IntType;
+import model.value.BoolValue;
 import model.value.IntValue;
 import model.value.ValueInterface;
 
@@ -88,5 +92,4 @@ public class TestAssignmentStatement {
 		}
 		assertEquals(((IntValue)symbolTable.getValue("abc")).getValue(), 23);
 	}
-
 }
