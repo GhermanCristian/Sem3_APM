@@ -1,10 +1,9 @@
 package model.statement;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 
-import exception.AlreadyDefinedVariableException;
 import exception.InvalidTypeException;
+import exception.UndefinedVariableException;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
 import model.expression.ExpressionInterface;
@@ -12,10 +11,10 @@ import model.type.StringType;
 import model.value.StringValue;
 import model.value.ValueInterface;
 
-public class OpenReadFileStatement implements StatementInterface{
+public class CloseReadFileStatement implements StatementInterface{
 	private final ExpressionInterface filePath;
 	
-	public OpenReadFileStatement(ExpressionInterface filePath) {
+	public CloseReadFileStatement(ExpressionInterface filePath) {
 		this.filePath = filePath;
 	}
 	
@@ -31,15 +30,19 @@ public class OpenReadFileStatement implements StatementInterface{
 		
 		// we know filePathValue is a StringValue, we can cast
 		String filePathString = ((StringValue)filePathValue).getValue();
-		if (symbolTable.isDefined(filePathString) == true) {
-			throw new AlreadyDefinedVariableException("File path " + filePathString + " is already in the symbol table");
+		if (symbolTable.isDefined(filePathString) == false) {
+			throw new UndefinedVariableException("File path " + filePathString + " is not defined in the symbol table");
 		}
-		if (fileTable.isDefined((StringValue)filePathValue) == true) {
-			throw new AlreadyDefinedVariableException("File path " + filePathString + " is already in the file table");
+		if (fileTable.isDefined((StringValue)filePathValue) == false) {
+			throw new UndefinedVariableException("File path " + filePathString + " is not defined in the file table");
 		}
-		BufferedReader fileBuffer = new BufferedReader(new FileReader(filePathString));
-		fileTable.insert((StringValue)filePathValue, fileBuffer);
-	
+		
+		BufferedReader fileBuffer = fileTable.getValue((StringValue)filePathValue);
+		fileBuffer.close();
+		symbolTable.remove(filePathString);
+		fileTable.remove((StringValue)filePathValue);
+		
 		return crtState;
 	}
+
 }
