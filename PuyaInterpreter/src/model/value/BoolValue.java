@@ -17,7 +17,7 @@ public class BoolValue implements ValueInterface {
 	
 	@Override
 	public boolean equals(Object another) {
-		return (another instanceof IntValue);
+		return (another instanceof BoolValue && ((BoolValue)another).getValue() == this.value);
 	}
 	
 	public boolean getValue() {

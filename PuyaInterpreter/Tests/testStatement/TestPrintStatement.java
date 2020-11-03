@@ -1,6 +1,8 @@
 package testStatement;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.BufferedReader;
+
 import org.junit.*;
 
 import model.ProgramState;
@@ -22,12 +24,14 @@ import model.type.BoolType;
 import model.type.IntType;
 import model.value.BoolValue;
 import model.value.IntValue;
+import model.value.StringValue;
 import model.value.ValueInterface;
 
 public class TestPrintStatement {
 	static StackInterface<StatementInterface> stack;
 	static DictionaryInterface<String, ValueInterface> symbolTable;
 	static ListInterface<ValueInterface> output;
+	static DictionaryInterface<StringValue, BufferedReader> fileTable;
 	static ProgramState crtState;
 	
 	@BeforeClass
@@ -35,7 +39,8 @@ public class TestPrintStatement {
 		stack = new MyStack<StatementInterface>();
 		symbolTable = new MyDictionary<String, ValueInterface>();
 		output = new MyList<ValueInterface>();
-		crtState = new ProgramState(stack, symbolTable, output, null);
+		fileTable = new MyDictionary<StringValue, BufferedReader>();
+		crtState = new ProgramState(stack, symbolTable, output, fileTable, null);
 	}
 	
 	@Before

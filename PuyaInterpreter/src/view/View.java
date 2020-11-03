@@ -1,5 +1,6 @@
 package view;
 
+import java.io.BufferedReader;
 import java.util.Scanner;
 import controller.Controller;
 import controller.ControllerInterface;
@@ -24,6 +25,7 @@ import model.type.BoolType;
 import model.type.IntType;
 import model.value.BoolValue;
 import model.value.IntValue;
+import model.value.StringValue;
 import model.value.ValueInterface;
 
 public class View {
@@ -136,7 +138,8 @@ public class View {
 				StackInterface<StatementInterface> stack = new MyStack<StatementInterface>();
 				DictionaryInterface<String, ValueInterface> symbolTable = new MyDictionary<String, ValueInterface>();
 				ListInterface<ValueInterface> output = new MyList<ValueInterface>();
-				ProgramState crtProgramState = new ProgramState(stack, symbolTable, output, originalProgram);
+				DictionaryInterface<StringValue, BufferedReader> fileTable = new MyDictionary<StringValue, BufferedReader>();
+				ProgramState crtProgramState = new ProgramState(stack, symbolTable, output, fileTable, originalProgram);
 				
 				this.controller.addProgramState(crtProgramState);
 			}

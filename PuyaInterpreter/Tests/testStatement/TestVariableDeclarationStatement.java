@@ -1,6 +1,8 @@
 package testStatement;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.BufferedReader;
+
 import org.junit.*;
 
 import model.ProgramState;
@@ -16,12 +18,14 @@ import model.type.BoolType;
 import model.type.IntType;
 import model.value.BoolValue;
 import model.value.IntValue;
+import model.value.StringValue;
 import model.value.ValueInterface;
 
 public class TestVariableDeclarationStatement{
 	static StackInterface<StatementInterface> stack;
 	static DictionaryInterface<String, ValueInterface> symbolTable;
 	static ListInterface<ValueInterface> output;
+	static DictionaryInterface<StringValue, BufferedReader> fileTable;
 	static ProgramState crtState;
 	
 	@BeforeClass
@@ -29,7 +33,8 @@ public class TestVariableDeclarationStatement{
 		stack = new MyStack<StatementInterface>();
 		symbolTable = new MyDictionary<String, ValueInterface>();
 		output = new MyList<ValueInterface>();
-		crtState = new ProgramState(stack, symbolTable, output, null);
+		fileTable = new MyDictionary<StringValue, BufferedReader>();
+		crtState = new ProgramState(stack, symbolTable, output, fileTable, null);
 	}
 	
 	@Before
@@ -57,7 +62,7 @@ public class TestVariableDeclarationStatement{
 		assertEquals(symbolTable.size(), 1);
 		assertTrue(symbolTable.isDefined("abc"));
 		assertFalse(symbolTable.isEmpty());
-		assertEquals(((IntValue)symbolTable.getValue("abc")).getValue(), new IntValue()); // default value
+		assertEquals(((IntValue)symbolTable.getValue("abc")).getValue(), new IntValue().getValue()); // default value
 	}
 	
 	@Test
@@ -95,7 +100,7 @@ public class TestVariableDeclarationStatement{
 		assertEquals(symbolTable.size(), 1);
 		assertTrue(symbolTable.isDefined("abc"));
 		assertFalse(symbolTable.isEmpty());
-		assertEquals(((BoolValue)symbolTable.getValue("abc")).getValue(), new BoolValue()); // default value
+		assertEquals(((BoolValue)symbolTable.getValue("abc")).getValue(), new BoolValue().getValue()); // default value
 	}
 
 }
