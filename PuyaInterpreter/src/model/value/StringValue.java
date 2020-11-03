@@ -15,6 +15,11 @@ public class StringValue implements ValueInterface{
 		this.value = value;
 	}
 	
+	@Override
+	public boolean equals(Object another) {
+		return (another instanceof StringValue && ((StringValue)another).getValue() == this.value);
+	}
+	
 	public String getValue() {
 		return this.value;
 	}
