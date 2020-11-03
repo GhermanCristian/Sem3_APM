@@ -124,7 +124,7 @@ public class TestPrintStatement {
 		StatementInterface s1 = new PrintStatement(new ArithmeticExpression(
 			new ValueExpression(new IntValue(23)), 
 			new ValueExpression(new IntValue(24)), 
-			0)); // print(23 + 24);
+			"+")); // print(23 + 24);
 		
 		try {
 			s1.execute(crtState);

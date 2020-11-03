@@ -44,7 +44,7 @@ public class TestArithmeticExpression {
 		ExpressionInterface e1 = new ArithmeticExpression(
 			new ValueExpression(new IntValue(1)), 
 			new ValueExpression(new IntValue(0)), 
-			3); // e1 = 1 / 0
+			"/"); // e1 = 1 / 0
 		
 		try {
 			e1.evaluate(symbolTable);
@@ -60,7 +60,7 @@ public class TestArithmeticExpression {
 		ExpressionInterface e1 = new ArithmeticExpression(
 			new ValueExpression(new IntValue(1)), 
 			new ValueExpression(new IntValue(0)), 
-			4); // 4 is not an operator code
+			"invalidOperator"); // not an operator code
 		
 		try {
 			e1.evaluate(symbolTable);
@@ -76,7 +76,7 @@ public class TestArithmeticExpression {
 		ExpressionInterface e1 = new ArithmeticExpression(
 			new ValueExpression(new BoolValue(true)), 
 			new ValueExpression(new IntValue(0)), 
-			0);
+			"+");
 		
 		try {
 			e1.evaluate(symbolTable);
@@ -92,7 +92,7 @@ public class TestArithmeticExpression {
 		ExpressionInterface e1 = new ArithmeticExpression(
 			new ValueExpression(new IntValue(1)), 
 			new ValueExpression(new BoolValue(false)), 
-			0);
+			"+");
 		
 		try {
 			e1.evaluate(symbolTable);
@@ -108,7 +108,7 @@ public class TestArithmeticExpression {
 		ExpressionInterface e1 = new ArithmeticExpression(
 			new ValueExpression(new IntValue(23)), 
 			new ValueExpression(new IntValue(24)), 
-			0); // 23 + 24
+			"+"); // 23 + 24
 		
 		ValueInterface res = null;
 		try {
@@ -126,7 +126,7 @@ public class TestArithmeticExpression {
 		ExpressionInterface e1 = new ArithmeticExpression(
 			new ValueExpression(new IntValue(23)), 
 			new ValueExpression(new IntValue(24)), 
-			1); // 23 - 24
+			"-"); // 23 - 24
 		
 		ValueInterface res = null;
 		try {
@@ -144,7 +144,7 @@ public class TestArithmeticExpression {
 		ExpressionInterface e1 = new ArithmeticExpression(
 			new ValueExpression(new IntValue(23)), 
 			new ValueExpression(new IntValue(24)), 
-			2); // 23 * 24
+			"*"); // 23 * 24
 		
 		ValueInterface res = null;
 		try {
@@ -162,7 +162,7 @@ public class TestArithmeticExpression {
 		ExpressionInterface e1 = new ArithmeticExpression(
 			new ValueExpression(new IntValue(24)), 
 			new ValueExpression(new IntValue(23)), 
-			3); // 24 / 23
+			"/"); // 24 / 23
 		
 		ValueInterface res = null;
 		try {

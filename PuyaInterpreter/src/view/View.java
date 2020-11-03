@@ -69,13 +69,13 @@ public class View {
 								new ArithmeticExpression(
 										new ValueExpression(new IntValue(3)), 
 										new ValueExpression(new IntValue(5)), 
-										2), // 3 * 5 
+										"*"), // 3 * 5 
 								new ValueExpression(new IntValue(2)), 
-								0))); // 3 * 5 + 2 );
+								"+"))); // 3 * 5 + 2 );
 		statementList.addLast(new AssignmentStatement("b", new ArithmeticExpression(
 								new VariableExpression("a"), 
 								new ValueExpression(new IntValue(1)), 
-								0))); // b = a + 1);
+								"+"))); // b = a + 1);
 		statementList.addLast(new PrintStatement(new VariableExpression("b")));
 		
 		return statementList;

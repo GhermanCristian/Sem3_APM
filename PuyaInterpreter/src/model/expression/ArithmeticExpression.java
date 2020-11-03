@@ -11,9 +11,9 @@ import model.value.ValueInterface;
 public class ArithmeticExpression implements ExpressionInterface{
 	private final ExpressionInterface firstExp;
 	private final ExpressionInterface secondExp;
-	private final int operator;
+	private final String operator;
 	
-	public ArithmeticExpression(ExpressionInterface firstExp, ExpressionInterface secondExp, int operator) {
+	public ArithmeticExpression(ExpressionInterface firstExp, ExpressionInterface secondExp, String operator) {
 		this.firstExp = firstExp;
 		this.secondExp = secondExp;
 		this.operator = operator;
@@ -30,16 +30,16 @@ public class ArithmeticExpression implements ExpressionInterface{
 				int firstInt = ((IntValue)firstVal).getValue();
 				int secondInt = ((IntValue)secondVal).getValue();
 				
-				if (this.operator == 0) {
+				if (this.operator.equals("+")) {
 					return new IntValue(firstInt + secondInt);
 				}
-				if (this.operator == 1) {
+				if (this.operator.equals("-")) {
 					return new IntValue(firstInt - secondInt);
 				}
-				if (this.operator == 2) {
+				if (this.operator.equals("*")) {
 					return new IntValue(firstInt * secondInt);
 				}
-				if (this.operator == 3) {
+				if (this.operator.equals("/")) {
 					if (secondInt == 0) {
 						throw new DivisionByZeroException("Division by zero");
 					}
