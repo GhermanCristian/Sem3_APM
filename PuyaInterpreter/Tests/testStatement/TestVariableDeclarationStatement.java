@@ -57,7 +57,7 @@ public class TestVariableDeclarationStatement{
 		assertEquals(symbolTable.size(), 1);
 		assertTrue(symbolTable.isDefined("abc"));
 		assertFalse(symbolTable.isEmpty());
-		assertEquals(((IntValue)symbolTable.getValue("abc")).getValue(), VariableDeclarationStatement.DEFAULT_INT_VALUE);
+		assertEquals(((IntValue)symbolTable.getValue("abc")).getValue(), new IntValue()); // default value
 	}
 	
 	@Test
@@ -95,7 +95,7 @@ public class TestVariableDeclarationStatement{
 		assertEquals(symbolTable.size(), 1);
 		assertTrue(symbolTable.isDefined("abc"));
 		assertFalse(symbolTable.isEmpty());
-		assertEquals(((BoolValue)symbolTable.getValue("abc")).getValue(), VariableDeclarationStatement.DEFAULT_BOOL_VALUE);
+		assertEquals(((BoolValue)symbolTable.getValue("abc")).getValue(), new BoolValue()); // default value
 	}
 
 }

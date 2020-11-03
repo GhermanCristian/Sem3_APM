@@ -5,6 +5,11 @@ import model.type.TypeInterface;
 
 public class IntValue implements ValueInterface{
 	private final int value;
+	public static final int DEFAULT_INT_VALUE = 0;
+	
+	public IntValue() {
+		this.value = IntValue.DEFAULT_INT_VALUE;
+	}
 	
 	public IntValue(int value) {
 		this.value = value;

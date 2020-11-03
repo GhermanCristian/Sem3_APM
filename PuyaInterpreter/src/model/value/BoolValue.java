@@ -5,6 +5,11 @@ import model.type.TypeInterface;
 
 public class BoolValue implements ValueInterface {
 	private final boolean value;
+	public static final boolean DEFAULT_BOOL_VALUE = false;
+	
+	public BoolValue() {
+		this.value = BoolValue.DEFAULT_BOOL_VALUE;
+	}
 	
 	public BoolValue(boolean value) {
 		this.value = value;
