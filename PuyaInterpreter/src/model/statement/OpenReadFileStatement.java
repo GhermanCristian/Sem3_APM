@@ -31,9 +31,6 @@ public class OpenReadFileStatement implements StatementInterface{
 		
 		// we know filePathValue is a StringValue, we can cast
 		String filePathString = ((StringValue)filePathValue).getValue();
-		if (symbolTable.isDefined(filePathString) == true) {
-			throw new AlreadyDefinedVariableException("File path " + filePathString + " is already in the symbol table");
-		}
 		if (fileTable.isDefined((StringValue)filePathValue) == true) {
 			throw new AlreadyDefinedVariableException("File path " + filePathString + " is already in the file table");
 		}

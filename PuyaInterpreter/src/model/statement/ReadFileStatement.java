@@ -40,9 +40,6 @@ public class ReadFileStatement implements StatementInterface{
 		
 		// we know filePathValue is a StringValue, we can cast
 		String filePathString = ((StringValue)filePathValue).getValue();
-		if (symbolTable.isDefined(filePathString) == false) {
-			throw new UndefinedVariableException("File path " + filePathString + " is not defined in the symbol table");
-		}
 		if (fileTable.isDefined((StringValue)filePathValue) == false) {
 			throw new UndefinedVariableException("File path " + filePathString + " is not defined in the file table");
 		}

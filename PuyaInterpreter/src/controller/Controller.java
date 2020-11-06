@@ -10,8 +10,8 @@ import repository.RepositoryInterface;
 public class Controller implements ControllerInterface{
 	private RepositoryInterface repository;
 	
-	public Controller() {
-		this.repository = new Repository("C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter\\logFile.txt");
+	public Controller(RepositoryInterface repository) {
+		this.repository = repository;
 	}
 	
 	@Override

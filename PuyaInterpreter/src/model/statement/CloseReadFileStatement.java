@@ -30,16 +30,12 @@ public class CloseReadFileStatement implements StatementInterface{
 		
 		// we know filePathValue is a StringValue, we can cast
 		String filePathString = ((StringValue)filePathValue).getValue();
-		if (symbolTable.isDefined(filePathString) == false) {
-			throw new UndefinedVariableException("File path " + filePathString + " is not defined in the symbol table");
-		}
 		if (fileTable.isDefined((StringValue)filePathValue) == false) {
 			throw new UndefinedVariableException("File path " + filePathString + " is not defined in the file table");
 		}
 		
 		BufferedReader fileBuffer = fileTable.getValue((StringValue)filePathValue);
 		fileBuffer.close();
-		symbolTable.remove(filePathString);
 		fileTable.remove((StringValue)filePathValue);
 		
 		return crtState;

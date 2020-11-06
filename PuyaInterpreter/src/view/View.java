@@ -15,10 +15,13 @@ import model.expression.ArithmeticExpression;
 import model.expression.ValueExpression;
 import model.expression.VariableExpression;
 import model.statement.AssignmentStatement;
+import model.statement.CloseReadFileStatement;
 import model.statement.CompoundStatement;
 import model.statement.EmptyStatement;
 import model.statement.IfStatement;
+import model.statement.OpenReadFileStatement;
 import model.statement.PrintStatement;
+import model.statement.ReadFileStatement;
 import model.statement.StatementInterface;
 import model.statement.VariableDeclarationStatement;
 import model.type.BoolType;
@@ -27,12 +30,15 @@ import model.value.BoolValue;
 import model.value.IntValue;
 import model.value.StringValue;
 import model.value.ValueInterface;
+import repository.Repository;
+import repository.RepositoryInterface;
 
 public class View {
 	private ControllerInterface controller;
 	
 	public View() {
-		this.controller = new Controller();
+		RepositoryInterface repo = new Repository("C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter\\logFile.txt");
+		this.controller = new Controller(repo);
 	}
 	
 	private StatementInterface composeStatement(MyList<StatementInterface> crtList) throws Exception {
@@ -100,6 +106,22 @@ public class View {
 		return statementList;
 	}
 	
+	private MyList<StatementInterface> getFourthExample() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+		
+		// openReadFile(str); int var; readFile(str); print(var); readFile(str); print(var); closeReadFile();
+		ValueExpression val = new ValueExpression(new StringValue("C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter\\log1.in"));
+		statementList.addLast(new OpenReadFileStatement(val));
+		statementList.addLast(new VariableDeclarationStatement("a", new IntType()));
+		statementList.addLast(new ReadFileStatement(val, "a"));
+		statementList.addLast(new PrintStatement(new VariableExpression("a")));
+		statementList.addLast(new ReadFileStatement(val, "a"));
+		statementList.addLast(new PrintStatement(new VariableExpression("a")));
+		statementList.addLast(new CloseReadFileStatement(val));
+		
+		return statementList;
+	}
+	
 	public void start() {
 		int choice;
 		Scanner consoleScanner = new Scanner(System.in);
@@ -124,7 +146,9 @@ public class View {
 				// int a; int b; a = 2 + 3 * 5; b = a + 1; print(b);
 				//statementList = this.getSecondExample();
 				//bool a; int v; a=true; (If a Then v=2 Else v=3); Print(v)
-				statementList = this.getThirdExample();
+				//statementList = this.getThirdExample();
+				// openReadFile(str); int var; readFile(str); print(var); readFile(str); print(var); closeReadFile();
+				statementList = this.getFourthExample();
 				
 				StatementInterface originalProgram;
 				try {
