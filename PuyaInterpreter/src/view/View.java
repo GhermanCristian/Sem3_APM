@@ -120,11 +120,11 @@ public class View {
 				MyList<StatementInterface> statementList = new MyList<StatementInterface>();
 				
 				// int a; a = 23; print(a);
-				statementList = this.getFirstExample();
+				//statementList = this.getFirstExample();
 				// int a; int b; a = 2 + 3 * 5; b = a + 1; print(b);
 				//statementList = this.getSecondExample();
 				//bool a; int v; a=true; (If a Then v=2 Else v=3); Print(v)
-				//statementList = this.getThirdExample();
+				statementList = this.getThirdExample();
 				
 				StatementInterface originalProgram;
 				try {

@@ -36,7 +36,7 @@ public class MyDictionary<TKey, TValue> implements DictionaryInterface<TKey, TVa
 		
 		Collection<TKey> allKeys = this.dictionary.keySet();
 		for (TKey key : allKeys) {
-			representation += (key.toString() + ": " + this.dictionary.get(key).toString() + "\n");
+			representation += (key.toString() + " -> " + this.dictionary.get(key).toString() + "\n");
 		}
 		
 		return representation;

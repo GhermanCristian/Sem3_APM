@@ -56,13 +56,14 @@ public class ProgramState {
 	public String toString() {
 		String representation = "";
 		
+		representation += "\n================\n";
 		representation += "ExecutionStack:\n";
 		representation += this.executionStack.toString();
-		representation += "SymbolTable:\n";
+		representation += "\nSymbolTable:\n";
 		representation += this.symbolTable.toString();
-		representation += "FileTable:\n";
+		representation += "\nFileTable:\n";
 		representation += this.fileTable.toString();
-		representation += "OutputTable:\n";
+		representation += "\nOutputTable:\n";
 		representation += this.output.toString();
 		
 		return representation;

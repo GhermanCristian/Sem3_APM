@@ -22,7 +22,7 @@ public class VariableExpression implements ExpressionInterface{
 	@Override
 	public String toString() {
 		String representation = "";
-		representation += (this.variableName + "\n");
+		representation += (this.variableName);
 		return representation;
 	}
 }

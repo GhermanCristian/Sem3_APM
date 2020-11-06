@@ -39,7 +39,7 @@ public class MyStack<TElem> implements StackInterface<TElem>{
 	public String toString() {
 		String representation = "";
 		for (TElem crtElem : this.stack) {
-			representation += (crtElem.toString() + "\n");
+			representation += (crtElem.toString());
 		}
 		return representation;
 	}

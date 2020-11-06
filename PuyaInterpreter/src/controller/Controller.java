@@ -11,7 +11,7 @@ public class Controller implements ControllerInterface{
 	private RepositoryInterface repository;
 	
 	public Controller() {
-		this.repository = new Repository();
+		this.repository = new Repository("C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter\\logFile.txt");
 	}
 	
 	@Override
@@ -28,10 +28,12 @@ public class Controller implements ControllerInterface{
 	public ProgramState fullProgramExecution() throws Exception{
 		ProgramState crtProgramState = this.repository.getCurrentProgramState();
 		StackInterface<StatementInterface> executionStack = crtProgramState.getExecutionStack();
+		this.repository.logProgramExecution();
 		while(executionStack.size() > 0) {
 			// normally, oneStepExecution throws an exception if the exe stack is empty
 			// but we are specifically checking if its size > 0 => that exception will never happen
 			this.oneStepExecution(crtProgramState);
+			this.repository.logProgramExecution();
 		}
 		
 		return crtProgramState;

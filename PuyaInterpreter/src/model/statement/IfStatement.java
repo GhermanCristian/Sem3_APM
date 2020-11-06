@@ -45,9 +45,10 @@ public class IfStatement implements StatementInterface{
 	
 	public String toString() {
 		String representation = "";
-		representation += ("if ("+ this.conditionalExpression.toString() + "){\n");
-		representation += (this.trueConditionStatement.toString() + ";\n}\n");
-		representation += ("else {" + this.falseConditionStatement.toString() + ";\n}");
+		// this indentation doesn't work past 1 level - I'm going to need sth like an indentationLevel when creating the if statement
+		representation += ("if ("+ this.conditionalExpression.toString() + ") {\n\t");
+		representation += (this.trueConditionStatement.toString() + "}\n");
+		representation += ("else {\n\t" + this.falseConditionStatement.toString() + "}\n");
 		return representation;
 	}
 

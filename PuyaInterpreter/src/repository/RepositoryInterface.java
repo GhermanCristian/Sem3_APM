@@ -3,6 +3,7 @@ package repository;
 import model.ProgramState;
 
 public interface RepositoryInterface {
-	ProgramState getCurrentProgramState() throws Exception;
-	void addProgramState(ProgramState newProgramState);
+	public ProgramState getCurrentProgramState() throws Exception;
+	public void addProgramState(ProgramState newProgramState);
+	public void logProgramExecution() throws Exception;
 }

@@ -43,7 +43,7 @@ public class VariableDeclarationStatement implements StatementInterface{
 	
 	public String toString() {
 		String representation = "";
-		representation += (this.variableType.toString() + " " + this.variableName + "\n");
+		representation += (this.variableType.toString() + " " + this.variableName + ";\n");
 		return representation;
 	}
 }

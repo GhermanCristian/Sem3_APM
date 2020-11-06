@@ -54,6 +54,7 @@ public class LogicalExpression implements ExpressionInterface{
 	public String toString() {
 		String representation = "";
 		representation += (this.firstExp.toString());
+		representation += (" " + this.operator + " ");
 		representation += (this.secondExp.toString());
 		return representation;
 	}
