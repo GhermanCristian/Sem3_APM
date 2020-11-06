@@ -18,4 +18,11 @@ public class VariableExpression implements ExpressionInterface{
 		}
 		return symbolTable.getValue(this.variableName);
 	}
+	
+	@Override
+	public String toString() {
+		String representation = "";
+		representation += (this.variableName + "\n");
+		return representation;
+	}
 }

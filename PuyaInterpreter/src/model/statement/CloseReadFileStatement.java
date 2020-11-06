@@ -44,5 +44,11 @@ public class CloseReadFileStatement implements StatementInterface{
 		
 		return crtState;
 	}
-
+	
+	@Override
+	public String toString() {
+		String representation = "";
+		representation += ("closeRead(" + this.filePath + ");\n");
+		return representation;
+	}
 }

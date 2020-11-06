@@ -12,7 +12,7 @@ public class StringType implements TypeInterface{
 	@Override
 	public String toString() {
 		String representation = "";
-		representation += "string";
+		representation += "String";
 		return representation;
 	}
 	

@@ -58,4 +58,11 @@ public class ReadFileStatement implements StatementInterface{
 		
 		return crtState;
 	}
+	
+	@Override
+	public String toString() {
+		String representation = "";
+		representation += ("readFile(" + this.filePath + ");\n");
+		return representation;
+	}
 }

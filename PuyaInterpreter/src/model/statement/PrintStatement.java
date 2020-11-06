@@ -26,7 +26,7 @@ public class PrintStatement implements StatementInterface {
 	// only displays print(var) (we're printing the print statement)
 	public String toString() {
 		String representation = "";
-		representation += ("print(" + this.expressionToPrint.toString() + ")");
+		representation += ("print (" + this.expressionToPrint.toString() + ");\n");
 		return representation;
 	}
 }

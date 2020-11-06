@@ -46,8 +46,8 @@ public class IfStatement implements StatementInterface{
 	public String toString() {
 		String representation = "";
 		representation += ("if ("+ this.conditionalExpression.toString() + "){\n");
-		representation += (this.trueConditionStatement.toString() + "\n}\n");
-		representation += ("else {" + this.falseConditionStatement.toString() + "\n}");
+		representation += (this.trueConditionStatement.toString() + ";\n}\n");
+		representation += ("else {" + this.falseConditionStatement.toString() + ";\n}");
 		return representation;
 	}
 

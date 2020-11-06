@@ -59,4 +59,12 @@ public class ArithmeticExpression implements ExpressionInterface{
 			throw new InvalidTypeException("First operand not an integer");
 		}
 	}
+	
+	@Override
+	public String toString() {
+		String representation = "";
+		representation += (this.firstExp.toString());
+		representation += (this.secondExp.toString());
+		return representation;
+	}
 }

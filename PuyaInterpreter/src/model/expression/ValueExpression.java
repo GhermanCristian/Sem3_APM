@@ -14,4 +14,11 @@ public class ValueExpression implements ExpressionInterface {
 	public ValueInterface evaluate(DictionaryInterface<String, ValueInterface> symbolTable) throws Exception {
 		return this.value;
 	}
+	
+	@Override
+	public String toString() {
+		String representation = "";
+		representation += (this.value.toString());
+		return representation;
+	}
 }

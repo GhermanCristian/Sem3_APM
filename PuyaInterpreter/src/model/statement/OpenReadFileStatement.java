@@ -42,4 +42,11 @@ public class OpenReadFileStatement implements StatementInterface{
 	
 		return crtState;
 	}
+	
+	@Override
+	public String toString() {
+		String representation = "";
+		representation += ("openRead(" + this.filePath + ");\n");
+		return representation;
+	}
 }

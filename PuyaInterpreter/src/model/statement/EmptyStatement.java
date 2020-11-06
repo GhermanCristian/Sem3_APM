@@ -11,7 +11,7 @@ public class EmptyStatement implements StatementInterface{
 	
 	public String toString() {
 		String representation = "";
-		representation += "empty_statement";
+		representation += "empty_statement\n";
 		return representation;
 	}
 

@@ -62,5 +62,13 @@ public class RelationalExpression implements ExpressionInterface{
 			throw new InvalidTypeException("First operand is not an integer");
 		}
 	}
+	
+	@Override
+	public String toString() {
+		String representation = "";
+		representation += (this.firstExp.toString());
+		representation += (this.secondExp.toString());
+		return representation;
+	}
 
 }

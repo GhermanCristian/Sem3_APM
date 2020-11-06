@@ -43,7 +43,7 @@ public class AssignmentStatement implements StatementInterface{
 	
 	public String toString() {
 		String representation = "";
-		representation += (this.variableName + " = " + this.expression.toString());
+		representation += (this.variableName + " = " + this.expression.toString() + ";\n");
 		return representation;
 	}
 

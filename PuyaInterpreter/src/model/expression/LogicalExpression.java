@@ -49,4 +49,12 @@ public class LogicalExpression implements ExpressionInterface{
 			throw new InvalidTypeException("First operand not a boolean");
 		}
 	}
+	
+	@Override
+	public String toString() {
+		String representation = "";
+		representation += (this.firstExp.toString());
+		representation += (this.secondExp.toString());
+		return representation;
+	}
 }

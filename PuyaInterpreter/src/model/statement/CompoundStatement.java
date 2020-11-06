@@ -23,7 +23,7 @@ public class CompoundStatement implements StatementInterface {
 	@Override
 	public String toString() {
 		String representation = "";
-		representation += ("(" + this.firstStatement.toString() + "; " + this.secondStatement.toString() + ")");
+		representation += ("(" + this.firstStatement.toString() + ";\n" + this.secondStatement.toString() + ");\n");
 		return representation;
 	}
 }
