@@ -6,4 +6,5 @@ public interface StackInterface<TElem> {
 	public void push(TElem newElem);
 	public TElem pop();
 	public TElem top();
+	public String toString();
 }

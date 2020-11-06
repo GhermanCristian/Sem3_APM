@@ -1,12 +1,13 @@
 package model.ADT;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class MyStack<TElem> implements StackInterface<TElem>{
-	private Stack<TElem> stack;
+	private Deque<TElem> stack;
 	
 	public MyStack() {
-		this.stack = new Stack<TElem>();
+		this.stack = new ArrayDeque<TElem>();
 	}
 
 	@Override
@@ -32,5 +33,14 @@ public class MyStack<TElem> implements StackInterface<TElem>{
 	@Override
 	public TElem pop() {
 		return this.stack.pop();
+	}
+	
+	@Override
+	public String toString() {
+		String representation = "";
+		for (TElem crtElem : this.stack) {
+			representation += (crtElem.toString() + "\n");
+		}
+		return representation;
 	}
 }

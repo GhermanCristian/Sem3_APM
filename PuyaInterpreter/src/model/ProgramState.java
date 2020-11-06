@@ -28,7 +28,9 @@ public class ProgramState {
 		this.output = output;
 		this.fileTable = fileTable;
 		//this.originalProgram = program.deepCopy();
-		this.executionStack.push(program);
+		if (program != null) { // we don't add null values to the exeStack because the Deque doesn't accept it
+			this.executionStack.push(program);
+		}
 	}
 	
 	public StackInterface<StatementInterface> getExecutionStack(){
@@ -53,6 +55,16 @@ public class ProgramState {
 	
 	public String toString() {
 		String representation = "";
+		
+		representation += "ExecutionStack:\n";
+		representation += this.executionStack.toString();
+		representation += "SymbolTable:\n";
+		representation += this.symbolTable.toString();
+		representation += "FileTable:\n";
+		representation += this.fileTable.toString();
+		representation += "OutputTable:\n";
+		representation += this.output.toString();
+		
 		return representation;
 	}
 }

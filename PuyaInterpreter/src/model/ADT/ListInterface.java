@@ -8,6 +8,7 @@ public interface ListInterface<TElem> {
 	public TElem pop() throws Exception;
 	public ListIterator<TElem> getIterator();
 	public int size();
+	public String toString();
 	public void clear();
 	public boolean isEmpty();
 	public TElem getLast() throws Exception;
