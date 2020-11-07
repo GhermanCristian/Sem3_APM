@@ -1,16 +1,6 @@
 package view;
 
-import java.io.BufferedReader;
-import java.util.Scanner;
-import controller.Controller;
-import controller.ControllerInterface;
-import model.ProgramState;
-import model.ADT.DictionaryInterface;
-import model.ADT.ListInterface;
-import model.ADT.MyDictionary;
 import model.ADT.MyList;
-import model.ADT.MyStack;
-import model.ADT.StackInterface;
 import model.expression.ArithmeticExpression;
 import model.expression.ValueExpression;
 import model.expression.VariableExpression;
@@ -29,17 +19,9 @@ import model.type.IntType;
 import model.value.BoolValue;
 import model.value.IntValue;
 import model.value.StringValue;
-import model.value.ValueInterface;
-import repository.Repository;
-import repository.RepositoryInterface;
 
 public class View {
-	private ControllerInterface controller;
-	
-	public View() {
-		RepositoryInterface repo = new Repository("C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter\\logFile.txt");
-		this.controller = new Controller(repo);
-	}
+	private final String SRC_FOLDER_PATH = "C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter";
 	
 	private StatementInterface composeStatement(MyList<StatementInterface> crtList) throws Exception {
 		// pop never actually throws an exception here (I use it when size() >= 1, and the exception occurs when size() = 0)
@@ -92,7 +74,7 @@ public class View {
 	private MyList<StatementInterface> getThirdExample() {
 		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
 		
-		//bool a; int v; a=true; (If a Then v=2 Else v=3); Print(v)
+		//bool a; int v; a=true; (If a Then v=2 Else v=3); print(v);
 		statementList.addLast(new VariableDeclarationStatement("a", new BoolType()));
 		statementList.addLast(new VariableDeclarationStatement("v", new IntType()));
 		statementList.addLast(new AssignmentStatement("a", new ValueExpression(new BoolValue(true))));
@@ -110,7 +92,7 @@ public class View {
 		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
 		
 		// openReadFile(str); int var; readFile(str); print(var); readFile(str); print(var); closeReadFile();
-		ValueExpression val = new ValueExpression(new StringValue("C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter\\log1.in"));
+		ValueExpression val = new ValueExpression(new StringValue(this.SRC_FOLDER_PATH + "\\log1.in"));
 		statementList.addLast(new OpenReadFileStatement(val));
 		statementList.addLast(new VariableDeclarationStatement("a", new IntType()));
 		statementList.addLast(new ReadFileStatement(val, "a"));
@@ -123,66 +105,19 @@ public class View {
 	}
 	
 	public void start() {
-		int choice;
-		Scanner consoleScanner = new Scanner(System.in);
+		TextMenu textMenu = new TextMenu();
 		
-		while(true) {
-			System.out.println("0. Exit");
-			System.out.println("1. Input program");
-			System.out.println("2. Full program execution + print output");
-			
-			choice = consoleScanner.nextInt();
-			
-			if (choice == 0) {
-				System.out.println("Program has ended");
-				break;
-			}
-			
-			if (choice == 1) {
-				MyList<StatementInterface> statementList = new MyList<StatementInterface>();
-				
-				// int a; a = 23; print(a);
-				//statementList = this.getFirstExample();
-				// int a; int b; a = 2 + 3 * 5; b = a + 1; print(b);
-				//statementList = this.getSecondExample();
-				//bool a; int v; a=true; (If a Then v=2 Else v=3); Print(v)
-				//statementList = this.getThirdExample();
-				// openReadFile(str); int var; readFile(str); print(var); readFile(str); print(var); closeReadFile();
-				statementList = this.getFourthExample();
-				
-				StatementInterface originalProgram;
-				try {
-					originalProgram = this.composeStatement(statementList);
-				}
-				catch (Exception e) {
-					System.out.println(e.getMessage());
-					continue;
-				}
-						
-				StackInterface<StatementInterface> stack = new MyStack<StatementInterface>();
-				DictionaryInterface<String, ValueInterface> symbolTable = new MyDictionary<String, ValueInterface>();
-				ListInterface<ValueInterface> output = new MyList<ValueInterface>();
-				DictionaryInterface<StringValue, BufferedReader> fileTable = new MyDictionary<StringValue, BufferedReader>();
-				ProgramState crtProgramState = new ProgramState(stack, symbolTable, output, fileTable, originalProgram);
-				
-				this.controller.addProgramState(crtProgramState);
-			}
-			
-			else if(choice == 2) {
-				try {
-					ProgramState finishedProgramState = this.controller.fullProgramExecution();
-					System.out.println(finishedProgramState.getOutput());
-				}
-				catch (Exception e) {
-					System.out.println(e.getMessage());
-				}
-			}
-			
-			else {
-				System.out.println("Invalid choice");
-			}
+		try {
+			textMenu.addCommand(new ExitCommand("0", "Exit program"));
+			textMenu.addCommand(new RunExampleCommand("1", "int a; a = 23; print(a);", this.composeStatement(this.getFirstExample()), this.SRC_FOLDER_PATH + "\\log1.in"));
+			textMenu.addCommand(new RunExampleCommand("2", "int a; int b; a = 2 + 3 * 5; b = a + 1; print(b);", this.composeStatement(this.getSecondExample()), this.SRC_FOLDER_PATH + "\\log2.in"));
+			textMenu.addCommand(new RunExampleCommand("3", "bool a; int v; a=true; (If a Then v=2 Else v=3); print(v);", this.composeStatement(this.getThirdExample()), this.SRC_FOLDER_PATH + "\\log3.in"));
+			textMenu.addCommand(new RunExampleCommand("4", "openReadFile(str); int var; readFile(str); print(var); readFile(str); print(var); closeReadFile();", this.composeStatement(this.getFourthExample()), this.SRC_FOLDER_PATH + "\\log4.in"));
+		}
+		catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
 		
-		consoleScanner.close();
+		textMenu.show();
 	}
 }
