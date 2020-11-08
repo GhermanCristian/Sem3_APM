@@ -6,6 +6,7 @@ import model.ProgramState;
 import model.ADT.DictionaryInterface;
 import model.type.BoolType;
 import model.type.IntType;
+import model.type.StringType;
 import model.type.TypeInterface;
 import model.value.ValueInterface;
 
@@ -31,6 +32,9 @@ public class VariableDeclarationStatement implements StatementInterface{
 		}
 		else if(this.variableType.equals(new BoolType())) { // variable is of type bool
 			symbolTable.insert(this.variableName, new BoolType().getDefaultValue());
+		}
+		else if(this.variableType.equals(new StringType())) {
+			symbolTable.insert(this.variableName, new StringType().getDefaultValue());
 		}
 		// I'm not sure if this part will ever be reached, because I'm already being given a TypeInterface (which should be valid)
 		// but just in case...

@@ -16,6 +16,7 @@ import model.statement.StatementInterface;
 import model.statement.VariableDeclarationStatement;
 import model.type.BoolType;
 import model.type.IntType;
+import model.type.StringType;
 import model.value.BoolValue;
 import model.value.IntValue;
 import model.value.StringValue;
@@ -113,4 +114,20 @@ public class TestVariableDeclarationStatement{
 		assertEquals(((BoolValue)symbolTable.getValue("abc")).getValue(), new BoolValue().getValue()); // default value
 	}
 
+	@Test
+	public void Execute_NonExistentString_StringAdded() {
+		StatementInterface s1 = new VariableDeclarationStatement("abc", new StringType());
+		
+		assertEquals(symbolTable.size(), 0);
+		try {
+			s1.execute(crtState);
+		}
+		catch (Exception e){
+			fail(e.getMessage());
+		}
+		assertEquals(symbolTable.size(), 1);
+		assertTrue(symbolTable.isDefined("abc"));
+		assertFalse(symbolTable.isEmpty());
+		assertEquals(((StringValue)symbolTable.getValue("abc")).getValue(), new StringValue().getValue()); // default value
+	}
 }
