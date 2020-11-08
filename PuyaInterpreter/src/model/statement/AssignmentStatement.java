@@ -31,12 +31,10 @@ public class AssignmentStatement implements StatementInterface{
 		TypeInterface variableType = symbolTable.getValue(this.variableName).getType();
 		
 		// if the new expression's type matches the type of the existing variable => update
-		if (variableType.equals(newExpressionType)) {
-			symbolTable.update(this.variableName, newExpressionValue);
-		}
-		else {
+		if (variableType.equals(newExpressionType) == false) {
 			throw new InvalidTypeException("Type of " + this.variableName + " doesn't match type of expression");
 		}
+		symbolTable.update(this.variableName, newExpressionValue);
 		
 		return crtState;
 	}
@@ -46,5 +44,4 @@ public class AssignmentStatement implements StatementInterface{
 		representation += (this.variableName + " = " + this.expression.toString() + ";\n");
 		return representation;
 	}
-
 }

@@ -26,18 +26,15 @@ public class IfStatement implements StatementInterface{
 		DictionaryInterface<String, ValueInterface> symbolTable = crtState.getSymbolTable();
 		
 		ValueInterface conditionalExpressionValue = this.conditionalExpression.evaluate(symbolTable);
-		if (conditionalExpressionValue.getType().equals(new BoolType())) {
-			// the expression is true => go to the first branch
-			if (((BoolValue)conditionalExpressionValue).getValue() == true) {
-				stack.push(this.trueConditionStatement);
-			}
-			// the expression is false => go to the second branch
-			else {
-				stack.push(this.falseConditionStatement);
-			}
-		}
-		else {
+		if (conditionalExpressionValue.getType().equals(new BoolType()) == false) {
 			throw new InvalidTypeException("Conditional expression is not boolean");
+		}
+		
+		if (((BoolValue)conditionalExpressionValue).getValue() == true) { // the expression is true => go to the first branch
+			stack.push(this.trueConditionStatement);
+		}
+		else { // the expression is false => go to the second branch
+			stack.push(this.falseConditionStatement);
 		}
 		
 		return crtState;
@@ -51,5 +48,4 @@ public class IfStatement implements StatementInterface{
 		representation += ("else {\n\t" + this.falseConditionStatement.toString() + "}\n");
 		return representation;
 	}
-
 }

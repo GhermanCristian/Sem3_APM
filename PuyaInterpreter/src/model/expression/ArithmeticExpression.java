@@ -24,39 +24,35 @@ public class ArithmeticExpression implements ExpressionInterface{
 		ValueInterface firstVal, secondVal;
 		firstVal = this.firstExp.evaluate(symbolTable);
 	
-		if (firstVal.getType().equals(new IntType())) {
-			secondVal = this.secondExp.evaluate(symbolTable);
-			if (secondVal.getType().equals(new IntType())) {
-				int firstInt = ((IntValue)firstVal).getValue();
-				int secondInt = ((IntValue)secondVal).getValue();
-				
-				if (this.operator.equals("+")) {
-					return new IntValue(firstInt + secondInt);
-				}
-				if (this.operator.equals("-")) {
-					return new IntValue(firstInt - secondInt);
-				}
-				if (this.operator.equals("*")) {
-					return new IntValue(firstInt * secondInt);
-				}
-				if (this.operator.equals("/")) {
-					if (secondInt == 0) {
-						throw new DivisionByZeroException("Division by zero");
-					}
-					return new IntValue(firstInt / secondInt);
-				}
-				else { // If I check the correctness of the operand before this (eg. in the controller/repo), I could just have case 3 as else
-					throw new InvalidOperatorException();
-				}
-			}
-			
-			else {
-				throw new InvalidTypeException("Second operand not an integer");
-			}
+		if (firstVal.getType().equals(new IntType()) == false) {
+			throw new InvalidTypeException("First operand not an integer");
 		}
 		
-		else {
-			throw new InvalidTypeException("First operand not an integer");
+		secondVal = this.secondExp.evaluate(symbolTable);
+		if (secondVal.getType().equals(new IntType()) == false) {
+			throw new InvalidTypeException("Second operand not an integer");
+		}
+		
+		int firstInt = ((IntValue)firstVal).getValue();
+		int secondInt = ((IntValue)secondVal).getValue();
+		
+		if (this.operator.equals("+")) {
+			return new IntValue(firstInt + secondInt);
+		}
+		if (this.operator.equals("-")) {
+			return new IntValue(firstInt - secondInt);
+		}
+		if (this.operator.equals("*")) {
+			return new IntValue(firstInt * secondInt);
+		}
+		if (this.operator.equals("/")) {
+			if (secondInt == 0) {
+				throw new DivisionByZeroException("Division by zero");
+			}
+			return new IntValue(firstInt / secondInt);
+		}
+		else { // If I check the correctness of the operand before this (eg. in the controller/repo), I could just have case 3 as else
+			throw new InvalidOperatorException();
 		}
 	}
 	

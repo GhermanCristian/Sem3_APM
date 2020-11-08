@@ -22,45 +22,40 @@ public class RelationalExpression implements ExpressionInterface{
 	@Override
 	public ValueInterface evaluate(DictionaryInterface<String, ValueInterface> symbolTable) throws Exception {
 		ValueInterface firstVal, secondVal;
+		
 		firstVal = this.firstExp.evaluate(symbolTable);
-		
-		if (firstVal.getType().equals(new IntType())) {
-			secondVal = this.secondExp.evaluate(symbolTable);
-			if (secondVal.getType().equals(new IntType())) {
-				int firstInt = ((IntValue)firstVal).getValue();
-				int secondInt = ((IntValue)secondVal).getValue();
-				
-				if (this.operator.equals("<")) {
-					return new BoolValue(firstInt < secondInt);
-				}
-				if (this.operator.equals("<=")) {
-					return new BoolValue(firstInt <= secondInt);
-				}
-				if (this.operator.equals(">")) {
-					return new BoolValue(firstInt > secondInt);
-				}
-				if (this.operator.equals(">=")) {
-					return new BoolValue(firstInt >= secondInt);
-				}
-				if (this.operator.equals("==")) {
-					return new BoolValue(firstInt == secondInt);
-				}
-				if (this.operator.equals("!=")) {
-					return new BoolValue(firstInt != secondInt);
-				}
-				else {
-					throw new InvalidOperatorException();
-				}
-			}
-			
-			else {
-				throw new InvalidTypeException("Second operand is not an integer");
-			}
-		}
-		
-		else {
+		if (firstVal.getType().equals(new IntType()) == false) {
 			throw new InvalidTypeException("First operand is not an integer");
 		}
+		secondVal = this.secondExp.evaluate(symbolTable);
+		if (secondVal.getType().equals(new IntType()) == false) {
+			throw new InvalidTypeException("Second operand is not an integer");
+		}
+		int firstInt = ((IntValue)firstVal).getValue();
+		int secondInt = ((IntValue)secondVal).getValue();
+		
+		if (this.operator.equals("<")) {
+			return new BoolValue(firstInt < secondInt);
+		}
+		if (this.operator.equals("<=")) {
+			return new BoolValue(firstInt <= secondInt);
+		}
+		if (this.operator.equals(">")) {
+			return new BoolValue(firstInt > secondInt);
+		}
+		if (this.operator.equals(">=")) {
+			return new BoolValue(firstInt >= secondInt);
+		}
+		if (this.operator.equals("==")) {
+			return new BoolValue(firstInt == secondInt);
+		}
+		if (this.operator.equals("!=")) {
+			return new BoolValue(firstInt != secondInt);
+		}
+		else {
+			throw new InvalidOperatorException();
+		}
+				
 	}
 	
 	@Override
