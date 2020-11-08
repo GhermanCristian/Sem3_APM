@@ -39,11 +39,21 @@ public class TestIfStatement {
 		crtState = new ProgramState(stack, symbolTable, output, fileTable, null);
 	}
 	
-	@Before
-	public void clearData() {
+	@After
+	public void clearAndCloseData() {
 		stack.clear();
 		symbolTable.clear();
 		output.clear();
+		
+		for (BufferedReader crtBuffer : fileTable.getAllValues()) {
+			try {
+				crtBuffer.close();
+			}
+			catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+		fileTable.clear();
 	}
 	
 	@Test

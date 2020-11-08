@@ -50,7 +50,6 @@ public class TestOpenReadFileStatement {
 				System.out.println(e.getMessage());
 			}
 		}
-		
 		fileTable.clear();
 	}
 	
