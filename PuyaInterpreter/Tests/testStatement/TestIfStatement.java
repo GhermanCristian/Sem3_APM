@@ -119,7 +119,7 @@ public class TestIfStatement {
 			new LogicalExpression(
 					new ValueExpression(new BoolValue(true)), 
 					new ValueExpression(new BoolValue(false)), 
-					1), // true || false
+					"||"), // true || false
 			new VariableDeclarationStatement("v1", new IntType()), 
 			new VariableDeclarationStatement("v2", new IntType())
 		);

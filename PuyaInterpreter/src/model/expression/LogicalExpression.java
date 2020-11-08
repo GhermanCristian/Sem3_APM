@@ -10,9 +10,9 @@ import model.value.ValueInterface;
 public class LogicalExpression implements ExpressionInterface{
 	private final ExpressionInterface firstExp;
 	private final ExpressionInterface secondExp;
-	private final int operator;
+	private final String operator;
 	
-	public LogicalExpression(ExpressionInterface firstExp, ExpressionInterface secondExp, int operator){
+	public LogicalExpression(ExpressionInterface firstExp, ExpressionInterface secondExp, String operator){
 		this.firstExp = firstExp;
 		this.secondExp = secondExp;
 		this.operator = operator;
@@ -23,30 +23,26 @@ public class LogicalExpression implements ExpressionInterface{
 		ValueInterface firstVal, secondVal;
 		firstVal = this.firstExp.evaluate(symbolTable);
 		
-		if (firstVal.getType().equals(new BoolType())) {
-			secondVal = this.secondExp.evaluate(symbolTable);
-			if (secondVal.getType().equals(new BoolType())) {
-				boolean firstBoolean = ((BoolValue)firstVal).getValue();
-				boolean secondBoolean = ((BoolValue)secondVal).getValue();
-				
-				if (this.operator == 0) {
-					return new BoolValue(firstBoolean && secondBoolean);
-				}
-				if (this.operator == 1) {
-					return new BoolValue(firstBoolean || secondBoolean);
-				}
-				else { // If I check the correctness of the operand before this (eg. in the controller/repo), I could just have case 1 as else
-					throw new InvalidOperatorException();
-				}
-			}
-			
-			else {
-				throw new InvalidTypeException("Second operand not a boolean");
-			}
+		if (firstVal.getType().equals(new BoolType()) == false) {
+			throw new InvalidTypeException("First operand not a boolean");
 		}
 		
-		else {
-			throw new InvalidTypeException("First operand not a boolean");
+		secondVal = this.secondExp.evaluate(symbolTable);
+		if (secondVal.getType().equals(new BoolType()) == false) {
+			throw new InvalidTypeException("Second operand not a boolean");
+		}
+		
+		boolean firstBoolean = ((BoolValue)firstVal).getValue();
+		boolean secondBoolean = ((BoolValue)secondVal).getValue();
+		
+		if (this.operator == "&&") {
+			return new BoolValue(firstBoolean && secondBoolean);
+		}
+		if (this.operator == "||") {
+			return new BoolValue(firstBoolean || secondBoolean);
+		}
+		else { // If I check the correctness of the operand before this (eg. in the controller/repo), I could just have case 1 as else
+			throw new InvalidOperatorException();
 		}
 	}
 	

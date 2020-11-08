@@ -163,7 +163,7 @@ public class TestPrintStatement {
 		StatementInterface s1 = new PrintStatement(new LogicalExpression(
 			new ValueExpression(new BoolValue(true)), 
 			new ValueExpression(new BoolValue(false)), 
-			1)); // print(true || false);
+			"||")); // print(true || false);
 		
 		try {
 			s1.execute(crtState);
