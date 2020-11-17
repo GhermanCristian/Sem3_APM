@@ -3,6 +3,7 @@ package view;
 import model.ADT.MyList;
 import model.expression.ArithmeticExpression;
 import model.expression.HeapReadingExpression;
+import model.expression.RelationalExpression;
 import model.expression.ValueExpression;
 import model.expression.VariableExpression;
 import model.statement.AssignmentStatement;
@@ -17,6 +18,7 @@ import model.statement.PrintStatement;
 import model.statement.ReadFileStatement;
 import model.statement.StatementInterface;
 import model.statement.VariableDeclarationStatement;
+import model.statement.WhileStatement;
 import model.type.BoolType;
 import model.type.IntType;
 import model.type.ReferenceType;
@@ -155,6 +157,28 @@ public class View {
 		return statementList;
 	}
 	
+	private MyList<StatementInterface> getEighthExample() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+		
+		// int v; v=4; (while (v>0) print(v); v = v - 1); print(v)
+		statementList.addLast(new VariableDeclarationStatement("v", new IntType()));
+		statementList.addLast(new AssignmentStatement("v", new ValueExpression(new IntValue(4))));
+		statementList.addLast(new WhileStatement(
+								new RelationalExpression(
+										new VariableExpression("v"), 
+										new ValueExpression(new IntValue(0)), 
+										">"), 
+								new CompoundStatement(
+									new PrintStatement(new VariableExpression("v")),
+									new AssignmentStatement("v", new ArithmeticExpression(
+											new VariableExpression("v"), 
+											new ValueExpression(new IntValue(1)), 
+											"-")))));
+		statementList.addLast(new PrintStatement(new VariableExpression("v")));
+		
+		return statementList;
+	}
+	
 	public void start() {
 		TextMenu textMenu = new TextMenu();
 		
@@ -167,6 +191,7 @@ public class View {
 			textMenu.addCommand(new RunExampleCommand("5", "Ref int v; new(v, 23); Ref Ref int a; new(a, v); print(v); print(a);", this.composeStatement(getFifthExample()), this.SRC_FOLDER_PATH + "\\log5.in"));
 			textMenu.addCommand(new RunExampleCommand("6", "Ref int v; new(v, 23); Ref Ref int a; new(a, v); print(rH(v)); print(rH(rH(a)) + 5);", this.composeStatement(getSixthExample()), this.SRC_FOLDER_PATH + "\\log6.in"));
 			textMenu.addCommand(new RunExampleCommand("7", "Ref int v; new(v, 23); print(rH(v)); wH(v, 24); print(rH(v) + 5);", this.composeStatement(getSeventhExample()), this.SRC_FOLDER_PATH + "\\log7.in"));
+			textMenu.addCommand(new RunExampleCommand("8", "int v; v=4; (while (v>0) print(v); v = v - 1); print(v)", this.composeStatement(getEighthExample()), this.SRC_FOLDER_PATH + "\\log8.in"));
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());
