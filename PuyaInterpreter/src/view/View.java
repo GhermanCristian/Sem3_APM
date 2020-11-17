@@ -10,6 +10,7 @@ import model.statement.CloseReadFileStatement;
 import model.statement.CompoundStatement;
 import model.statement.EmptyStatement;
 import model.statement.HeapAllocationStatement;
+import model.statement.HeapWritingStatement;
 import model.statement.IfStatement;
 import model.statement.OpenReadFileStatement;
 import model.statement.PrintStatement;
@@ -138,6 +139,22 @@ public class View {
 		return statementList;
 	}
 	
+	private MyList<StatementInterface> getSeventhExample() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+		
+		// Ref int v; new(v, 23); print(rH(v)); wH(v, 24); print(rH(v) + 5);
+		statementList.addLast(new VariableDeclarationStatement("v", new ReferenceType(new IntType())));
+		statementList.addLast(new HeapAllocationStatement("v", new ValueExpression(new IntValue(23))));
+		statementList.addLast(new PrintStatement(new HeapReadingExpression(new VariableExpression("v"))));
+		statementList.addLast(new HeapWritingStatement("v", new ValueExpression(new IntValue(24))));
+		statementList.addLast(new PrintStatement(new ArithmeticExpression(
+													new HeapReadingExpression(new VariableExpression("v")), 
+													new ValueExpression(new IntValue(5)), 
+													"+")));
+		
+		return statementList;
+	}
+	
 	public void start() {
 		TextMenu textMenu = new TextMenu();
 		
@@ -149,6 +166,7 @@ public class View {
 			textMenu.addCommand(new RunExampleCommand("4", "openReadFile(str); int var; readFile(str); print(var); readFile(str); print(var); closeReadFile();", this.composeStatement(this.getFourthExample()), this.SRC_FOLDER_PATH + "\\log4.in"));
 			textMenu.addCommand(new RunExampleCommand("5", "Ref int v; new(v, 23); Ref Ref int a; new(a, v); print(v); print(a);", this.composeStatement(getFifthExample()), this.SRC_FOLDER_PATH + "\\log5.in"));
 			textMenu.addCommand(new RunExampleCommand("6", "Ref int v; new(v, 23); Ref Ref int a; new(a, v); print(rH(v)); print(rH(rH(a)) + 5);", this.composeStatement(getSixthExample()), this.SRC_FOLDER_PATH + "\\log6.in"));
+			textMenu.addCommand(new RunExampleCommand("7", "Ref int v; new(v, 23); print(rH(v)); wH(v, 24); print(rH(v) + 5);", this.composeStatement(getSeventhExample()), this.SRC_FOLDER_PATH + "\\log7.in"));
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());
