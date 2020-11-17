@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public class MyDictionary<TKey, TValue> implements DictionaryInterface<TKey, TValue>{
-	private HashMap<TKey, TValue> dictionary;
+	protected HashMap<TKey, TValue> dictionary;
 	
 	public MyDictionary() {
 		this.dictionary = new HashMap<TKey, TValue>();
