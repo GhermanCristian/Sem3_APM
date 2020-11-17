@@ -2,6 +2,7 @@ package view;
 
 import model.ADT.MyList;
 import model.expression.ArithmeticExpression;
+import model.expression.HeapReadingExpression;
 import model.expression.ValueExpression;
 import model.expression.VariableExpression;
 import model.statement.AssignmentStatement;
@@ -59,9 +60,9 @@ public class View {
 		statementList.addLast(new VariableDeclarationStatement("b", new IntType()));
 		statementList.addLast(new AssignmentStatement("a", new ArithmeticExpression(
 								new ArithmeticExpression(
-										new ValueExpression(new IntValue(3)), 
-										new ValueExpression(new IntValue(5)), 
-										"*"), // 3 * 5 
+									new ValueExpression(new IntValue(3)), 
+									new ValueExpression(new IntValue(5)), 
+									"*"), // 3 * 5 
 								new ValueExpression(new IntValue(2)), 
 								"+"))); // 3 * 5 + 2 );
 		statementList.addLast(new AssignmentStatement("b", new ArithmeticExpression(
@@ -109,13 +110,30 @@ public class View {
 	private MyList<StatementInterface> getFifthExample() {
 		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
 		
-		// Ref int v; new(v, 23); Ref Ref int a; new(a,v); print(v); print(a);
+		// Ref int v; new(v, 23); Ref Ref int a; new(a, v); print(v); print(a);
 		statementList.addLast(new VariableDeclarationStatement("v", new ReferenceType(new IntType())));
 		statementList.addLast(new HeapAllocationStatement("v", new ValueExpression(new IntValue(23))));
 		statementList.addLast(new VariableDeclarationStatement("a", new ReferenceType(new ReferenceType(new IntType()))));
 		statementList.addLast(new HeapAllocationStatement("a", new VariableExpression("v")));
 		statementList.addLast(new PrintStatement(new VariableExpression("v")));
 		statementList.addLast(new PrintStatement(new VariableExpression("a")));
+		
+		return statementList;
+	}
+	
+	private MyList<StatementInterface> getSixthExample() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+		
+		// Ref int v; new(v, 23); Ref Ref int a; new(a, v); print(rH(v)); print(rH(rH(a)) + 5);
+		statementList.addLast(new VariableDeclarationStatement("v", new ReferenceType(new IntType())));
+		statementList.addLast(new HeapAllocationStatement("v", new ValueExpression(new IntValue(23))));
+		statementList.addLast(new VariableDeclarationStatement("a", new ReferenceType(new ReferenceType(new IntType()))));
+		statementList.addLast(new HeapAllocationStatement("a", new VariableExpression("v")));
+		statementList.addLast(new PrintStatement(new HeapReadingExpression(new VariableExpression("v"))));
+		statementList.addLast(new PrintStatement(new ArithmeticExpression(
+													new HeapReadingExpression(new HeapReadingExpression(new VariableExpression("a"))), 
+													new ValueExpression(new IntValue(5)), 
+													"+")));
 		
 		return statementList;
 	}
@@ -129,7 +147,8 @@ public class View {
 			textMenu.addCommand(new RunExampleCommand("2", "int a; int b; a = 2 + 3 * 5; b = a + 1; print(b);", this.composeStatement(this.getSecondExample()), this.SRC_FOLDER_PATH + "\\log2.in"));
 			textMenu.addCommand(new RunExampleCommand("3", "bool a; int v; a=true; (If a Then v=2 Else v=3); print(v);", this.composeStatement(this.getThirdExample()), this.SRC_FOLDER_PATH + "\\log3.in"));
 			textMenu.addCommand(new RunExampleCommand("4", "openReadFile(str); int var; readFile(str); print(var); readFile(str); print(var); closeReadFile();", this.composeStatement(this.getFourthExample()), this.SRC_FOLDER_PATH + "\\log4.in"));
-			textMenu.addCommand(new RunExampleCommand("5", "Ref int v; new(v, 23); Ref Ref int a; new(a,v); print(v); print(a);", this.composeStatement(getFifthExample()), this.SRC_FOLDER_PATH + "\\log5.in"));
+			textMenu.addCommand(new RunExampleCommand("5", "Ref int v; new(v, 23); Ref Ref int a; new(a, v); print(v); print(a);", this.composeStatement(getFifthExample()), this.SRC_FOLDER_PATH + "\\log5.in"));
+			textMenu.addCommand(new RunExampleCommand("6", "Ref int v; new(v, 23); Ref Ref int a; new(a, v); print(rH(v)); print(rH(rH(a)) + 5);", this.composeStatement(getSixthExample()), this.SRC_FOLDER_PATH + "\\log6.in"));
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());

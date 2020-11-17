@@ -30,7 +30,7 @@ public class ReferenceType implements TypeInterface{
 	
 	public String toString() {
 		String representation = "";
-		representation += ("&(" + this.innerType.toString() + ")");
+		representation += ("Ref(" + this.innerType.toString() + ")");
 		return representation;
 	}
 }
