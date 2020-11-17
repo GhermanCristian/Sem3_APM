@@ -23,7 +23,8 @@ public class OpenReadFileStatement implements StatementInterface{
 	public ProgramState execute(ProgramState crtState) throws Exception {
 		DictionaryInterface<String, ValueInterface> symbolTable = crtState.getSymbolTable();
 		DictionaryInterface<StringValue, BufferedReader> fileTable = crtState.getFileTable();
-		ValueInterface filePathValue = this.filePath.evaluate(symbolTable);
+		DictionaryInterface<Integer, ValueInterface> heap = crtState.getHeap();
+		ValueInterface filePathValue = this.filePath.evaluate(symbolTable, heap);
 		
 		if (filePathValue.getType().equals(new StringType()) == false) {
 			throw new InvalidTypeException("File path should be a string");

@@ -8,6 +8,7 @@ import model.ProgramState;
 import model.ADT.DictionaryInterface;
 import model.ADT.ListInterface;
 import model.ADT.MyDictionary;
+import model.ADT.MyHeap;
 import model.ADT.MyList;
 import model.ADT.MyStack;
 import model.ADT.StackInterface;
@@ -33,7 +34,8 @@ public class RunExampleCommand extends Command{
 		DictionaryInterface<String, ValueInterface> symbolTable = new MyDictionary<String, ValueInterface>();
 		ListInterface<ValueInterface> output = new MyList<ValueInterface>();
 		DictionaryInterface<StringValue, BufferedReader> fileTable = new MyDictionary<StringValue, BufferedReader>();
-		ProgramState crtProgramState = new ProgramState(stack, symbolTable, output, fileTable, this.crtStatement);
+		DictionaryInterface<Integer, ValueInterface> heap = new MyHeap<Integer, ValueInterface>();
+		ProgramState crtProgramState = new ProgramState(stack, symbolTable, output, fileTable, heap, this.crtStatement);
 		RepositoryInterface repo = new Repository(this.repositoryLocation);
 		ControllerInterface controller = new Controller(repo);
 		controller.addProgramState(crtProgramState);

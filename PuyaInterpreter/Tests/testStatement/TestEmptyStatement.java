@@ -7,6 +7,7 @@ import model.ProgramState;
 import model.ADT.DictionaryInterface;
 import model.ADT.ListInterface;
 import model.ADT.MyDictionary;
+import model.ADT.MyHeap;
 import model.ADT.MyList;
 import model.ADT.MyStack;
 import model.ADT.StackInterface;
@@ -20,6 +21,7 @@ public class TestEmptyStatement {
 	static DictionaryInterface<String, ValueInterface> symbolTable;
 	static ListInterface<ValueInterface> output;
 	static DictionaryInterface<StringValue, BufferedReader> fileTable;
+	static DictionaryInterface<Integer, ValueInterface> heap;
 	static ProgramState crtState;
 	
 	@BeforeClass
@@ -28,7 +30,8 @@ public class TestEmptyStatement {
 		symbolTable = new MyDictionary<String, ValueInterface>();
 		output = new MyList<ValueInterface>();
 		fileTable = new MyDictionary<StringValue, BufferedReader>();
-		crtState = new ProgramState(stack, symbolTable, output, fileTable, null);
+		heap = new MyHeap<Integer, ValueInterface>();
+		crtState = new ProgramState(stack, symbolTable, output, fileTable, heap, null);
 	}
 	
 	@After
@@ -46,6 +49,7 @@ public class TestEmptyStatement {
 			}
 		}
 		fileTable.clear();
+		heap.clear();
 	}
 	
 	@Test

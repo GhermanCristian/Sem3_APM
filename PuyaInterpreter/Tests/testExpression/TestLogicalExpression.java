@@ -8,6 +8,7 @@ import model.ProgramState;
 import model.ADT.DictionaryInterface;
 import model.ADT.ListInterface;
 import model.ADT.MyDictionary;
+import model.ADT.MyHeap;
 import model.ADT.MyList;
 import model.ADT.MyStack;
 import model.ADT.StackInterface;
@@ -25,6 +26,7 @@ public class TestLogicalExpression {
 	static DictionaryInterface<String, ValueInterface> symbolTable;
 	static ListInterface<ValueInterface> output;
 	static DictionaryInterface<StringValue, BufferedReader> fileTable;
+	static DictionaryInterface<Integer, ValueInterface> heap;
 	static ProgramState crtState;
 	
 	@BeforeClass
@@ -33,7 +35,8 @@ public class TestLogicalExpression {
 		symbolTable = new MyDictionary<String, ValueInterface>();
 		output = new MyList<ValueInterface>();
 		fileTable = new MyDictionary<StringValue, BufferedReader>();
-		crtState = new ProgramState(stack, symbolTable, output, fileTable, null);
+		heap = new MyHeap<Integer, ValueInterface>();
+		crtState = new ProgramState(stack, symbolTable, output, fileTable, heap, null);
 	}
 	
 	@After
@@ -51,6 +54,7 @@ public class TestLogicalExpression {
 			}
 		}
 		fileTable.clear();
+		heap.clear();
 	}
 	
 	@Test
@@ -61,7 +65,7 @@ public class TestLogicalExpression {
 			"invalidOperator");
 		
 		try {
-			e1.evaluate(symbolTable);
+			e1.evaluate(symbolTable, heap);
 			fail("Invalid operator");
 		}
 		catch (Exception e) {
@@ -77,7 +81,7 @@ public class TestLogicalExpression {
 			"||");
 		
 		try {
-			e1.evaluate(symbolTable);
+			e1.evaluate(symbolTable, heap);
 			fail("First operand should be boolean");
 		}
 		catch (Exception e) {
@@ -93,7 +97,7 @@ public class TestLogicalExpression {
 			"||");
 			
 		try {
-			e1.evaluate(symbolTable);
+			e1.evaluate(symbolTable, heap);
 			fail("Second operand should be boolean");
 		}
 		catch (Exception e) {
@@ -110,7 +114,7 @@ public class TestLogicalExpression {
 		
 		ValueInterface res = null;
 		try {
-			res = e1.evaluate(symbolTable);
+			res = e1.evaluate(symbolTable, heap);
 		} 
 		catch (Exception e) {
 			fail(e.getMessage());
@@ -128,7 +132,7 @@ public class TestLogicalExpression {
 			
 		ValueInterface res = null;
 		try {
-			res = e1.evaluate(symbolTable);
+			res = e1.evaluate(symbolTable, heap);
 		} 
 		catch (Exception e) {
 			fail(e.getMessage());

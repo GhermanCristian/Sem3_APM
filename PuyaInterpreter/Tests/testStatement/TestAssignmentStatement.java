@@ -2,25 +2,21 @@ package testStatement;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.BufferedReader;
-
 import org.junit.*;
-
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
 import model.ADT.ListInterface;
 import model.ADT.MyDictionary;
+import model.ADT.MyHeap;
 import model.ADT.MyList;
 import model.ADT.MyStack;
 import model.ADT.StackInterface;
-import model.expression.ArithmeticExpression;
-import model.expression.ExpressionInterface;
 import model.expression.ValueExpression;
 import model.statement.AssignmentStatement;
 import model.statement.StatementInterface;
 import model.statement.VariableDeclarationStatement;
 import model.type.BoolType;
 import model.type.IntType;
-import model.value.BoolValue;
 import model.value.IntValue;
 import model.value.StringValue;
 import model.value.ValueInterface;
@@ -30,6 +26,7 @@ public class TestAssignmentStatement {
 	static DictionaryInterface<String, ValueInterface> symbolTable;
 	static ListInterface<ValueInterface> output;
 	static DictionaryInterface<StringValue, BufferedReader> fileTable;
+	static DictionaryInterface<Integer, ValueInterface> heap;
 	static ProgramState crtState;
 	
 	@BeforeClass
@@ -38,7 +35,8 @@ public class TestAssignmentStatement {
 		symbolTable = new MyDictionary<String, ValueInterface>();
 		output = new MyList<ValueInterface>();
 		fileTable = new MyDictionary<StringValue, BufferedReader>();
-		crtState = new ProgramState(stack, symbolTable, output, fileTable, null);
+		heap = new MyHeap<Integer, ValueInterface>();
+		crtState = new ProgramState(stack, symbolTable, output, fileTable, heap, null);
 	}
 	
 	@After
@@ -56,6 +54,7 @@ public class TestAssignmentStatement {
 			}
 		}
 		fileTable.clear();
+		heap.clear();
 	}
 	
 	@Test

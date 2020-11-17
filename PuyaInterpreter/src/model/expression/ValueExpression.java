@@ -11,7 +11,7 @@ public class ValueExpression implements ExpressionInterface {
 	}
 
 	@Override
-	public ValueInterface evaluate(DictionaryInterface<String, ValueInterface> symbolTable) throws Exception {
+	public ValueInterface evaluate(DictionaryInterface<String, ValueInterface> symbolTable, DictionaryInterface<Integer, ValueInterface> heap) throws Exception {
 		return this.value;
 	}
 	

@@ -20,15 +20,15 @@ public class ArithmeticExpression implements ExpressionInterface{
 	}
 
 	@Override
-	public ValueInterface evaluate(DictionaryInterface<String, ValueInterface> symbolTable) throws Exception {
+	public ValueInterface evaluate(DictionaryInterface<String, ValueInterface> symbolTable, DictionaryInterface<Integer, ValueInterface> heap) throws Exception {
 		ValueInterface firstVal, secondVal;
-		firstVal = this.firstExp.evaluate(symbolTable);
+		firstVal = this.firstExp.evaluate(symbolTable, heap);
 	
 		if (firstVal.getType().equals(new IntType()) == false) {
 			throw new InvalidTypeException("First operand not an integer");
 		}
 		
-		secondVal = this.secondExp.evaluate(symbolTable);
+		secondVal = this.secondExp.evaluate(symbolTable, heap);
 		if (secondVal.getType().equals(new IntType()) == false) {
 			throw new InvalidTypeException("Second operand not an integer");
 		}

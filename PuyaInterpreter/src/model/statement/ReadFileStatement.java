@@ -32,7 +32,8 @@ public class ReadFileStatement implements StatementInterface{
 			throw new InvalidTypeException(this.variableName + " is not an integer");
 		}
 		DictionaryInterface<StringValue, BufferedReader> fileTable = crtState.getFileTable();
-		ValueInterface filePathValue = this.filePath.evaluate(symbolTable);
+		DictionaryInterface<Integer, ValueInterface> heap = crtState.getHeap();
+		ValueInterface filePathValue = this.filePath.evaluate(symbolTable, heap);
 		
 		if (filePathValue.getType().equals(new StringType()) == false) {
 			throw new InvalidTypeException("File path should be a string");

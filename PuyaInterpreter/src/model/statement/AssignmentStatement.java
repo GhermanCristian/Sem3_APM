@@ -20,13 +20,14 @@ public class AssignmentStatement implements StatementInterface{
 	@Override
 	public ProgramState execute(ProgramState crtState) throws Exception {
 		DictionaryInterface<String, ValueInterface> symbolTable = crtState.getSymbolTable();
+		DictionaryInterface<Integer, ValueInterface> heap = crtState.getHeap();
 		
 		if (symbolTable.isDefined(this.variableName) == false) {
 			throw new UndefinedVariableException("Variable " + this.variableName + " is not defined");
 		}
 		
 		// the value of the new expression (the one we want to assign to the existing variable)
-		ValueInterface newExpressionValue = this.expression.evaluate(symbolTable);
+		ValueInterface newExpressionValue = this.expression.evaluate(symbolTable, heap);
 		TypeInterface newExpressionType = newExpressionValue.getType();
 		TypeInterface variableType = symbolTable.getValue(this.variableName).getType();
 		

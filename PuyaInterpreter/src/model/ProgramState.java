@@ -14,6 +14,7 @@ public class ProgramState {
 	private DictionaryInterface<String, ValueInterface> symbolTable;
 	private ListInterface<ValueInterface> output;
 	private DictionaryInterface<StringValue, BufferedReader> fileTable;
+	private DictionaryInterface<Integer, ValueInterface> heap;
 	private StatementInterface originalProgram;
 	
 	public ProgramState(
@@ -21,32 +22,38 @@ public class ProgramState {
 			DictionaryInterface<String, ValueInterface> symbolTable, 
 			ListInterface<ValueInterface> output,
 			DictionaryInterface<StringValue, BufferedReader> fileTable,
+			DictionaryInterface<Integer, ValueInterface> heap,
 			StatementInterface program
 			) {
 		this.executionStack = stack;
 		this.symbolTable = symbolTable;
 		this.output = output;
 		this.fileTable = fileTable;
+		this.heap = heap;
 		//this.originalProgram = program.deepCopy();
 		if (program != null) { // we don't add null values to the exeStack because the Deque doesn't accept it
 			this.executionStack.push(program);
 		}
 	}
 	
-	public StackInterface<StatementInterface> getExecutionStack(){
+	public StackInterface<StatementInterface> getExecutionStack() {
 		return this.executionStack;
 	}
 	
-	public DictionaryInterface<String, ValueInterface> getSymbolTable(){
+	public DictionaryInterface<String, ValueInterface> getSymbolTable() {
 		return this.symbolTable;
 	}
 	
-	public ListInterface<ValueInterface> getOutput(){
+	public ListInterface<ValueInterface> getOutput() {
 		return this.output;
 	}
 	
-	public DictionaryInterface<StringValue, BufferedReader> getFileTable(){
+	public DictionaryInterface<StringValue, BufferedReader> getFileTable() {
 		return this.fileTable;
+	}
+	
+	public DictionaryInterface<Integer, ValueInterface> getHeap() {
+		return this.heap;
 	}
 	
 	public StatementInterface getOriginalProgram() {
@@ -65,6 +72,8 @@ public class ProgramState {
 		representation += this.fileTable.toString();
 		representation += "\nOutputTable:\n";
 		representation += this.output.toString();
+		representation += "\nHeap:\n";
+		representation += this.heap.toString();
 		
 		return representation;
 	}
