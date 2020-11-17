@@ -38,7 +38,7 @@ public class ReferenceValue implements ValueInterface{
 	
 	public String toString() {
 		String representation = "";
-		representation += Integer.toHexString(this.heapAddress);
+		representation += ("(0x" + Integer.toHexString(this.heapAddress) + ", " + this.referencedType.toString() + ")");
 		return representation;
 	}
 

@@ -8,6 +8,7 @@ import model.statement.AssignmentStatement;
 import model.statement.CloseReadFileStatement;
 import model.statement.CompoundStatement;
 import model.statement.EmptyStatement;
+import model.statement.HeapAllocationStatement;
 import model.statement.IfStatement;
 import model.statement.OpenReadFileStatement;
 import model.statement.PrintStatement;
@@ -16,6 +17,7 @@ import model.statement.StatementInterface;
 import model.statement.VariableDeclarationStatement;
 import model.type.BoolType;
 import model.type.IntType;
+import model.type.ReferenceType;
 import model.value.BoolValue;
 import model.value.IntValue;
 import model.value.StringValue;
@@ -104,6 +106,20 @@ public class View {
 		return statementList;
 	}
 	
+	private MyList<StatementInterface> getFifthExample() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+		
+		// Ref int v; new(v, 23); Ref Ref int a; new(a,v); print(v); print(a);
+		statementList.addLast(new VariableDeclarationStatement("v", new ReferenceType(new IntType())));
+		statementList.addLast(new HeapAllocationStatement("v", new ValueExpression(new IntValue(23))));
+		statementList.addLast(new VariableDeclarationStatement("a", new ReferenceType(new ReferenceType(new IntType()))));
+		statementList.addLast(new HeapAllocationStatement("a", new VariableExpression("v")));
+		statementList.addLast(new PrintStatement(new VariableExpression("v")));
+		statementList.addLast(new PrintStatement(new VariableExpression("a")));
+		
+		return statementList;
+	}
+	
 	public void start() {
 		TextMenu textMenu = new TextMenu();
 		
@@ -113,6 +129,7 @@ public class View {
 			textMenu.addCommand(new RunExampleCommand("2", "int a; int b; a = 2 + 3 * 5; b = a + 1; print(b);", this.composeStatement(this.getSecondExample()), this.SRC_FOLDER_PATH + "\\log2.in"));
 			textMenu.addCommand(new RunExampleCommand("3", "bool a; int v; a=true; (If a Then v=2 Else v=3); print(v);", this.composeStatement(this.getThirdExample()), this.SRC_FOLDER_PATH + "\\log3.in"));
 			textMenu.addCommand(new RunExampleCommand("4", "openReadFile(str); int var; readFile(str); print(var); readFile(str); print(var); closeReadFile();", this.composeStatement(this.getFourthExample()), this.SRC_FOLDER_PATH + "\\log4.in"));
+			textMenu.addCommand(new RunExampleCommand("5", "Ref int v; new(v, 23); Ref Ref int a; new(a,v); print(v); print(a);", this.composeStatement(getFifthExample()), this.SRC_FOLDER_PATH + "\\log5.in"));
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());

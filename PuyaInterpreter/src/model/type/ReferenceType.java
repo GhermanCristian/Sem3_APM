@@ -12,7 +12,10 @@ public class ReferenceType implements TypeInterface{
 	
 	@Override
 	public boolean equals(Object another) {
-		return (another instanceof ReferenceType && (this.innerType.equals(((ReferenceType)another).getInnerType())));
+		if (another instanceof ReferenceType) {
+			return this.innerType.equals(((ReferenceType)another).getInnerType());
+		}
+		return false;
 	}
 
 	@Override
