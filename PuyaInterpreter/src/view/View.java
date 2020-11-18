@@ -179,6 +179,20 @@ public class View {
 		return statementList;
 	}
 	
+	private MyList<StatementInterface> getNinthExample() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+		
+		// Ref int v; new(v, 23); Ref Ref int a; new(a, v); new(v, 24); print(rH(rH(a)));
+		statementList.addLast(new VariableDeclarationStatement("v", new ReferenceType(new IntType())));
+		statementList.addLast(new HeapAllocationStatement("v", new ValueExpression(new IntValue(23))));
+		statementList.addLast(new VariableDeclarationStatement("a", new ReferenceType(new ReferenceType(new IntType()))));
+		statementList.addLast(new HeapAllocationStatement("a", new VariableExpression("v")));
+		statementList.addLast(new HeapAllocationStatement("v", new ValueExpression(new IntValue(24))));
+		statementList.addLast(new PrintStatement(new HeapReadingExpression(new HeapReadingExpression(new VariableExpression("a")))));
+		
+		return statementList;
+	}
+	
 	public void start() {
 		TextMenu textMenu = new TextMenu();
 		
@@ -192,6 +206,7 @@ public class View {
 			textMenu.addCommand(new RunExampleCommand("6", "Ref int v; new(v, 23); Ref Ref int a; new(a, v); print(rH(v)); print(rH(rH(a)) + 5);", this.composeStatement(getSixthExample()), this.SRC_FOLDER_PATH + "\\log6.in"));
 			textMenu.addCommand(new RunExampleCommand("7", "Ref int v; new(v, 23); print(rH(v)); wH(v, 24); print(rH(v) + 5);", this.composeStatement(getSeventhExample()), this.SRC_FOLDER_PATH + "\\log7.in"));
 			textMenu.addCommand(new RunExampleCommand("8", "int v; v=4; (while (v>0) print(v); v = v - 1); print(v)", this.composeStatement(getEighthExample()), this.SRC_FOLDER_PATH + "\\log8.in"));
+			textMenu.addCommand(new RunExampleCommand("9", "Ref int v; new(v, 23); Ref Ref int a; new(a, v); new(v, 24); print(rH(rH(a)));", this.composeStatement(getNinthExample()), this.SRC_FOLDER_PATH + "\\log9.in"));
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());

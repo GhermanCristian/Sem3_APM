@@ -81,4 +81,9 @@ public class MyDictionary<TKey, TValue> implements DictionaryInterface<TKey, TVa
 	public HashMap<TKey, TValue> getAllPairs() {
 		return this.dictionary;
 	}
+
+	@Override
+	public void setContent(HashMap<TKey, TValue> newContent) {
+		this.dictionary = newContent;
+	}
 }

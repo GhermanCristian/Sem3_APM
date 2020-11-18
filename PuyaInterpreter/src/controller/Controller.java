@@ -1,9 +1,17 @@
 package controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import exception.EmptyADTException;
 import model.ProgramState;
+import model.ADT.DictionaryInterface;
 import model.ADT.StackInterface;
 import model.statement.StatementInterface;
+import model.value.ReferenceValue;
+import model.value.ValueInterface;
 import repository.Repository;
 import repository.RepositoryInterface;
 
@@ -12,6 +20,20 @@ public class Controller implements ControllerInterface{
 	
 	public Controller(RepositoryInterface repository) {
 		this.repository = repository;
+	}
+	
+	private HashMap<Integer, ValueInterface> getGarbageCollectedHeap(ProgramState crtProgramState) {
+		DictionaryInterface<String, ValueInterface> symbolTable = crtProgramState.getSymbolTable();
+		DictionaryInterface<Integer, ValueInterface> heap = crtProgramState.getHeap();
+		
+		List<Integer> symbolTableAddresses = symbolTable.getAllValues()
+											.stream()
+											.filter(elem -> elem instanceof ReferenceValue)
+											.map(elem -> {ReferenceValue elem1 = (ReferenceValue)elem; return elem1.getHeapAddress();})
+											.collect(Collectors.toList());
+		return (HashMap<Integer, ValueInterface>)heap.getAllPairs().entrySet().stream()
+											.filter(elem -> symbolTableAddresses.contains(elem.getKey()))
+											.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 	}
 	
 	@Override
@@ -34,8 +56,10 @@ public class Controller implements ControllerInterface{
 			// but we are specifically checking if its size > 0 => that exception will never happen
 			this.oneStepExecution(crtProgramState);
 			this.repository.logProgramExecution();
+			crtProgramState.getHeap().setContent(this.getGarbageCollectedHeap(crtProgramState));
 		}
 		
+		this.repository.logProgramExecution();
 		return crtProgramState;
 	}
 
