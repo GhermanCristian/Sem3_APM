@@ -12,7 +12,6 @@ import model.ADT.StackInterface;
 import model.statement.StatementInterface;
 import model.value.ReferenceValue;
 import model.value.ValueInterface;
-import repository.Repository;
 import repository.RepositoryInterface;
 
 public class Controller implements ControllerInterface{
@@ -31,8 +30,13 @@ public class Controller implements ControllerInterface{
 											.filter(elem -> elem instanceof ReferenceValue)
 											.map(elem -> {ReferenceValue elem1 = (ReferenceValue)elem; return elem1.getHeapAddress();})
 											.collect(Collectors.toList());
+		List<Integer> heapReferencedAddresses = heap.getAllValues()
+											.stream()
+											.filter(elem -> elem instanceof ReferenceValue)
+											.map(elem -> {ReferenceValue elem1 = (ReferenceValue)elem; return elem1.getHeapAddress();})
+											.collect(Collectors.toList());
 		return (HashMap<Integer, ValueInterface>)heap.getAllPairs().entrySet().stream()
-											.filter(elem -> symbolTableAddresses.contains(elem.getKey()))
+											.filter(elem -> symbolTableAddresses.contains(elem.getKey()) || heapReferencedAddresses.contains(elem.getKey()))
 											.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 	}
 	
