@@ -34,4 +34,9 @@ public class IntValue implements ValueInterface{
 	public TypeInterface getType() {
 		return new IntType();
 	}
+
+	@Override
+	public ValueInterface getDeepCopy() {
+		return new IntValue(this.value);
+	}
 }

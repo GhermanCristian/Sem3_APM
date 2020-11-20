@@ -35,4 +35,8 @@ public class StringValue implements ValueInterface{
 		return new StringType();
 	}
 
+	@Override
+	public ValueInterface getDeepCopy() {
+		return new StringValue(this.value);
+	}
 }

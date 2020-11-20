@@ -3,5 +3,6 @@ package model.type;
 import model.value.ValueInterface;
 
 public interface TypeInterface {
-	ValueInterface getDefaultValue();
+	public ValueInterface getDefaultValue();
+	public TypeInterface getDeepCopy();
 }

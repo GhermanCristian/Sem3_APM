@@ -9,6 +9,7 @@ public interface DictionaryInterface<TKey, TValue> {
 	public boolean isDefined(TKey key);
 	public boolean exists(TValue value);
 	public boolean isEmpty();
+	public void clone(HashMap<TKey, TValue> original);
 	public void setContent(HashMap<TKey, TValue> newContent);
 	public void update(TKey key, TValue newValue);
 	public void insert(TKey key, TValue newValue);

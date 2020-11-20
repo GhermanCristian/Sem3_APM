@@ -20,4 +20,9 @@ public class BoolType implements TypeInterface{
 	public ValueInterface getDefaultValue() {
 		return new BoolValue(); // the default constructor sets the value to the default one
 	}
+
+	@Override
+	public TypeInterface getDeepCopy() {
+		return new BoolType();
+	}
 }

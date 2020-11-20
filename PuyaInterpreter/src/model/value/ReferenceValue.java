@@ -42,4 +42,8 @@ public class ReferenceValue implements ValueInterface{
 		return representation;
 	}
 
+	@Override
+	public ValueInterface getDeepCopy() {
+		return new ReferenceValue(this.heapAddress, this.referencedType.getDeepCopy());
+	}
 }

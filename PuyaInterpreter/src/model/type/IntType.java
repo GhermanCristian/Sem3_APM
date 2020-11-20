@@ -20,4 +20,9 @@ public class IntType implements TypeInterface{
 	public ValueInterface getDefaultValue() {
 		return new IntValue(); // the default constructor sets the value to the default one
 	}
+
+	@Override
+	public TypeInterface getDeepCopy() {
+		return new IntType();
+	}
 }
