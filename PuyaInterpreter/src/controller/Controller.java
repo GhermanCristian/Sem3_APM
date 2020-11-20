@@ -39,16 +39,6 @@ public class Controller implements ControllerInterface{
 											.filter(elem -> symbolTableAddresses.contains(elem.getKey()) || heapReferencedAddresses.contains(elem.getKey()))
 											.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 	}
-	
-	@Override
-	public ProgramState oneStepExecution(ProgramState crtProgramState) throws Exception{
-		StackInterface<StatementInterface> executionStack = crtProgramState.getExecutionStack();
-		if (executionStack.size() == 0) {
-			throw new EmptyADTException("No program states available");
-		}
-		StatementInterface currentStatement = executionStack.pop();
-		return currentStatement.execute(crtProgramState);
-	}
 
 	@Override
 	public ProgramState fullProgramExecution() throws Exception{

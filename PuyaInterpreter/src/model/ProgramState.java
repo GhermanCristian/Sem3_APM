@@ -2,6 +2,7 @@ package model;
 
 import java.io.BufferedReader;
 
+import exception.EmptyADTException;
 import model.ADT.DictionaryInterface;
 import model.ADT.ListInterface;
 import model.ADT.StackInterface;
@@ -16,6 +17,8 @@ public class ProgramState {
 	private DictionaryInterface<StringValue, BufferedReader> fileTable;
 	private DictionaryInterface<Integer, ValueInterface> heap;
 	private StatementInterface originalProgram;
+	private static int globalThreadCount;
+	private final int threadID;
 	
 	public ProgramState(
 			StackInterface<StatementInterface> stack, 
@@ -34,6 +37,13 @@ public class ProgramState {
 		if (program != null) { // we don't add null values to the exeStack because the Deque doesn't accept it
 			this.executionStack.push(program);
 		}
+		this.threadID = ProgramState.manageThreadID();
+	}
+	
+	public static synchronized int manageThreadID() {
+		int newThreadID = ProgramState.globalThreadCount;
+		ProgramState.globalThreadCount += 1;
+		return newThreadID;
 	}
 	
 	public StackInterface<StatementInterface> getExecutionStack() {
@@ -60,10 +70,22 @@ public class ProgramState {
 		return this.originalProgram;
 	}
 	
+	public boolean isCompleted() {
+		return (this.executionStack.size() == 0);
+	}
+	
+	public ProgramState oneStepExecution() throws Exception{
+		if (this.executionStack.size() == 0) {
+			throw new EmptyADTException("No program states available");
+		}
+		StatementInterface currentStatement = this.executionStack.pop();
+		return currentStatement.execute(this);
+	}
+	
 	public String toString() {
 		String representation = "";
 		
-		representation += "\n================\n";
+		representation += "\n======== ThreadID: " + Integer.toString(this.threadID) + "========\n";
 		representation += "ExecutionStack:\n";
 		representation += this.executionStack.toString();
 		representation += "\nSymbolTable:\n";

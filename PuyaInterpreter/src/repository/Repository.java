@@ -23,7 +23,6 @@ public class Repository implements RepositoryInterface{
 
 	@Override
 	public void logProgramExecution(ProgramState crtProgramState) throws Exception {
-		// maybe I should also have the threadID as an argument or sth
 		PrintWriter logFile = new PrintWriter(new BufferedWriter(new FileWriter(this.logFilePath, true)));
 		logFile.append(crtProgramState.toString()); 
 		logFile.close();
