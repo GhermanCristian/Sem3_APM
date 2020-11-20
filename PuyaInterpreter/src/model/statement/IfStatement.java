@@ -38,7 +38,7 @@ public class IfStatement implements StatementInterface{
 			stack.push(this.falseConditionStatement);
 		}
 		
-		return crtState;
+		return null;
 	}
 	
 	public String toString() {

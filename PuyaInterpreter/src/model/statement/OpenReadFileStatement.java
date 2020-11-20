@@ -38,7 +38,7 @@ public class OpenReadFileStatement implements StatementInterface{
 		BufferedReader fileBuffer = new BufferedReader(new FileReader(filePathString));
 		fileTable.insert((StringValue)filePathValue, fileBuffer);
 	
-		return crtState;
+		return null;
 	}
 	
 	@Override

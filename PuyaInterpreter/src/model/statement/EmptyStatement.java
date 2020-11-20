@@ -6,7 +6,7 @@ public class EmptyStatement implements StatementInterface{
 
 	@Override
 	public ProgramState execute(ProgramState crtState) throws Exception {
-		return crtState;
+		return null;
 	}
 	
 	public String toString() {

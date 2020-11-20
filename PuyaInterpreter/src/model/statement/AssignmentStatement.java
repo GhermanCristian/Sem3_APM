@@ -37,7 +37,7 @@ public class AssignmentStatement implements StatementInterface{
 		}
 		symbolTable.update(this.variableName, newExpressionValue);
 		
-		return crtState;
+		return null;
 	}
 	
 	public String toString() {

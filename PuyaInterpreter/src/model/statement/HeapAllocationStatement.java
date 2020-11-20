@@ -45,7 +45,7 @@ public class HeapAllocationStatement implements StatementInterface {
 		heap.insert(newPositionInHeap, expressionValue);
 		symbolTable.update(this.variableName, new ReferenceValue(newPositionInHeap, referencedType));
 		
-		return crtState;
+		return null;
 	}
 	
 	@Override

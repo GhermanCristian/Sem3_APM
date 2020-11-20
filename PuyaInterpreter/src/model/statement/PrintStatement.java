@@ -21,7 +21,7 @@ public class PrintStatement implements StatementInterface {
 		
 		output.addLast(this.expressionToPrint.evaluate(symbolTable, heap));
 		
-		return crtState;
+		return null;
 	}
 	
 	// only displays print(var) (we're printing the print statement)

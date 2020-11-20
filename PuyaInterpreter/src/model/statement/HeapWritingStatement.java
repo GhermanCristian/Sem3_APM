@@ -48,7 +48,7 @@ public class HeapWritingStatement implements StatementInterface {
 		
 		heap.update(positionInHeap, expressionValue);
 		
-		return crtState;
+		return null;
 	}
 
 	@Override

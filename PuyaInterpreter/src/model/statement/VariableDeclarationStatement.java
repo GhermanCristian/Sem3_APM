@@ -46,7 +46,7 @@ public class VariableDeclarationStatement implements StatementInterface{
 			throw new InvalidTypeException("Invalid type when trying to declare " + this.variableName);
 		}
 		
-		return crtState;
+		return null;
 	}
 	
 	public String toString() {

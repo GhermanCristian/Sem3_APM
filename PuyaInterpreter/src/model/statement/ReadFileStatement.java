@@ -54,7 +54,7 @@ public class ReadFileStatement implements StatementInterface{
 			symbolTable.update(this.variableName, new IntValue(Integer.parseInt(currentLine)));
 		}
 		
-		return crtState;
+		return null;
 	}
 	
 	@Override

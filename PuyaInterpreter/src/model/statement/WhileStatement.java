@@ -33,7 +33,7 @@ public class WhileStatement implements StatementInterface {
 			stack.push(this.statement);
 		}
 		
-		return crtState;
+		return null;
 	}
 	
 	public String toString() {

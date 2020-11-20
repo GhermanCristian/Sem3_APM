@@ -17,7 +17,7 @@ public class ProgramState {
 	private DictionaryInterface<StringValue, BufferedReader> fileTable;
 	private DictionaryInterface<Integer, ValueInterface> heap;
 	private StatementInterface originalProgram;
-	private static int globalThreadCount;
+	private static int globalThreadCount = 1;
 	private final int threadID;
 	
 	public ProgramState(
