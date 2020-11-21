@@ -10,6 +10,7 @@ import model.statement.AssignmentStatement;
 import model.statement.CloseReadFileStatement;
 import model.statement.CompoundStatement;
 import model.statement.EmptyStatement;
+import model.statement.ForkStatement;
 import model.statement.HeapAllocationStatement;
 import model.statement.HeapWritingStatement;
 import model.statement.IfStatement;
@@ -29,7 +30,7 @@ import model.value.StringValue;
 public class View {
 	private final String SRC_FOLDER_PATH = "C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter";
 	
-	private StatementInterface composeStatement(MyList<StatementInterface> crtList) throws Exception {
+	private StatementInterface composeStatement(MyList<StatementInterface> crtList){
 		// pop never actually throws an exception here (I use it when size() >= 1, and the exception occurs when size() = 0)
 		// but if I didn't add it, the compiler would complain
 		if (crtList.size() == 0) {
@@ -37,11 +38,23 @@ public class View {
 		}
 		
 		if (crtList.size() == 1) {
-			return crtList.pop();
+			try {
+				return crtList.pop();
+			} 
+			catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
 		}
 		
-		StatementInterface lastStatement = crtList.pop();
-		return new CompoundStatement(composeStatement(crtList), lastStatement);
+		StatementInterface lastStatement = null;
+		try {
+			lastStatement = crtList.pop();
+			return new CompoundStatement(composeStatement(crtList), lastStatement);
+		} 
+		catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return lastStatement;
 	}
 	
 	private MyList<StatementInterface> getFirstExample() {
@@ -193,6 +206,28 @@ public class View {
 		return statementList;
 	}
 	
+	private MyList<StatementInterface> getTenthExample() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+		
+		//int v; Ref int a; v=10; new(a,22); fork(wH(a,30); v=32; print(v); print(rH(a))); print(v); print(rH(a));
+		statementList.addLast(new VariableDeclarationStatement("v", new IntType()));
+		statementList.addLast(new VariableDeclarationStatement("a", new ReferenceType(new IntType())));
+		statementList.addLast(new AssignmentStatement("v", new ValueExpression(new IntValue(10))));
+		statementList.addLast(new HeapAllocationStatement("a", new ValueExpression(new IntValue(22))));
+		
+		MyList<StatementInterface> threadStatementList = new MyList<StatementInterface>();
+		threadStatementList.addLast(new HeapWritingStatement("a", new ValueExpression(new IntValue(30))));
+		threadStatementList.addLast(new AssignmentStatement("v", new ValueExpression(new IntValue(32))));
+		threadStatementList.addLast(new PrintStatement(new VariableExpression("v")));
+		threadStatementList.addLast(new PrintStatement(new HeapReadingExpression(new VariableExpression("a"))));
+		
+		statementList.addLast(new ForkStatement(this.composeStatement(threadStatementList)));
+		statementList.addLast(new PrintStatement(new VariableExpression("v")));
+		statementList.addLast(new PrintStatement(new HeapReadingExpression(new VariableExpression("a"))));
+		
+		return statementList;
+	}
+	
 	public void start() {
 		TextMenu textMenu = new TextMenu();
 		
@@ -202,11 +237,12 @@ public class View {
 			textMenu.addCommand(new RunExampleCommand("2", "int a; int b; a = 2 + 3 * 5; b = a + 1; print(b);", this.composeStatement(this.getSecondExample()), this.SRC_FOLDER_PATH + "\\log2.in"));
 			textMenu.addCommand(new RunExampleCommand("3", "bool a; int v; a=true; (If a Then v=2 Else v=3); print(v);", this.composeStatement(this.getThirdExample()), this.SRC_FOLDER_PATH + "\\log3.in"));
 			textMenu.addCommand(new RunExampleCommand("4", "openReadFile(str); int var; readFile(str); print(var); readFile(str); print(var); closeReadFile();", this.composeStatement(this.getFourthExample()), this.SRC_FOLDER_PATH + "\\log4.in"));
-			textMenu.addCommand(new RunExampleCommand("5", "Ref int v; new(v, 23); Ref Ref int a; new(a, v); print(v); print(a);", this.composeStatement(getFifthExample()), this.SRC_FOLDER_PATH + "\\log5.in"));
-			textMenu.addCommand(new RunExampleCommand("6", "Ref int v; new(v, 23); Ref Ref int a; new(a, v); print(rH(v)); print(rH(rH(a)) + 5);", this.composeStatement(getSixthExample()), this.SRC_FOLDER_PATH + "\\log6.in"));
-			textMenu.addCommand(new RunExampleCommand("7", "Ref int v; new(v, 23); print(rH(v)); wH(v, 24); print(rH(v) + 5);", this.composeStatement(getSeventhExample()), this.SRC_FOLDER_PATH + "\\log7.in"));
-			textMenu.addCommand(new RunExampleCommand("8", "int v; v=4; (while (v>0) print(v); v = v - 1); print(v)", this.composeStatement(getEighthExample()), this.SRC_FOLDER_PATH + "\\log8.in"));
-			textMenu.addCommand(new RunExampleCommand("9", "Ref int v; new(v, 23); Ref Ref int a; new(a, v); new(v, 24); print(rH(rH(a)));", this.composeStatement(getNinthExample()), this.SRC_FOLDER_PATH + "\\log9.in"));
+			textMenu.addCommand(new RunExampleCommand("5", "Ref int v; new(v, 23); Ref Ref int a; new(a, v); print(v); print(a);", this.composeStatement(this.getFifthExample()), this.SRC_FOLDER_PATH + "\\log5.in"));
+			textMenu.addCommand(new RunExampleCommand("6", "Ref int v; new(v, 23); Ref Ref int a; new(a, v); print(rH(v)); print(rH(rH(a)) + 5);", this.composeStatement(this.getSixthExample()), this.SRC_FOLDER_PATH + "\\log6.in"));
+			textMenu.addCommand(new RunExampleCommand("7", "Ref int v; new(v, 23); print(rH(v)); wH(v, 24); print(rH(v) + 5);", this.composeStatement(this.getSeventhExample()), this.SRC_FOLDER_PATH + "\\log7.in"));
+			textMenu.addCommand(new RunExampleCommand("8", "int v; v=4; (while (v>0) print(v); v = v - 1); print(v)", this.composeStatement(this.getEighthExample()), this.SRC_FOLDER_PATH + "\\log8.in"));
+			textMenu.addCommand(new RunExampleCommand("9", "Ref int v; new(v, 23); Ref Ref int a; new(a, v); new(v, 24); print(rH(rH(a)));", this.composeStatement(this.getNinthExample()), this.SRC_FOLDER_PATH + "\\log9.in"));
+			textMenu.addCommand(new RunExampleCommand("10", "int v; Ref int a; v=10; new(a,22); fork(wH(a,30); v=32; print(v); print(rH(a))); print(v); print(rH(a));", this.composeStatement(this.getTenthExample()), this.SRC_FOLDER_PATH + "\\log10.in"));
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());

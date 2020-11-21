@@ -1,35 +1,41 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
-
-import exception.EmptyADTException;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
-import model.ADT.StackInterface;
-import model.statement.StatementInterface;
 import model.value.ReferenceValue;
 import model.value.ValueInterface;
 import repository.RepositoryInterface;
 
 public class Controller implements ControllerInterface{
 	private RepositoryInterface repository;
+	private ExecutorService executor;
 	
 	public Controller(RepositoryInterface repository) {
 		this.repository = repository;
 	}
 	
-	private HashMap<Integer, ValueInterface> getGarbageCollectedHeap(ProgramState crtProgramState) {
-		DictionaryInterface<String, ValueInterface> symbolTable = crtProgramState.getSymbolTable();
-		DictionaryInterface<Integer, ValueInterface> heap = crtProgramState.getHeap();
+	private List<Integer> getHeapAddressesFromSymbolTable(DictionaryInterface<String, ValueInterface> symbolTable) {
+		return symbolTable.getAllValues()
+				.stream()
+				.filter(elem -> elem instanceof ReferenceValue)
+				.map(elem -> {ReferenceValue elem1 = (ReferenceValue)elem; return elem1.getHeapAddress();})
+				.collect(Collectors.toList());
+	}
+	
+	private HashMap<Integer, ValueInterface> getGarbageCollectedHeap(List<ProgramState> threadList) {
+		// the heap is the same for all threads, so we just pick one from which to get the heap
+		DictionaryInterface<Integer, ValueInterface> heap = threadList.get(0).getHeap();
 		
-		List<Integer> symbolTableAddresses = symbolTable.getAllValues()
-											.stream()
-											.filter(elem -> elem instanceof ReferenceValue)
-											.map(elem -> {ReferenceValue elem1 = (ReferenceValue)elem; return elem1.getHeapAddress();})
-											.collect(Collectors.toList());
+		List<Integer> symbolTableAddresses = new ArrayList<Integer>();
+		threadList.forEach(thread -> symbolTableAddresses.addAll(this.getHeapAddressesFromSymbolTable(thread.getSymbolTable())));
 		List<Integer> heapReferencedAddresses = heap.getAllValues()
 											.stream()
 											.filter(elem -> elem instanceof ReferenceValue)
@@ -41,20 +47,46 @@ public class Controller implements ControllerInterface{
 	}
 
 	@Override
-	public ProgramState fullProgramExecution() throws Exception{
-		ProgramState crtProgramState = this.repository.getCurrentProgramState();
-		StackInterface<StatementInterface> executionStack = crtProgramState.getExecutionStack();
-		this.repository.logProgramExecution();
-		while(executionStack.size() > 0) {
-			// normally, oneStepExecution throws an exception if the exe stack is empty
-			// but we are specifically checking if its size > 0 => that exception will never happen
-			this.oneStepExecution(crtProgramState);
-			this.repository.logProgramExecution();
-			crtProgramState.getHeap().setContent(this.getGarbageCollectedHeap(crtProgramState));
+	public void fullProgramExecution() throws Exception {
+		this.executor = Executors.newFixedThreadPool(2);
+		List<ProgramState> threadsStillInExecution = this.removeCompletedThreads(this.repository.getThreadList());
+		while (threadsStillInExecution.size() > 0) {
+			threadsStillInExecution.get(0).getHeap().setContent(this.getGarbageCollectedHeap(threadsStillInExecution));
+			this.oneStepExecutionAllThreads(threadsStillInExecution);
+			threadsStillInExecution = this.removeCompletedThreads(this.repository.getThreadList());
 		}
 		
-		this.repository.logProgramExecution();
-		return crtProgramState;
+		this.executor.shutdownNow();
+		this.repository.setThreadList(threadsStillInExecution); // what is the purpose of this ??????
+	}
+	
+	@Override
+	public void oneStepExecutionAllThreads(List<ProgramState> threadList) throws Exception {
+		for (ProgramState crtThread : threadList) {
+			this.repository.logProgramExecution(crtThread);
+		}
+		
+		List<Callable<ProgramState>> callableList = threadList.stream()
+									.map((ProgramState thread) -> (Callable<ProgramState>)(() -> {return thread.oneStepExecution();}))
+									.collect(Collectors.toList());
+		// threads that have been advanced by 1 step
+		List<ProgramState> advancedThreadList = this.executor.invokeAll(callableList).stream()
+													.map(future -> {
+														try {
+															return future.get();
+														}
+														catch (Exception e) {
+															// I have to throw a runtime exception because fuck you functional programming
+															throw new RuntimeException(e.getMessage());
+														}
+													})
+													.filter(thread -> thread != null)
+													.collect(Collectors.toList());
+		threadList.addAll(advancedThreadList);
+		for (ProgramState crtThread : threadList) {
+			this.repository.logProgramExecution(crtThread);
+		}
+		this.repository.setThreadList(threadList);
 	}
 
 	@Override
@@ -62,4 +94,8 @@ public class Controller implements ControllerInterface{
 		this.repository.addProgramState(newProgramState);
 	}
 
+	@Override
+	public List<ProgramState> removeCompletedThreads(List<ProgramState> initialList) {
+		return initialList.stream().filter(thread -> thread.isCompleted() == false).collect(Collectors.toList());
+	}
 }

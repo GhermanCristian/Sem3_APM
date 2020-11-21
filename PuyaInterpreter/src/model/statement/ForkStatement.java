@@ -25,4 +25,11 @@ public class ForkStatement implements StatementInterface {
 		symbolTable.clone(parentThread.getSymbolTable().getAllPairs());
 		return new ProgramState(stack, symbolTable, parentThread.getOutput(), parentThread.getFileTable(), parentThread.getHeap(), this.threadInstructions);
 	}
+	
+	@Override
+	public String toString() {
+		String representation = "";
+		representation += ("fork\n(\n" + this.threadInstructions.toString() + ")\n");
+		return representation;
+	}
 }

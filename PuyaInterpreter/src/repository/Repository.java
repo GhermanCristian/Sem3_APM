@@ -23,6 +23,7 @@ public class Repository implements RepositoryInterface{
 
 	@Override
 	public void logProgramExecution(ProgramState crtProgramState) throws Exception {
+		// this method can throw an exception if fileWriter throws an IOException
 		PrintWriter logFile = new PrintWriter(new BufferedWriter(new FileWriter(this.logFilePath, true)));
 		logFile.append(crtProgramState.toString()); 
 		logFile.close();
