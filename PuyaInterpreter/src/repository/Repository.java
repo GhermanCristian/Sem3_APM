@@ -22,10 +22,12 @@ public class Repository implements RepositoryInterface{
 	}
 
 	@Override
-	public void logProgramExecution(ProgramState crtProgramState) throws Exception {
-		// this method can throw an exception if fileWriter throws an IOException
+	public void logCompleteThreadListExecution(boolean beforeStep) throws Exception {
 		PrintWriter logFile = new PrintWriter(new BufferedWriter(new FileWriter(this.logFilePath, true)));
-		logFile.append(crtProgramState.toString()); 
+		if (beforeStep == true) {
+			logFile.append("\n======== New step ========\n");
+		}
+		this.threadList.forEach(thread -> logFile.append(thread.toString()));
 		logFile.close();
 	}
 

@@ -223,6 +223,7 @@ public class View {
 		
 		statementList.addLast(new ForkStatement(this.composeStatement(threadStatementList)));
 		statementList.addLast(new PrintStatement(new VariableExpression("v")));
+		// if I add an instruction here (like v = 23), I delay the main thread by 1 step and it syncronizes with the other thr
 		statementList.addLast(new PrintStatement(new HeapReadingExpression(new VariableExpression("a"))));
 		
 		return statementList;

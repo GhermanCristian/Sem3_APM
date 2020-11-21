@@ -1,7 +1,6 @@
 package model.statement;
 
 import model.ProgramState;
-import model.ADT.StackInterface;
 
 public class CompoundStatement implements StatementInterface {
 	private final StatementInterface firstStatement;
@@ -12,11 +11,19 @@ public class CompoundStatement implements StatementInterface {
 		this.secondStatement = secondStatement;
 	}
 	
+	private void processStatement(ProgramState crtState, StatementInterface statement) throws Exception {
+		if (statement instanceof CompoundStatement) {
+			statement.execute(crtState);
+		}
+		else {
+			crtState.getExecutionStack().push(statement);
+		}
+	}
+	
 	@Override
-	public ProgramState execute(ProgramState crtState) throws Exception{
-		StackInterface <StatementInterface> stack = crtState.getExecutionStack();
-		stack.push(this.secondStatement);
-		stack.push(this.firstStatement);
+	public ProgramState execute(ProgramState crtState) throws Exception {
+		this.processStatement(crtState, this.secondStatement);
+		this.processStatement(crtState, this.firstStatement);
 		return null;
 	}
 	

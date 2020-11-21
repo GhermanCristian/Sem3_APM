@@ -7,5 +7,5 @@ public interface RepositoryInterface {
 	public void addProgramState(ProgramState newProgramState);
 	public List<ProgramState> getThreadList();
 	public void setThreadList(List<ProgramState> newList);
-	public void logProgramExecution(ProgramState crtProgramState) throws Exception;
+	public void logCompleteThreadListExecution(boolean beforeStep) throws Exception;
 }

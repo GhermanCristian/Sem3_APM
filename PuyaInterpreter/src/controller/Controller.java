@@ -60,12 +60,8 @@ public class Controller implements ControllerInterface{
 		this.repository.setThreadList(threadsStillInExecution); // what is the purpose of this ??????
 	}
 	
-	@Override
-	public void oneStepExecutionAllThreads(List<ProgramState> threadList) throws Exception {
-		for (ProgramState crtThread : threadList) {
-			this.repository.logProgramExecution(crtThread);
-		}
-		
+	private void oneStepExecutionAllThreads(List<ProgramState> threadList) throws Exception {
+		this.repository.logCompleteThreadListExecution(true);
 		List<Callable<ProgramState>> callableList = threadList.stream()
 									.map((ProgramState thread) -> (Callable<ProgramState>)(() -> {return thread.oneStepExecution();}))
 									.collect(Collectors.toList());
@@ -83,9 +79,7 @@ public class Controller implements ControllerInterface{
 													.filter(thread -> thread != null)
 													.collect(Collectors.toList());
 		threadList.addAll(advancedThreadList);
-		for (ProgramState crtThread : threadList) {
-			this.repository.logProgramExecution(crtThread);
-		}
+		this.repository.logCompleteThreadListExecution(false);
 		this.repository.setThreadList(threadList);
 	}
 
