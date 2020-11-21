@@ -165,4 +165,23 @@ public class TestHeapWritingStatement {
 		assertEquals(heap.size(), 1);
 		assertEquals(((IntValue)heap.getValue(1)).getValue(), 24);
 	}
+	
+	@Test
+	public void Execute_ValidInput_ReturnsNull() {
+		StatementInterface s1 = new VariableDeclarationStatement("a", new ReferenceType(new IntType()));
+		StatementInterface s3 = new HeapAllocationStatement("a", new ValueExpression(new IntValue(23)));
+		StatementInterface s2 = new HeapWritingStatement("a", new ValueExpression(new IntValue(24)));
+		ProgramState result = null;
+		
+		try {
+			s1.execute(crtState);
+			s3.execute(crtState);
+			result = s2.execute(crtState);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertNull(result);
+	}
 }

@@ -13,7 +13,6 @@ import model.ADT.MyList;
 import model.ADT.MyStack;
 import model.ADT.StackInterface;
 import model.expression.ValueExpression;
-import model.expression.VariableExpression;
 import model.statement.HeapAllocationStatement;
 import model.statement.StatementInterface;
 import model.statement.VariableDeclarationStatement;
@@ -117,7 +116,30 @@ public class TestHeapAllocationStatement {
 	}
 	
 	@Test
-	public void Execute_ValidInput_CorrectAllocationAndSymbolTableUpdate() {
+	public void Execute_ValidInput_CorrectSymbolTableUpdate() {
+		TypeInterface t1 = new ReferenceType(new IntType());
+		StatementInterface s1 = new VariableDeclarationStatement("a", t1);
+		StatementInterface s2 = new HeapAllocationStatement("a", new ValueExpression(new IntValue(23)));
+		
+		try {
+			s1.execute(crtState);
+		} 
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertEquals(symbolTable.getValue("a"), t1.getDefaultValue());
+		
+		try {
+			s2.execute(crtState);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertEquals(symbolTable.getValue("a"), new ReferenceValue(1, t1));
+	}
+	
+	@Test
+	public void Execute_ValidInput_CorrectHeapAllocation() {
 		TypeInterface t1 = new ReferenceType(new IntType());
 		StatementInterface s1 = new VariableDeclarationStatement("a", t1);
 		StatementInterface s2 = new HeapAllocationStatement("a", new ValueExpression(new IntValue(23)));
@@ -129,7 +151,6 @@ public class TestHeapAllocationStatement {
 			fail(e.getMessage());
 		}
 		assertTrue(heap.isEmpty());
-		assertEquals(symbolTable.getValue("a"), t1.getDefaultValue());
 		
 		try {
 			s2.execute(crtState);
@@ -139,6 +160,23 @@ public class TestHeapAllocationStatement {
 		}
 		assertEquals(heap.size(), 1);
 		assertEquals(((IntValue)heap.getValue(1)).getValue(), 23);
-		assertEquals(symbolTable.getValue("a"), new ReferenceValue(1, t1));
+	}
+	
+	@Test
+	public void Execute_ValidInput_ReturnsNull() {
+		TypeInterface t1 = new ReferenceType(new IntType());
+		StatementInterface s1 = new VariableDeclarationStatement("a", t1);
+		StatementInterface s2 = new HeapAllocationStatement("a", new ValueExpression(new IntValue(23)));
+		ProgramState result = null;
+		
+		try {
+			s1.execute(crtState);
+			result = s2.execute(crtState);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertNull(result);
 	}
 }

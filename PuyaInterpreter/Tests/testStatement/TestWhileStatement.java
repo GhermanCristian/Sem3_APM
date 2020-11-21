@@ -94,6 +94,20 @@ public class TestWhileStatement {
 	}
 	
 	@Test
+	public void Execute_FalseCondition_ReturnsNull() {
+		StatementInterface s1 = new WhileStatement(new ValueExpression(new BoolValue(false)), 
+												new VariableDeclarationStatement("a", new IntType()));
+		ProgramState result = null;
+		try {
+			result = s1.execute(crtState);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertNull(result);
+	}
+	
+	@Test
 	public void Execute_5IterationsSingleStatement_CorrectOutputSize() {
 		StatementInterface s1 = new VariableDeclarationStatement("a", new IntType());
 		StatementInterface s2 = new AssignmentStatement("a", new ValueExpression(new IntValue(5)));

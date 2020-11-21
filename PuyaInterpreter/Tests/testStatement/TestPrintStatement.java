@@ -186,4 +186,17 @@ public class TestPrintStatement {
 		}
 	}
 
+	@Test
+	public void Execute_ValidValueExpression_ReturnsNull() {
+		StatementInterface s1 = new PrintStatement(new ValueExpression(new IntValue(23))); // print(23);
+		ProgramState result = null;
+		
+		try {
+			s1.execute(crtState);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertNull(result);
+	}
 }

@@ -74,4 +74,17 @@ public class TestEmptyStatement {
 		assertEquals(fileTable.size(), 0);
 	}
 
+	@Test
+	public void Execute_ValidInput_ReturnsNull() {
+		StatementInterface s1 = new EmptyStatement();
+		ProgramState result = null;
+		
+		try {
+			result = s1.execute(crtState);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertNull(result);
+	}
 }

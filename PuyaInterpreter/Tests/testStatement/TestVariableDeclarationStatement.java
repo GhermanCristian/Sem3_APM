@@ -2,9 +2,7 @@ package testStatement;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.BufferedReader;
-
 import org.junit.*;
-
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
 import model.ADT.ListInterface;
@@ -17,9 +15,11 @@ import model.statement.StatementInterface;
 import model.statement.VariableDeclarationStatement;
 import model.type.BoolType;
 import model.type.IntType;
+import model.type.ReferenceType;
 import model.type.StringType;
 import model.value.BoolValue;
 import model.value.IntValue;
+import model.value.ReferenceValue;
 import model.value.StringValue;
 import model.value.ValueInterface;
 
@@ -60,6 +60,19 @@ public class TestVariableDeclarationStatement{
 	}
 	
 	@Test
+	public void Execute_NullType_ThrowsException() {
+		StatementInterface s1 = new VariableDeclarationStatement("abc", null);
+		
+		try {
+			s1.execute(crtState);
+			fail("Type cannot be null");
+		}
+		catch (Exception e){
+			assertTrue(true);
+		}
+	}
+	
+	@Test
 	public void Execute_NonExistentInt_IntAdded() {
 		StatementInterface s1 = new VariableDeclarationStatement("abc", new IntType());
 		
@@ -78,6 +91,19 @@ public class TestVariableDeclarationStatement{
 		assertTrue(symbolTable.isDefined("abc"));
 		assertFalse(symbolTable.isEmpty());
 		assertEquals(((IntValue)symbolTable.getValue("abc")).getValue(), new IntValue().getValue()); // default value
+	}
+	
+	@Test
+	public void Execute_NonExistentInt_ReturnsNull() {
+		StatementInterface s1 = new VariableDeclarationStatement("abc", new IntType());
+		ProgramState result = null;
+		try {
+			result = s1.execute(crtState);
+		}
+		catch (Exception e){
+			fail(e.getMessage());
+		}
+		assertNull(result);
 	}
 	
 	@Test
@@ -133,5 +159,22 @@ public class TestVariableDeclarationStatement{
 		assertTrue(symbolTable.isDefined("abc"));
 		assertFalse(symbolTable.isEmpty());
 		assertEquals(((StringValue)symbolTable.getValue("abc")).getValue(), new StringValue().getValue()); // default value
+	}
+	
+	@Test
+	public void Execute_NonExistentReference_ReferenceAdded() {
+		StatementInterface s1 = new VariableDeclarationStatement("abc", new ReferenceType(new IntType()));
+		
+		assertEquals(symbolTable.size(), 0);
+		try {
+			s1.execute(crtState);
+		}
+		catch (Exception e){
+			fail(e.getMessage());
+		}
+		assertEquals(symbolTable.size(), 1);
+		assertTrue(symbolTable.isDefined("abc"));
+		assertFalse(symbolTable.isEmpty());
+		assertEquals(((ReferenceValue)symbolTable.getValue("abc")).getReferencedType(), new IntType());
 	}
 }

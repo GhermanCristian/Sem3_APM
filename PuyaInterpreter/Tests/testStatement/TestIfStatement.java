@@ -140,4 +140,21 @@ public class TestIfStatement {
 		assertTrue(symbolTable.isDefined("v1"));
 		assertFalse(symbolTable.isDefined("v2"));
 	}
+	
+	@Test
+	public void Execute_ValidValueCondition_ReturnsNull() {
+		StatementInterface s1 = new IfStatement(new ValueExpression(new BoolValue(false)), 
+			new VariableDeclarationStatement("v1", new IntType()), 
+			new VariableDeclarationStatement("v2", new IntType())
+		);
+		ProgramState result = null;
+		
+		try {
+			result = s1.execute(crtState);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertNull(result);
+	}
 }

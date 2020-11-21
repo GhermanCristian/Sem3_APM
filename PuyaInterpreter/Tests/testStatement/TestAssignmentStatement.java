@@ -106,4 +106,21 @@ public class TestAssignmentStatement {
 		}
 		assertEquals(((IntValue)symbolTable.getValue("abc")).getValue(), 23);
 	}
+	
+	@Test
+	public void Execute_ValidInput_ReturnsNull() {
+		StatementInterface s1 = new VariableDeclarationStatement("abc", new IntType());
+		StatementInterface s2 = new AssignmentStatement("abc", new ValueExpression(new IntValue(23)));
+		ProgramState result = null;
+		
+		try {
+			s1.execute(crtState); // int abc = 0; (0 is the default initialization value)
+			result = s2.execute(crtState); // abc = 23;
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertNull(result);
+	}
 }

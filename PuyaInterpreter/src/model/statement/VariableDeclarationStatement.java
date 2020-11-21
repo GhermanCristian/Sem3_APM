@@ -40,8 +40,8 @@ public class VariableDeclarationStatement implements StatementInterface{
 		else if (this.variableType instanceof ReferenceType) {
 			symbolTable.insert(this.variableName, this.variableType.getDefaultValue());
 		}
-		// I'm not sure if this part will ever be reached, because I'm already being given a TypeInterface (which should be valid)
-		// but just in case...
+		// I'm not sure if this part will ever be reached, because the compiler doesn't allow for anything but a TypeInterface
+		// to be added, but just in case...
 		else {
 			throw new InvalidTypeException("Invalid type when trying to declare " + this.variableName);
 		}

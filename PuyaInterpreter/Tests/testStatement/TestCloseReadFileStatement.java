@@ -108,4 +108,21 @@ public class TestCloseReadFileStatement {
 		assertEquals(fileTable.size(), 0);
 		assertFalse(fileTable.isDefined(path));
 	}
+	
+	@Test
+	public void Execute_ValidInput_ReturnsNull() {
+		StringValue path = new StringValue(this.SRC_FOLDER_PATH + "\\logFile.txt");
+		StatementInterface s1 = new OpenReadFileStatement(new ValueExpression(path));
+		StatementInterface s2 = new CloseReadFileStatement(new ValueExpression(path));	
+		
+		ProgramState result = null;
+		try {
+			s1.execute(crtState);
+			result = s2.execute(crtState);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertNull(result);
+	}
 }

@@ -109,4 +109,22 @@ public class TestCompoundStatement {
 		assertEquals(((IntValue)symbolTable.getValue("abc")).getValue(), 23);
 		assertEquals(stack.size(), 0); // the stack is now empty
 	}
+	
+	@Test
+	public void Execute_ValidInput_ReturnsNull() {
+		StatementInterface s1 = new CompoundStatement(
+			new VariableDeclarationStatement("abc", new IntType()), 
+			new AssignmentStatement("abc", new ValueExpression(new IntValue(23)))
+		);
+		ProgramState result = null;
+		
+		try {
+			result = s1.execute(crtState);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertNull(result);
+	}
 }

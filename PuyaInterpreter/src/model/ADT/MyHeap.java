@@ -18,4 +18,10 @@ public class MyHeap<TKey, TValue> extends MyDictionary<TKey, TValue>{
 		this.firstAvailablePosition = setNextAvailablePosition();
 		return positionCopy;
 	}
+	
+	@Override
+	public void clear() {
+		this.dictionary.clear();
+		this.firstAvailablePosition = 1;
+	}
 }

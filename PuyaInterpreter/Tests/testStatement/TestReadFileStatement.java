@@ -135,6 +135,24 @@ public class TestReadFileStatement {
 	}
 	
 	@Test
+	public void Execute_ValidEmptyInput_ReturnsNull() {
+		StringValue path = new StringValue(this.SRC_FOLDER_PATH + "\\emptyFile.txt");
+		StatementInterface s1 = new OpenReadFileStatement(new ValueExpression(path));
+		StatementInterface s2 = new ReadFileStatement(new ValueExpression(path), "someVariable");
+		ProgramState result = null;
+		symbolTable.insert("someVariable", new IntValue(23));
+
+		try {
+			s1.execute(crtState);
+			result = s2.execute(crtState);	
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertNull(result);
+	}
+	
+	@Test
 	public void Execute_ValidNonEmptyInput_VariableUpdated() {
 		StringValue path = new StringValue(this.SRC_FOLDER_PATH + "\\logFile.txt");
 		StatementInterface s1 = new OpenReadFileStatement(new ValueExpression(path));

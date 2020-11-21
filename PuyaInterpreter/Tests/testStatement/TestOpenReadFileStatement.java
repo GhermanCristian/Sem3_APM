@@ -99,6 +99,21 @@ public class TestOpenReadFileStatement {
 	}
 	
 	@Test
+	public void Execute_ValidFile_ReturnsNull() {
+		StringValue path = new StringValue(this.SRC_FOLDER_PATH + "\\logFile.txt");
+		StatementInterface s1 = new OpenReadFileStatement(new ValueExpression(path));
+		ProgramState result = null;
+		
+		try {
+			result = s1.execute(crtState);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertNull(result);
+	}
+	
+	@Test
 	public void Execute_FileAlreadyDefined_ThrowsException() {
 		StringValue path = new StringValue(this.SRC_FOLDER_PATH + "\\logFile.txt");
 		StatementInterface s1 = new OpenReadFileStatement(new ValueExpression(path));
