@@ -1,6 +1,7 @@
 package model.expression;
 
 import model.ADT.DictionaryInterface;
+import model.type.TypeInterface;
 import model.value.ValueInterface;
 
 public class ValueExpression implements ExpressionInterface {
@@ -20,5 +21,10 @@ public class ValueExpression implements ExpressionInterface {
 		String representation = "";
 		representation += (this.value.toString());
 		return representation;
+	}
+
+	@Override
+	public TypeInterface typeCheck(DictionaryInterface<String, TypeInterface> typeEnvironment) throws Exception {
+		return this.value.getType();
 	}
 }

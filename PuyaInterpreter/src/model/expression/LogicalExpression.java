@@ -4,6 +4,7 @@ import exception.InvalidOperatorException;
 import exception.InvalidTypeException;
 import model.ADT.DictionaryInterface;
 import model.type.BoolType;
+import model.type.TypeInterface;
 import model.value.BoolValue;
 import model.value.ValueInterface;
 
@@ -24,12 +25,12 @@ public class LogicalExpression implements ExpressionInterface{
 		firstVal = this.firstExp.evaluate(symbolTable, heap);
 		
 		if (firstVal.getType().equals(new BoolType()) == false) {
-			throw new InvalidTypeException("First operand not a boolean");
+			throw new InvalidTypeException("First operand is not a boolean");
 		}
 		
 		secondVal = this.secondExp.evaluate(symbolTable, heap);
 		if (secondVal.getType().equals(new BoolType()) == false) {
-			throw new InvalidTypeException("Second operand not a boolean");
+			throw new InvalidTypeException("Second operand is not a boolean");
 		}
 		
 		boolean firstBoolean = ((BoolValue)firstVal).getValue();
@@ -53,5 +54,22 @@ public class LogicalExpression implements ExpressionInterface{
 		representation += (" " + this.operator + " ");
 		representation += (this.secondExp.toString());
 		return representation;
+	}
+
+	@Override
+	public TypeInterface typeCheck(DictionaryInterface<String, TypeInterface> typeEnvironment) throws Exception {
+		TypeInterface firstType, secondType, boolType;
+		firstType = this.firstExp.typeCheck(typeEnvironment);
+		secondType = this.secondExp.typeCheck(typeEnvironment);
+		boolType = new BoolType();
+		
+		if (firstType.equals(boolType) == false) {
+			throw new InvalidTypeException("First expression is not a boolean");
+		}
+		if (secondType.equals(boolType) == false) {
+			throw new InvalidTypeException("Second expression is not a boolean");
+		}
+		
+		return boolType;
 	}
 }

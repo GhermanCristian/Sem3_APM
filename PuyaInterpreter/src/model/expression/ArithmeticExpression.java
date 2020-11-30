@@ -5,6 +5,7 @@ import exception.InvalidOperatorException;
 import exception.InvalidTypeException;
 import model.ADT.DictionaryInterface;
 import model.type.IntType;
+import model.type.TypeInterface;
 import model.value.IntValue;
 import model.value.ValueInterface;
 
@@ -22,17 +23,15 @@ public class ArithmeticExpression implements ExpressionInterface{
 	@Override
 	public ValueInterface evaluate(DictionaryInterface<String, ValueInterface> symbolTable, DictionaryInterface<Integer, ValueInterface> heap) throws Exception {
 		ValueInterface firstVal, secondVal;
-		firstVal = this.firstExp.evaluate(symbolTable, heap);
-	
-		if (firstVal.getType().equals(new IntType()) == false) {
-			throw new InvalidTypeException("First operand not an integer");
-		}
 		
+		firstVal = this.firstExp.evaluate(symbolTable, heap);
+		if (firstVal.getType().equals(new IntType()) == false) {
+			throw new InvalidTypeException("First operand is not an integer");
+		}
 		secondVal = this.secondExp.evaluate(symbolTable, heap);
 		if (secondVal.getType().equals(new IntType()) == false) {
-			throw new InvalidTypeException("Second operand not an integer");
+			throw new InvalidTypeException("Second operand is not an integer");
 		}
-		
 		int firstInt = ((IntValue)firstVal).getValue();
 		int secondInt = ((IntValue)secondVal).getValue();
 		
@@ -63,5 +62,22 @@ public class ArithmeticExpression implements ExpressionInterface{
 		representation += (" " + this.operator + " ");
 		representation += (this.secondExp.toString());
 		return representation;
+	}
+
+	@Override
+	public TypeInterface typeCheck(DictionaryInterface<String, TypeInterface> typeEnvironment) throws Exception {
+		TypeInterface firstType, secondType, intType;
+		firstType = this.firstExp.typeCheck(typeEnvironment);
+		secondType = this.secondExp.typeCheck(typeEnvironment);
+		intType = new IntType();
+		
+		if (firstType.equals(intType) == false) {
+			throw new InvalidTypeException("First expression is not an integer");
+		}
+		if (secondType.equals(intType) == false) {
+			throw new InvalidTypeException("Second expression is not an integer");
+		}
+		
+		return intType;
 	}
 }

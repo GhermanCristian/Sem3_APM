@@ -4,6 +4,7 @@ import exception.InvalidOperatorException;
 import exception.InvalidTypeException;
 import model.ADT.DictionaryInterface;
 import model.type.IntType;
+import model.type.TypeInterface;
 import model.value.BoolValue;
 import model.value.IntValue;
 import model.value.ValueInterface;
@@ -65,6 +66,23 @@ public class RelationalExpression implements ExpressionInterface{
 		representation += (" " + this.operator + " ");
 		representation += (this.secondExp.toString());
 		return representation;
+	}
+
+	@Override
+	public TypeInterface typeCheck(DictionaryInterface<String, TypeInterface> typeEnvironment) throws Exception {
+		TypeInterface firstType, secondType, intType;
+		firstType = this.firstExp.typeCheck(typeEnvironment);
+		secondType = this.secondExp.typeCheck(typeEnvironment);
+		intType = new IntType();
+		
+		if (firstType.equals(intType) == false) {
+			throw new InvalidTypeException("First expression is not an integer");
+		}
+		if (secondType.equals(intType) == false) {
+			throw new InvalidTypeException("Second expression is not an integer");
+		}
+		
+		return intType;
 	}
 
 }
