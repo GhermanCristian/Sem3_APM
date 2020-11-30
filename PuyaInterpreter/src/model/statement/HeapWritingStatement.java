@@ -5,6 +5,7 @@ import exception.UndefinedVariableException;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
 import model.expression.ExpressionInterface;
+import model.type.ReferenceType;
 import model.type.TypeInterface;
 import model.value.ReferenceValue;
 import model.value.ValueInterface;
@@ -56,5 +57,18 @@ public class HeapWritingStatement implements StatementInterface {
 		String representation = "";
 		representation += ("*(" + this.variableName + ") = " + this.expression.toString() + ";\n");
 		return representation;
+	}
+
+	@Override
+	public DictionaryInterface<String, TypeInterface> getTypeEnvironment(
+			DictionaryInterface<String, TypeInterface> initialTypeEnvironment) throws Exception {
+		TypeInterface expressionReferenceType = new ReferenceType(this.expression.typeCheck(initialTypeEnvironment));
+		// the type of the reference that "variableName" is allocated to
+		// if getValue does not return a ReferenceValue, the equals will fail; it will also fail if the inner types don't match
+		// so we're doing both checks simultaneously
+		if (initialTypeEnvironment.getValue(this.variableName).equals(expressionReferenceType) == false) {
+			throw new InvalidTypeException("HeapWritingStatement: Expression cannot be evaluated to a " + expressionReferenceType.toString());
+		}
+		return initialTypeEnvironment;
 	}
 }

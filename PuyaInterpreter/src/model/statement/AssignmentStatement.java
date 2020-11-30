@@ -33,7 +33,7 @@ public class AssignmentStatement implements StatementInterface{
 		
 		// if the new expression's type matches the type of the existing variable => update
 		if (variableType.equals(newExpressionType) == false) {
-			throw new InvalidTypeException("Type of " + this.variableName + " doesn't match type of expression");
+			throw new InvalidTypeException("Type of " + this.variableName + " doesn't match the expression's type");
 		}
 		symbolTable.update(this.variableName, newExpressionValue);
 		
@@ -44,5 +44,14 @@ public class AssignmentStatement implements StatementInterface{
 		String representation = "";
 		representation += (this.variableName + " = " + this.expression.toString() + ";\n");
 		return representation;
+	}
+
+	@Override
+	public DictionaryInterface<String, TypeInterface> getTypeEnvironment(
+			DictionaryInterface<String, TypeInterface> initialTypeEnvironment) throws Exception {
+		if (initialTypeEnvironment.getValue(this.variableName).equals(this.expression.typeCheck(initialTypeEnvironment)) == false) {
+			throw new InvalidTypeException("AssignmentStatement: type of "+ this.variableName + " doesn't match the expression's type");
+		}
+		return initialTypeEnvironment; // the type environment remains unchanged
 	}
 }

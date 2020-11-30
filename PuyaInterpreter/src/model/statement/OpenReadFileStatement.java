@@ -9,6 +9,7 @@ import model.ProgramState;
 import model.ADT.DictionaryInterface;
 import model.expression.ExpressionInterface;
 import model.type.StringType;
+import model.type.TypeInterface;
 import model.value.StringValue;
 import model.value.ValueInterface;
 
@@ -46,5 +47,14 @@ public class OpenReadFileStatement implements StatementInterface{
 		String representation = "";
 		representation += ("openRead(" + this.filePath + ");\n");
 		return representation;
+	}
+
+	@Override
+	public DictionaryInterface<String, TypeInterface> getTypeEnvironment(
+			DictionaryInterface<String, TypeInterface> initialTypeEnvironment) throws Exception {
+		if (this.filePath.typeCheck(initialTypeEnvironment).equals(new StringType()) == false) {
+			throw new InvalidTypeException("OpenReadFileStatement: file path should be a stringValue");
+		}
+		return initialTypeEnvironment;
 	}
 }

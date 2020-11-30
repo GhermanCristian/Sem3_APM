@@ -54,4 +54,11 @@ public class VariableDeclarationStatement implements StatementInterface{
 		representation += (this.variableType.toString() + " " + this.variableName + ";\n");
 		return representation;
 	}
+
+	@Override
+	public DictionaryInterface<String, TypeInterface> getTypeEnvironment(
+			DictionaryInterface<String, TypeInterface> initialTypeEnvironment) throws Exception {
+		initialTypeEnvironment.insert(this.variableName, this.variableType);
+		return initialTypeEnvironment; // this is the only statement that changes the type environment
+	}
 }

@@ -4,6 +4,7 @@ import model.ProgramState;
 import model.ADT.DictionaryInterface;
 import model.ADT.ListInterface;
 import model.expression.ExpressionInterface;
+import model.type.TypeInterface;
 import model.value.ValueInterface;
 
 public class PrintStatement implements StatementInterface {
@@ -29,5 +30,12 @@ public class PrintStatement implements StatementInterface {
 		String representation = "";
 		representation += ("print (" + this.expressionToPrint.toString() + ");\n");
 		return representation;
+	}
+
+	@Override
+	public DictionaryInterface<String, TypeInterface> getTypeEnvironment(
+			DictionaryInterface<String, TypeInterface> initialTypeEnvironment) throws Exception {
+		this.expressionToPrint.typeCheck(initialTypeEnvironment); // throws an exception if the expression's type is invalid
+		return initialTypeEnvironment; // the type environment is not modified
 	}
 }

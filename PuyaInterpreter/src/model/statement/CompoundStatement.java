@@ -1,6 +1,8 @@
 package model.statement;
 
 import model.ProgramState;
+import model.ADT.DictionaryInterface;
+import model.type.TypeInterface;
 
 public class CompoundStatement implements StatementInterface {
 	private final StatementInterface firstStatement;
@@ -33,5 +35,11 @@ public class CompoundStatement implements StatementInterface {
 		// need to better highlight the fact that this is a CompoundStatement
 		representation += (this.firstStatement.toString() + this.secondStatement.toString());
 		return representation;
+	}
+
+	@Override
+	public DictionaryInterface<String, TypeInterface> getTypeEnvironment(
+			DictionaryInterface<String, TypeInterface> initialTypeEnvironment) throws Exception {
+		return this.secondStatement.getTypeEnvironment(this.firstStatement.getTypeEnvironment(initialTypeEnvironment));
 	}
 }

@@ -5,6 +5,7 @@ import model.ADT.DictionaryInterface;
 import model.ADT.MyDictionary;
 import model.ADT.MyStack;
 import model.ADT.StackInterface;
+import model.type.TypeInterface;
 import model.value.ValueInterface;
 
 public class ForkStatement implements StatementInterface {
@@ -31,5 +32,12 @@ public class ForkStatement implements StatementInterface {
 		String representation = "";
 		representation += ("fork\n(\n" + this.threadInstructions.toString() + ")\n");
 		return representation;
+	}
+
+	@Override
+	public DictionaryInterface<String, TypeInterface> getTypeEnvironment(
+			DictionaryInterface<String, TypeInterface> initialTypeEnvironment) throws Exception {
+		//this.threadInstructions.getTypeEnvironment(clone(initialTypeEnvironment));
+		return initialTypeEnvironment;
 	}
 }

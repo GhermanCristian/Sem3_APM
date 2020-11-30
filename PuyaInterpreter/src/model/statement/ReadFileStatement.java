@@ -8,6 +8,7 @@ import model.ADT.DictionaryInterface;
 import model.expression.ExpressionInterface;
 import model.type.IntType;
 import model.type.StringType;
+import model.type.TypeInterface;
 import model.value.IntValue;
 import model.value.StringValue;
 import model.value.ValueInterface;
@@ -62,5 +63,17 @@ public class ReadFileStatement implements StatementInterface{
 		String representation = "";
 		representation += ("readFile(" + this.filePath + ");\n");
 		return representation;
+	}
+
+	@Override
+	public DictionaryInterface<String, TypeInterface> getTypeEnvironment(
+			DictionaryInterface<String, TypeInterface> initialTypeEnvironment) throws Exception {
+		if (initialTypeEnvironment.getValue(this.variableName).equals(new IntType()) == false) {
+			throw new InvalidTypeException("ReadFileStatement: " + this.variableName + " is not an integer");
+		}
+		if (this.filePath.typeCheck(initialTypeEnvironment).equals(new StringType()) == false) {
+			throw new InvalidTypeException("ReadFileStatement: file path should be a stringValue");
+		}
+		return initialTypeEnvironment;
 	}
 }
