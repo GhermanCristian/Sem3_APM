@@ -22,17 +22,9 @@ public class LogicalExpression implements ExpressionInterface{
 	@Override
 	public ValueInterface evaluate(DictionaryInterface<String, ValueInterface> symbolTable, DictionaryInterface<Integer, ValueInterface> heap) throws Exception {
 		ValueInterface firstVal, secondVal;
+		
 		firstVal = this.firstExp.evaluate(symbolTable, heap);
-		
-		if (firstVal.getType().equals(new BoolType()) == false) {
-			throw new InvalidTypeException("First operand is not a boolean");
-		}
-		
 		secondVal = this.secondExp.evaluate(symbolTable, heap);
-		if (secondVal.getType().equals(new BoolType()) == false) {
-			throw new InvalidTypeException("Second operand is not a boolean");
-		}
-		
 		boolean firstBoolean = ((BoolValue)firstVal).getValue();
 		boolean secondBoolean = ((BoolValue)secondVal).getValue();
 		
@@ -42,7 +34,7 @@ public class LogicalExpression implements ExpressionInterface{
 		if (this.operator == "||") {
 			return new BoolValue(firstBoolean || secondBoolean);
 		}
-		else { // If I check the correctness of the operand before this (eg. in the controller/repo), I could just have case 1 as else
+		else {
 			throw new InvalidOperatorException();
 		}
 	}

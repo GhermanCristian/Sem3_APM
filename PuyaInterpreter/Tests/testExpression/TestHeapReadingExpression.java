@@ -21,6 +21,7 @@ import model.statement.StatementInterface;
 import model.statement.VariableDeclarationStatement;
 import model.type.IntType;
 import model.type.ReferenceType;
+import model.type.TypeInterface;
 import model.value.IntValue;
 import model.value.ReferenceValue;
 import model.value.StringValue;
@@ -32,6 +33,7 @@ public class TestHeapReadingExpression {
 	static ListInterface<ValueInterface> output;
 	static DictionaryInterface<StringValue, BufferedReader> fileTable;
 	static DictionaryInterface<Integer, ValueInterface> heap;
+	static DictionaryInterface<String, TypeInterface> typeEnvironment;
 	static ProgramState crtState;
 	
 	@BeforeClass
@@ -41,6 +43,7 @@ public class TestHeapReadingExpression {
 		output = new MyList<ValueInterface>();
 		fileTable = new MyDictionary<StringValue, BufferedReader>();
 		heap = new MyHeap<Integer, ValueInterface>();
+		typeEnvironment = new MyDictionary<String, TypeInterface>();
 		crtState = new ProgramState(stack, symbolTable, output, fileTable, heap, null);
 	}
 	
@@ -60,18 +63,33 @@ public class TestHeapReadingExpression {
 		}
 		fileTable.clear();
 		heap.clear();
+		typeEnvironment.clear();
 	}
 	
 	@Test
-	public void Evaluate_ExpressionNotReference_ThrowsException() {
+	public void TypeCheck_ExpressionNotReference_ThrowsException() {
 		ExpressionInterface e1 = new HeapReadingExpression(new ValueExpression(new IntValue()));
 		try {
-			e1.evaluate(symbolTable, heap);
+			e1.typeCheck(typeEnvironment);
 			fail("Expression is not a reference");
 		}
 		catch(Exception e) {
 			assertTrue(true);
 		}
+	}
+	
+	@Test
+	public void TypeCheck_ValidExpressionType_ReturnsInnerType() {
+		ExpressionInterface e1 = new HeapReadingExpression(new ValueExpression(new ReferenceValue(new IntType())));
+		TypeInterface result = null;
+		try {
+			result = e1.typeCheck(typeEnvironment);
+		}
+		catch(Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertEquals(result, new IntType());
 	}
 	
 	@Test

@@ -16,6 +16,8 @@ import model.expression.ExpressionInterface;
 import model.expression.LogicalExpression;
 import model.expression.ValueExpression;
 import model.statement.StatementInterface;
+import model.type.BoolType;
+import model.type.TypeInterface;
 import model.value.BoolValue;
 import model.value.IntValue;
 import model.value.StringValue;
@@ -27,6 +29,7 @@ public class TestLogicalExpression {
 	static ListInterface<ValueInterface> output;
 	static DictionaryInterface<StringValue, BufferedReader> fileTable;
 	static DictionaryInterface<Integer, ValueInterface> heap;
+	static DictionaryInterface<String, TypeInterface> typeEnvironment;
 	static ProgramState crtState;
 	
 	@BeforeClass
@@ -36,6 +39,7 @@ public class TestLogicalExpression {
 		output = new MyList<ValueInterface>();
 		fileTable = new MyDictionary<StringValue, BufferedReader>();
 		heap = new MyHeap<Integer, ValueInterface>();
+		typeEnvironment = new MyDictionary<String, TypeInterface>();
 		crtState = new ProgramState(stack, symbolTable, output, fileTable, heap, null);
 	}
 	
@@ -55,6 +59,57 @@ public class TestLogicalExpression {
 		}
 		fileTable.clear();
 		heap.clear();
+		typeEnvironment.clear();
+	}
+	
+	@Test
+	public void TypeCheck_FirstOperandNotBoolean_ThrowsException() {
+		ExpressionInterface e1 = new LogicalExpression(
+			new ValueExpression(new IntValue(12)), 
+			new ValueExpression(new BoolValue(true)), 
+			"||");
+		
+		try {
+			e1.typeCheck(typeEnvironment);
+			fail("First operand should be boolean");
+		}
+		catch (Exception e) {
+			assertTrue(true);
+		}
+	}
+	
+	@Test
+	public void TypeCheck_SecondOperandNotBoolean_ThrowsException() {
+		ExpressionInterface e1 = new LogicalExpression(
+			new ValueExpression(new BoolValue(true)), 
+			new ValueExpression(new IntValue(12)), 
+			"||");
+			
+		try {
+			e1.typeCheck(typeEnvironment);
+			fail("Second operand should be boolean");
+		}
+		catch (Exception e) {
+			assertTrue(true);
+		}
+	}
+	
+	@Test
+	public void TypeCheck_ValidOperands_ReturnsBoolType() {
+		ExpressionInterface e1 = new LogicalExpression(
+			new ValueExpression(new BoolValue(true)), 
+			new ValueExpression(new BoolValue(true)), 
+			"||");
+			
+		TypeInterface result = null;
+		try {
+			result = e1.typeCheck(typeEnvironment);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertEquals(result, new BoolType());
 	}
 	
 	@Test
@@ -67,38 +122,6 @@ public class TestLogicalExpression {
 		try {
 			e1.evaluate(symbolTable, heap);
 			fail("Invalid operator");
-		}
-		catch (Exception e) {
-			assertTrue(true);
-		}
-	}
-	
-	@Test
-	public void Evaluate_FirstOperandNotBoolean_ThrowsException() {
-		ExpressionInterface e1 = new LogicalExpression(
-			new ValueExpression(new IntValue(12)), 
-			new ValueExpression(new BoolValue(true)), 
-			"||");
-		
-		try {
-			e1.evaluate(symbolTable, heap);
-			fail("First operand should be boolean");
-		}
-		catch (Exception e) {
-			assertTrue(true);
-		}
-	}
-	
-	@Test
-	public void Evaluate_SecondOperandNotBoolean_ThrowsException() {
-		ExpressionInterface e1 = new LogicalExpression(
-			new ValueExpression(new BoolValue(true)), 
-			new ValueExpression(new IntValue(12)), 
-			"||");
-			
-		try {
-			e1.evaluate(symbolTable, heap);
-			fail("Second operand should be boolean");
 		}
 		catch (Exception e) {
 			assertTrue(true);

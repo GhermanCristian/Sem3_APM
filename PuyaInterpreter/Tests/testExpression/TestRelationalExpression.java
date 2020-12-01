@@ -16,6 +16,8 @@ import model.expression.ExpressionInterface;
 import model.expression.RelationalExpression;
 import model.expression.ValueExpression;
 import model.statement.StatementInterface;
+import model.type.IntType;
+import model.type.TypeInterface;
 import model.value.BoolValue;
 import model.value.IntValue;
 import model.value.StringValue;
@@ -27,6 +29,7 @@ public class TestRelationalExpression {
 	static ListInterface<ValueInterface> output;
 	static DictionaryInterface<StringValue, BufferedReader> fileTable;
 	static DictionaryInterface<Integer, ValueInterface> heap;
+	static DictionaryInterface<String, TypeInterface> typeEnvironment;
 	static ProgramState crtState;
 	
 	@BeforeClass
@@ -36,6 +39,7 @@ public class TestRelationalExpression {
 		output = new MyList<ValueInterface>();
 		fileTable = new MyDictionary<StringValue, BufferedReader>();
 		heap = new MyHeap<Integer, ValueInterface>();
+		typeEnvironment = new MyDictionary<String, TypeInterface>();
 		crtState = new ProgramState(stack, symbolTable, output, fileTable, heap, null);
 	}
 	
@@ -55,6 +59,57 @@ public class TestRelationalExpression {
 		}
 		fileTable.clear();
 		heap.clear();
+		typeEnvironment.clear();
+	}
+	
+	@Test
+	public void TypeCheck_FirstOperandNotInteger_ThrowsException() {
+		ExpressionInterface e1 = new RelationalExpression(
+			new ValueExpression(new BoolValue(true)), 
+			new ValueExpression(new IntValue(0)), 
+			"==");
+		
+		try {
+			e1.typeCheck(typeEnvironment);
+			fail("First operand is not an integer");
+		}
+		catch (Exception e) {
+			assertTrue(true);
+		}	
+	}
+	
+	@Test
+	public void TypeCheck_SecondOperandNotInteger_ThrowsException() {
+		ExpressionInterface e1 = new RelationalExpression(
+			new ValueExpression(new IntValue(0)), 
+			new ValueExpression(new BoolValue(true)), 
+			"==");
+		
+		try {
+			e1.typeCheck(typeEnvironment);
+			fail("Second operand is not an integer");
+		}
+		catch (Exception e) {
+			assertTrue(true);
+		}
+	}
+	
+	@Test
+	public void TypeCheck_ValidOperands_ReturnsIntType() {
+		ExpressionInterface e1 = new RelationalExpression(
+			new ValueExpression(new IntValue(0)), 
+			new ValueExpression(new IntValue(0)), 
+			"==");
+		TypeInterface result = null;
+		
+		try {
+			result = e1.typeCheck(typeEnvironment);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertEquals(result, new IntType());
 	}
 	
 	@Test
@@ -67,38 +122,6 @@ public class TestRelationalExpression {
 		try {
 			e1.evaluate(symbolTable, heap);
 			fail("Invalid operator");
-		}
-		catch (Exception e) {
-			assertTrue(true);
-		}
-	}
-	
-	@Test
-	public void Evaluate_FirstOperandNotInteger_ThrowsException() {
-		ExpressionInterface e1 = new RelationalExpression(
-			new ValueExpression(new BoolValue(true)), 
-			new ValueExpression(new IntValue(0)), 
-			"==");
-		
-		try {
-			e1.evaluate(symbolTable, heap);
-			fail("First operand not an integer");
-		}
-		catch (Exception e) {
-			assertTrue(true);
-		}	
-	}
-	
-	@Test
-	public void Evaluate_SecondOperandNotInteger_ThrowsException() {
-		ExpressionInterface e1 = new RelationalExpression(
-			new ValueExpression(new IntValue(0)), 
-			new ValueExpression(new BoolValue(true)), 
-			"==");
-		
-		try {
-			e1.evaluate(symbolTable, heap);
-			fail("Second operand not an integer");
 		}
 		catch (Exception e) {
 			assertTrue(true);

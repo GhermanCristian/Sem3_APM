@@ -18,9 +18,6 @@ public class HeapReadingExpression implements ExpressionInterface{
 	@Override
 	public ValueInterface evaluate(DictionaryInterface<String, ValueInterface> symbolTable, DictionaryInterface<Integer, ValueInterface> heap) throws Exception {		
 		ValueInterface expressionValue = this.expression.evaluate(symbolTable, heap);
-		if (expressionValue instanceof ReferenceValue == false) {
-			throw new InvalidTypeException("Expression is not a reference");
-		}
 		
 		int heapAddress = ((ReferenceValue)expressionValue).getHeapAddress();
 		if (heap.isDefined(heapAddress) == false) {

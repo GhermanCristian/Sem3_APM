@@ -25,13 +25,7 @@ public class RelationalExpression implements ExpressionInterface{
 		ValueInterface firstVal, secondVal;
 		
 		firstVal = this.firstExp.evaluate(symbolTable, heap);
-		if (firstVal.getType().equals(new IntType()) == false) {
-			throw new InvalidTypeException("First operand is not an integer");
-		}
 		secondVal = this.secondExp.evaluate(symbolTable, heap);
-		if (secondVal.getType().equals(new IntType()) == false) {
-			throw new InvalidTypeException("Second operand is not an integer");
-		}
 		int firstInt = ((IntValue)firstVal).getValue();
 		int secondInt = ((IntValue)secondVal).getValue();
 		
