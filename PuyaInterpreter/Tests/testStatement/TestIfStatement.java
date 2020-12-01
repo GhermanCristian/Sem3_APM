@@ -19,6 +19,7 @@ import model.statement.IfStatement;
 import model.statement.StatementInterface;
 import model.statement.VariableDeclarationStatement;
 import model.type.IntType;
+import model.type.TypeInterface;
 import model.value.BoolValue;
 import model.value.IntValue;
 import model.value.StringValue;
@@ -30,6 +31,7 @@ public class TestIfStatement {
 	static ListInterface<ValueInterface> output;
 	static DictionaryInterface<StringValue, BufferedReader> fileTable;
 	static DictionaryInterface<Integer, ValueInterface> heap;
+	static DictionaryInterface<String, TypeInterface> typeEnvironment;
 	static ProgramState crtState;
 	
 	@BeforeClass
@@ -39,6 +41,7 @@ public class TestIfStatement {
 		output = new MyList<ValueInterface>();
 		fileTable = new MyDictionary<StringValue, BufferedReader>();
 		heap = new MyHeap<Integer, ValueInterface>();
+		typeEnvironment = new MyDictionary<String, TypeInterface>();
 		crtState = new ProgramState(stack, symbolTable, output, fileTable, heap, null);
 	}
 	
@@ -58,6 +61,7 @@ public class TestIfStatement {
 		}
 		fileTable.clear();
 		heap.clear();
+		typeEnvironment.clear();
 	}
 	
 	@Test

@@ -16,6 +16,7 @@ import model.expression.ValueExpression;
 import model.statement.CloseReadFileStatement;
 import model.statement.OpenReadFileStatement;
 import model.statement.StatementInterface;
+import model.type.TypeInterface;
 import model.value.IntValue;
 import model.value.StringValue;
 import model.value.ValueInterface;
@@ -27,6 +28,7 @@ public class TestCloseReadFileStatement {
 	static ListInterface<ValueInterface> output;
 	static DictionaryInterface<StringValue, BufferedReader> fileTable;
 	static DictionaryInterface<Integer, ValueInterface> heap;
+	static DictionaryInterface<String, TypeInterface> typeEnvironment;
 	static ProgramState crtState;
 	
 	@BeforeClass
@@ -36,6 +38,7 @@ public class TestCloseReadFileStatement {
 		output = new MyList<ValueInterface>();
 		fileTable = new MyDictionary<StringValue, BufferedReader>();
 		heap = new MyHeap<Integer, ValueInterface>();
+		typeEnvironment = new MyDictionary<String, TypeInterface>();
 		crtState = new ProgramState(stack, symbolTable, output, fileTable, heap, null);
 	}
 	
@@ -55,6 +58,7 @@ public class TestCloseReadFileStatement {
 		}
 		fileTable.clear();
 		heap.clear();
+		typeEnvironment.clear();
 	}
 	
 	@Test

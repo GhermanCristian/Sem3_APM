@@ -31,6 +31,7 @@ public class TestHeapAllocationStatement {
 	static ListInterface<ValueInterface> output;
 	static DictionaryInterface<StringValue, BufferedReader> fileTable;
 	static DictionaryInterface<Integer, ValueInterface> heap;
+	static DictionaryInterface<String, TypeInterface> typeEnvironment;
 	static ProgramState crtState;
 	
 	@BeforeClass
@@ -40,6 +41,7 @@ public class TestHeapAllocationStatement {
 		output = new MyList<ValueInterface>();
 		fileTable = new MyDictionary<StringValue, BufferedReader>();
 		heap = new MyHeap<Integer, ValueInterface>();
+		typeEnvironment = new MyDictionary<String, TypeInterface>();
 		crtState = new ProgramState(stack, symbolTable, output, fileTable, heap, null);
 	}
 	
@@ -59,6 +61,7 @@ public class TestHeapAllocationStatement {
 		}
 		fileTable.clear();
 		heap.clear();
+		typeEnvironment.clear();
 	}
 	
 	@Test

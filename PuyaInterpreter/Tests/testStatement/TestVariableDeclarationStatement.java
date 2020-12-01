@@ -17,6 +17,7 @@ import model.type.BoolType;
 import model.type.IntType;
 import model.type.ReferenceType;
 import model.type.StringType;
+import model.type.TypeInterface;
 import model.value.BoolValue;
 import model.value.IntValue;
 import model.value.ReferenceValue;
@@ -29,6 +30,7 @@ public class TestVariableDeclarationStatement{
 	static ListInterface<ValueInterface> output;
 	static DictionaryInterface<StringValue, BufferedReader> fileTable;
 	static DictionaryInterface<Integer, ValueInterface> heap;
+	static DictionaryInterface<String, TypeInterface> typeEnvironment;
 	static ProgramState crtState;
 	
 	@BeforeClass
@@ -38,6 +40,7 @@ public class TestVariableDeclarationStatement{
 		output = new MyList<ValueInterface>();
 		fileTable = new MyDictionary<StringValue, BufferedReader>();
 		heap = new MyHeap<Integer, ValueInterface>();
+		typeEnvironment = new MyDictionary<String, TypeInterface>();
 		crtState = new ProgramState(stack, symbolTable, output, fileTable, heap, null);
 	}
 	
@@ -57,6 +60,22 @@ public class TestVariableDeclarationStatement{
 		}
 		fileTable.clear();
 		heap.clear();
+		typeEnvironment.clear();
+	}
+	
+	@Test
+	public void GetTypeEnvironment_NewVariable_VariableAddedToTypeEnvironment() {
+		StatementInterface s1 = new VariableDeclarationStatement("abc", new IntType());
+
+		assertTrue(typeEnvironment.isEmpty());
+		try {
+			typeEnvironment = s1.getTypeEnvironment(typeEnvironment);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertEquals(typeEnvironment.size(), 1);
+		assertEquals(typeEnvironment.getValue("abc"), new IntType());
 	}
 	
 	@Test

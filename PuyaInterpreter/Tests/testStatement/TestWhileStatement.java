@@ -13,8 +13,6 @@ import model.ADT.MyList;
 import model.ADT.MyStack;
 import model.ADT.StackInterface;
 import model.expression.ArithmeticExpression;
-import model.expression.ExpressionInterface;
-import model.expression.LogicalExpression;
 import model.expression.RelationalExpression;
 import model.expression.ValueExpression;
 import model.expression.VariableExpression;
@@ -25,6 +23,7 @@ import model.statement.StatementInterface;
 import model.statement.VariableDeclarationStatement;
 import model.statement.WhileStatement;
 import model.type.IntType;
+import model.type.TypeInterface;
 import model.value.BoolValue;
 import model.value.IntValue;
 import model.value.StringValue;
@@ -36,6 +35,7 @@ public class TestWhileStatement {
 	static ListInterface<ValueInterface> output;
 	static DictionaryInterface<StringValue, BufferedReader> fileTable;
 	static DictionaryInterface<Integer, ValueInterface> heap;
+	static DictionaryInterface<String, TypeInterface> typeEnvironment;
 	static ProgramState crtState;
 	
 	@BeforeClass
@@ -45,6 +45,7 @@ public class TestWhileStatement {
 		output = new MyList<ValueInterface>();
 		fileTable = new MyDictionary<StringValue, BufferedReader>();
 		heap = new MyHeap<Integer, ValueInterface>();
+		typeEnvironment = new MyDictionary<String, TypeInterface>();
 		crtState = new ProgramState(stack, symbolTable, output, fileTable, heap, null);
 	}
 	
@@ -64,6 +65,7 @@ public class TestWhileStatement {
 		}
 		fileTable.clear();
 		heap.clear();
+		typeEnvironment.clear();
 	}
 	
 	@Test
