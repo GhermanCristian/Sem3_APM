@@ -52,7 +52,7 @@ public class WhileStatement implements StatementInterface {
 		if (this.conditionalExpression.typeCheck(initialTypeEnvironment).equals(new BoolType()) == false) {
 			throw new InvalidTypeException("WhileStatement: Conditional expression is not boolean");
 		}
-		//this.statement.getTypeEnvironment(clone(initialTypeEnvironment));
+		this.statement.getTypeEnvironment(initialTypeEnvironment.clone());
 		return initialTypeEnvironment;
 	}
 }

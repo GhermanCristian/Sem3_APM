@@ -37,7 +37,7 @@ public class ForkStatement implements StatementInterface {
 	@Override
 	public DictionaryInterface<String, TypeInterface> getTypeEnvironment(
 			DictionaryInterface<String, TypeInterface> initialTypeEnvironment) throws Exception {
-		//this.threadInstructions.getTypeEnvironment(clone(initialTypeEnvironment));
+		this.threadInstructions.getTypeEnvironment(initialTypeEnvironment.clone());
 		return initialTypeEnvironment;
 	}
 }

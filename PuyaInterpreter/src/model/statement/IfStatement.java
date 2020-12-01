@@ -57,8 +57,8 @@ public class IfStatement implements StatementInterface{
 		if (this.conditionalExpression.typeCheck(initialTypeEnvironment).equals(new BoolType()) == false) {
 			throw new InvalidTypeException("IfStatement: Conditional expression is not boolean");
 		}
-		//this.trueConditionStatement.getTypeEnvironment(clone(initialTypeEnvironment));
-		//this.falseConditionStatement.getTypeEnvironment(clone(initialTypeEnvironment));
+		this.trueConditionStatement.getTypeEnvironment(initialTypeEnvironment.clone());
+		this.falseConditionStatement.getTypeEnvironment(initialTypeEnvironment.clone());
 		return initialTypeEnvironment;
 	}
 }
