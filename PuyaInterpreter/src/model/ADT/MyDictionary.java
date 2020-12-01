@@ -3,8 +3,6 @@ package model.ADT;
 import java.util.Collection;
 import java.util.HashMap;
 
-import model.value.ValueInterface;
-
 public class MyDictionary<TKey, TValue> implements DictionaryInterface<TKey, TValue>{
 	protected HashMap<TKey, TValue> dictionary;
 	
@@ -89,12 +87,12 @@ public class MyDictionary<TKey, TValue> implements DictionaryInterface<TKey, TVa
 		this.dictionary = newContent;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public void clone(HashMap<TKey, TValue> original) {
-		// for now this only properly works with HashMaps that map to ValueInterface
-		this.dictionary.clear();
-		original.entrySet().stream().filter(pair -> pair.getValue() instanceof ValueInterface)
-									.forEach(pair -> this.dictionary.put(pair.getKey(), (TValue)((ValueInterface)pair.getValue()).getDeepCopy()));
+	public DictionaryInterface<TKey, TValue> clone() {
+		DictionaryInterface<TKey, TValue> newDictionary = new MyDictionary<TKey, TValue>();
+		// this will only work if the types are immutable
+		// in this case, all Types and Values (and the java String) are immutable
+		this.dictionary.entrySet().stream().forEach(pair -> newDictionary.insert(pair.getKey(), pair.getValue()));
+		return newDictionary;
 	}
 }
