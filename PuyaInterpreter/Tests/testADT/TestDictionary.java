@@ -17,7 +17,7 @@ public class TestDictionary {
 		
 		d1.insert("a1", new IntValue(23));
 		assertEquals(d1.size(), 1);
-		d1.clone(d2.getAllPairs());
+		d1 = d2.clone();
 		assertEquals(d1.size(), 0);
 	}
 	
@@ -33,7 +33,7 @@ public class TestDictionary {
 		d1.insert("a4", new IntValue(26));
 		d1.insert("a5", new IntValue(27));
 		assertEquals(d2.size(), 0);
-		d2.clone(d1.getAllPairs());
+		d2 = d1.clone();
 		assertEquals(d2.size(), 5);
 	}
 	
@@ -48,7 +48,7 @@ public class TestDictionary {
 		d1.insert("a3", new IntValue(25));
 		d1.insert("a4", new IntValue(26));
 		d1.insert("a5", new IntValue(27));
-		d2.clone(d1.getAllPairs());
+		d2 = d1.clone();
 		
 		assertEquals(d2.getValue("a1"), new IntValue(23));
 		assertEquals(d2.getValue("a2"), new IntValue(24));
