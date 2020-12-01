@@ -37,7 +37,12 @@ public class TextMenu {
 				if (option == "0") {
 					finishedProgram = true;
 				}
-				crtCommand.execute();
+				try {
+					crtCommand.execute();
+				}
+				catch (Exception e) {
+					System.out.println(e);
+				}
 			}
 		}
 		

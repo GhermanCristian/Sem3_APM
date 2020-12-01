@@ -6,7 +6,7 @@ public class ExitCommand extends Command {
 	}
 	
 	@Override
-	public void execute() {
+	public void execute() throws Exception {
 		System.out.println("Program execution has ended");
 		System.exit(0);
 	}

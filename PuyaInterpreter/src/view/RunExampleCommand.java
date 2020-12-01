@@ -13,12 +13,13 @@ import model.ADT.MyList;
 import model.ADT.MyStack;
 import model.ADT.StackInterface;
 import model.statement.StatementInterface;
+import model.type.TypeInterface;
 import model.value.StringValue;
 import model.value.ValueInterface;
 import repository.Repository;
 import repository.RepositoryInterface;
 
-public class RunExampleCommand extends Command{
+public class RunExampleCommand extends Command {
 	private final StatementInterface crtStatement;
 	private final String repositoryLocation;
 	
@@ -29,22 +30,20 @@ public class RunExampleCommand extends Command{
 	}
 	
 	@Override
-	public void execute() {
+	public void execute() throws Exception {
 		StackInterface<StatementInterface> stack = new MyStack<StatementInterface>();
 		DictionaryInterface<String, ValueInterface> symbolTable = new MyDictionary<String, ValueInterface>();
 		ListInterface<ValueInterface> output = new MyList<ValueInterface>();
 		DictionaryInterface<StringValue, BufferedReader> fileTable = new MyDictionary<StringValue, BufferedReader>();
 		DictionaryInterface<Integer, ValueInterface> heap = new MyHeap<Integer, ValueInterface>();
+		
+		DictionaryInterface<String, TypeInterface> typeEnvironment = new MyDictionary<String, TypeInterface>();
+		this.crtStatement.getTypeEnvironment(typeEnvironment);
 		ProgramState crtProgramState = new ProgramState(stack, symbolTable, output, fileTable, heap, this.crtStatement);
+		
 		RepositoryInterface repo = new Repository(this.repositoryLocation);
 		ControllerInterface controller = new Controller(repo);
 		controller.addProgramState(crtProgramState);
-		
-		try {
-			controller.fullProgramExecution();
-		}
-		catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
+		controller.fullProgramExecution();
 	}
 }
