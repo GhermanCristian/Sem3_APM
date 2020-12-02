@@ -65,22 +65,41 @@ public class TestIfStatement {
 	}
 	
 	@Test
-	public void Execute_NonBooleanCondition_ThrowsException() {
+	public void GetTypeEnvironment_NonBooleanCondition_ThrowsException() {
 		StatementInterface s1 = new IfStatement(new ValueExpression(new IntValue(5)), 
 			new VariableDeclarationStatement("v1", new IntType()), 
 			new VariableDeclarationStatement("v2", new IntType())
 		);
 		
 		try {
-			s1.execute(crtState);
-			fail("Not a boolean condition");
+			s1.getTypeEnvironment(typeEnvironment);
+			fail("TestIfStatement: not a boolean condition");
 		}
 		catch (Exception e) {
 			assertTrue(true);
 		}
 	}
-
 	
+	@Test
+	public void GetTypeEnvironment_ValidCondition_VariableNotDefinedOutsideScope() {
+		StatementInterface s1 = new IfStatement(new ValueExpression(new BoolValue(true)), 
+			new VariableDeclarationStatement("v1", new IntType()), 
+			new VariableDeclarationStatement("v2", new IntType())
+		);
+		
+		try {
+			s1.getTypeEnvironment(typeEnvironment);
+			s1.execute(crtState);
+			crtState.getExecutionStack().pop().execute(crtState); 
+			// after we execute "int v1", only the local typeEnv is changed, not the main one
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertFalse(typeEnvironment.isDefined("v1"));
+	}
+
 	@Test
 	public void Execute_ValidValueCondition_GoToTrueBranch() {
 		StatementInterface s1 = new IfStatement(new ValueExpression(new BoolValue(true)), 

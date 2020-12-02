@@ -21,7 +21,6 @@ import model.type.BoolType;
 import model.type.IntType;
 import model.type.ReferenceType;
 import model.type.TypeInterface;
-import model.value.BoolValue;
 import model.value.IntValue;
 import model.value.StringValue;
 import model.value.ValueInterface;
@@ -66,12 +65,20 @@ public class TestHeapWritingStatement {
 	}
 	
 	@Test
-	public void Execute_VariableUndefinedInSymbolTable_ThrowsException() {
-		StatementInterface s1 = new HeapWritingStatement("undefined baby", new ValueExpression(new IntValue(23)));
+	public void GetTypeEnvironment_VariableNotAReference_ThrowsException() {
+		StatementInterface s1 = new VariableDeclarationStatement("a", new IntType());
+		StatementInterface s2 = new HeapWritingStatement("a", new ValueExpression(new IntValue(23)));
 		
 		try {
-			s1.execute(crtState);
-			fail("Variable is undefined in the symbol table");
+			typeEnvironment = s1.getTypeEnvironment(typeEnvironment);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		try {
+			s2.getTypeEnvironment(typeEnvironment);
+			fail("TestHeapWritingStatement: variable is not a reference");
 		}
 		catch (Exception e) {
 			assertTrue(true);
@@ -79,20 +86,48 @@ public class TestHeapWritingStatement {
 	}
 	
 	@Test
-	public void Execute_VariableNotAReference_ThrowsException() {
-		StatementInterface s1 = new VariableDeclarationStatement("a", new IntType());
+	public void GetTypeEnvironment_ReferenceTypeNotMatching_ThrowsException() {
+		StatementInterface s1 = new VariableDeclarationStatement("a", new ReferenceType(new BoolType()));
 		StatementInterface s2 = new HeapWritingStatement("a", new ValueExpression(new IntValue(23)));
 		
 		try {
-			s1.execute(crtState);
+			typeEnvironment = s1.getTypeEnvironment(typeEnvironment);
 		}
 		catch (Exception e) {
 			fail(e.getMessage());
 		}
 		
 		try {
-			s2.execute(crtState);
-			fail("Variable is not a reference");
+			s2.getTypeEnvironment(typeEnvironment);
+			fail("TestHeapWritingStatement: the reference type does not match the expression type");
+		}
+		catch (Exception e) {
+			assertTrue(true);
+		}
+	}
+	
+	@Test
+	public void GetTypeEnvironment_ValidOperandTypes_TypeEnvironmentUnchanged() {
+		StatementInterface s1 = new VariableDeclarationStatement("a", new ReferenceType(new IntType()));
+		StatementInterface s2 = new HeapWritingStatement("a", new ValueExpression(new IntValue(23)));
+		
+		try {
+			typeEnvironment = s2.getTypeEnvironment(s1.getTypeEnvironment(typeEnvironment));
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertEquals(typeEnvironment.size(), 1);
+		assertEquals(typeEnvironment.getValue("a"), new ReferenceType(new IntType()));
+	}
+	
+	@Test
+	public void Execute_VariableUndefinedInSymbolTable_ThrowsException() {
+		StatementInterface s1 = new HeapWritingStatement("undefined baby", new ValueExpression(new IntValue(23)));
+		
+		try {
+			s1.execute(crtState);
+			fail("Variable is undefined in the symbol table");
 		}
 		catch (Exception e) {
 			assertTrue(true);
@@ -114,29 +149,6 @@ public class TestHeapWritingStatement {
 		try {
 			s2.execute(crtState);
 			fail("Variable is not in the heap");
-		}
-		catch (Exception e) {
-			assertTrue(true);
-		}
-	}
-	
-	@Test
-	public void Execute_ExpressionTypeNotMatching_ThrowsException() {
-		StatementInterface s1 = new VariableDeclarationStatement("a", new ReferenceType(new BoolType()));
-		StatementInterface s2 = new HeapWritingStatement("a", new ValueExpression(new IntValue(23)));
-		StatementInterface s3 = new HeapAllocationStatement("a", new ValueExpression(new BoolValue(true)));
-		
-		try {
-			s1.execute(crtState);
-			s3.execute(crtState);
-		}
-		catch (Exception e) {
-			fail(e.getMessage());
-		}
-		
-		try {
-			s2.execute(crtState);
-			fail("The type of the variable does not match the expression");
 		}
 		catch (Exception e) {
 			assertTrue(true);

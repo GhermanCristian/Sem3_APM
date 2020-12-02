@@ -26,10 +26,6 @@ public class CloseReadFileStatement implements StatementInterface{
 		DictionaryInterface<Integer, ValueInterface> heap = crtState.getHeap();
 		ValueInterface filePathValue = this.filePath.evaluate(symbolTable, heap);
 		
-		if (filePathValue.getType().equals(new StringType()) == false) {
-			throw new InvalidTypeException("File path should be a string");
-		}
-		
 		// we know filePathValue is a StringValue, we can cast
 		String filePathString = ((StringValue)filePathValue).getValue();
 		if (fileTable.isDefined((StringValue)filePathValue) == false) {

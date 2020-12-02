@@ -29,16 +29,10 @@ public class ReadFileStatement implements StatementInterface{
 		if (symbolTable.isDefined(this.variableName) == false) {
 			throw new UndefinedVariableException(this.variableName + " is not defined in the symbolTable");
 		}
-		if (symbolTable.getValue(this.variableName).getType().equals(new IntType()) == false) {
-			throw new InvalidTypeException(this.variableName + " is not an integer");
-		}
+		
 		DictionaryInterface<StringValue, BufferedReader> fileTable = crtState.getFileTable();
 		DictionaryInterface<Integer, ValueInterface> heap = crtState.getHeap();
 		ValueInterface filePathValue = this.filePath.evaluate(symbolTable, heap);
-		
-		if (filePathValue.getType().equals(new StringType()) == false) {
-			throw new InvalidTypeException("File path should be a string");
-		}
 		
 		// we know filePathValue is a StringValue, we can cast
 		String filePathString = ((StringValue)filePathValue).getValue();

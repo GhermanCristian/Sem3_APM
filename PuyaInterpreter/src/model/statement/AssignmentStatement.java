@@ -28,13 +28,6 @@ public class AssignmentStatement implements StatementInterface{
 		
 		// the value of the new expression (the one we want to assign to the existing variable)
 		ValueInterface newExpressionValue = this.expression.evaluate(symbolTable, heap);
-		TypeInterface newExpressionType = newExpressionValue.getType();
-		TypeInterface variableType = symbolTable.getValue(this.variableName).getType();
-		
-		// if the new expression's type matches the type of the existing variable => update
-		if (variableType.equals(newExpressionType) == false) {
-			throw new InvalidTypeException("Type of " + this.variableName + " doesn't match the expression's type");
-		}
 		symbolTable.update(this.variableName, newExpressionValue);
 		
 		return null;

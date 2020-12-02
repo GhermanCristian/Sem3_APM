@@ -3,6 +3,7 @@ package model.expression;
 import exception.InvalidOperatorException;
 import exception.InvalidTypeException;
 import model.ADT.DictionaryInterface;
+import model.type.BoolType;
 import model.type.IntType;
 import model.type.TypeInterface;
 import model.value.BoolValue;
@@ -76,7 +77,7 @@ public class RelationalExpression implements ExpressionInterface{
 			throw new InvalidTypeException("Second expression is not an integer");
 		}
 		
-		return intType;
+		return new BoolType();
 	}
 
 }

@@ -26,10 +26,6 @@ public class WhileStatement implements StatementInterface {
 		DictionaryInterface<Integer, ValueInterface> heap = crtState.getHeap();
 		
 		ValueInterface conditionalExpressionValue = this.conditionalExpression.evaluate(symbolTable, heap);
-		if (conditionalExpressionValue instanceof BoolValue == false) {
-			throw new InvalidTypeException("Conditional expression is not boolean");
-		}
-		
 		if (((BoolValue)conditionalExpressionValue).getValue() == true) {
 			stack.push(this);
 			stack.push(this.statement);

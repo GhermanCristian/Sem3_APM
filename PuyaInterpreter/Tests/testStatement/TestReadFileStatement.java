@@ -16,6 +16,8 @@ import model.expression.ValueExpression;
 import model.statement.OpenReadFileStatement;
 import model.statement.ReadFileStatement;
 import model.statement.StatementInterface;
+import model.statement.VariableDeclarationStatement;
+import model.type.IntType;
 import model.type.TypeInterface;
 import model.value.BoolValue;
 import model.value.IntValue;
@@ -61,6 +63,67 @@ public class TestReadFileStatement {
 		heap.clear();
 		typeEnvironment.clear();
 	}
+	
+	@Test
+	public void GetTypeEnvironment_NonIntegerValue_ThrowsException() {
+		StringValue path = new StringValue(this.SRC_FOLDER_PATH + "\\logFile.txt");
+		StatementInterface s1 = new ReadFileStatement(new ValueExpression(path), "someVariable");
+		
+		symbolTable.insert("someVariable", new BoolValue());
+		try {
+			s1.getTypeEnvironment(typeEnvironment);
+			fail("Variable is not an integer");
+		}
+		catch (Exception e) {
+			assertTrue(true);
+		}
+	}	
+	
+	@Test
+	public void GetTypeEnvironment_PathNotAString_ThrowsException() {
+		StatementInterface s1 = new ReadFileStatement(new ValueExpression(new IntValue()), "someVariable");
+		StatementInterface s2 = new VariableDeclarationStatement("someVariable", new IntType());
+		
+		try {
+			typeEnvironment = s2.getTypeEnvironment(typeEnvironment);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		try {
+			s1.getTypeEnvironment(typeEnvironment);
+			fail("TestReadFileStatement: path should be a StringValue");
+		}
+		catch (Exception e) {
+			assertTrue(true);
+		}
+	}
+	
+	@Test
+	public void GetTypeEnvironment_ValidInputTypes_TypeEnvironmentUnchanged() {
+		StringValue path = new StringValue(this.SRC_FOLDER_PATH + "\\logFile.txt");
+		StatementInterface s1 = new ReadFileStatement(new ValueExpression(path), "someVariable");
+		StatementInterface s2 = new VariableDeclarationStatement("someVariable", new IntType());
+		
+		try {
+			typeEnvironment = s2.getTypeEnvironment(typeEnvironment);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertEquals(typeEnvironment.size(), 1);
+		assertEquals(typeEnvironment.getValue("someVariable"), new IntType());
+		
+		try {
+			s1.getTypeEnvironment(typeEnvironment);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertEquals(typeEnvironment.size(), 1);
+		assertEquals(typeEnvironment.getValue("someVariable"), new IntType());
+	}
 
 	@Test
 	public void Execute_UndefinedVariable_ThrowsException() {
@@ -70,35 +133,6 @@ public class TestReadFileStatement {
 		try {
 			s1.execute(crtState);
 			fail("Undefined variable");
-		}
-		catch (Exception e) {
-			assertTrue(true);
-		}
-	}
-	
-	@Test
-	public void Execute_NonIntegerValue_ThrowsException() {
-		StringValue path = new StringValue(this.SRC_FOLDER_PATH + "\\logFile.txt");
-		StatementInterface s1 = new ReadFileStatement(new ValueExpression(path), "someVariable");
-		
-		symbolTable.insert("someVariable", new BoolValue());
-		try {
-			s1.execute(crtState);
-			fail("Variable is not an integer");
-		}
-		catch (Exception e) {
-			assertTrue(true);
-		}
-	}	
-	
-	@Test
-	public void Execute_PathNotAString_ThrowsException() {
-		StatementInterface s1 = new ReadFileStatement(new ValueExpression(new IntValue()), "someVariable");
-		symbolTable.insert("someVariable", new IntValue());
-		
-		try {
-			s1.execute(crtState);
-			fail("File path is not a string");
 		}
 		catch (Exception e) {
 			assertTrue(true);

@@ -69,16 +69,61 @@ public class TestWhileStatement {
 	}
 	
 	@Test
-	public void Execute_NonBooleanCondition_ThrowsException() {
+	public void GetTypeEnvironment_NonBooleanCondition_ThrowsException() {
 		StatementInterface s1 = new WhileStatement(new ValueExpression(new IntValue(23)), 
 												new VariableDeclarationStatement("a", new IntType()));
 		try {
-			s1.execute(crtState);
+			s1.getTypeEnvironment(typeEnvironment);
 			fail("Conditional expression is not boolean");
 		}
 		catch (Exception e) {
 			assertTrue(true);
 		}
+	}
+	
+	@Test
+	public void GetTypeEnvironment_BooleanCondition_TypeEnvironmentUnchanged() {
+		StatementInterface s1 = new WhileStatement(new ValueExpression(new BoolValue(true)), 
+												new VariableDeclarationStatement("a", new IntType()));
+		assertTrue(typeEnvironment.isEmpty());
+		try {
+			typeEnvironment = s1.getTypeEnvironment(typeEnvironment);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertTrue(typeEnvironment.isEmpty());
+	}
+	
+	@Test
+	public void GetTypeEnvironment_1IterationCompoundStatement_VariableNotDefinedOutsideScope() {
+		StatementInterface s1 = new VariableDeclarationStatement("a", new IntType());
+		StatementInterface s2 = new AssignmentStatement("a", new ValueExpression(new IntValue(1)));
+		StatementInterface s3 = new WhileStatement(
+									new RelationalExpression(
+										new VariableExpression("a"), 
+										new ValueExpression(new IntValue()), 
+										">"), 
+									new CompoundStatement(
+											new VariableDeclarationStatement("new a", new IntType()), 
+											new AssignmentStatement("a", new ArithmeticExpression(
+																			new VariableExpression("a"), 
+																			new ValueExpression(new IntValue(1)), 
+																			"-"))));
+		try {
+			typeEnvironment = s3.getTypeEnvironment(s2.getTypeEnvironment(s1.getTypeEnvironment(typeEnvironment)));
+			s1.execute(crtState);
+			s2.execute(crtState);
+			s3.execute(crtState);
+			while (crtState.getExecutionStack().size() > 0) {
+				crtState.getExecutionStack().pop().execute(crtState);
+			}
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertFalse(typeEnvironment.isDefined("new a"));
 	}
 	
 	@Test
@@ -110,7 +155,7 @@ public class TestWhileStatement {
 	}
 	
 	@Test
-	public void Execute_5IterationsSingleStatement_CorrectOutputSize() {
+	public void Execute_5IterationsCompoundStatement_CorrectOutputSize() {
 		StatementInterface s1 = new VariableDeclarationStatement("a", new IntType());
 		StatementInterface s2 = new AssignmentStatement("a", new ValueExpression(new IntValue(5)));
 		StatementInterface s3 = new WhileStatement(
@@ -140,7 +185,7 @@ public class TestWhileStatement {
 	}
 	
 	@Test
-	public void Execute_5IterationsSingleStatement_CorrectOutputContent() {
+	public void Execute_5IterationsCompoundStatement_CorrectOutputContent() {
 		StatementInterface s1 = new VariableDeclarationStatement("a", new IntType());
 		StatementInterface s2 = new AssignmentStatement("a", new ValueExpression(new IntValue(5)));
 		StatementInterface s3 = new WhileStatement(

@@ -69,6 +69,32 @@ public class TestPrintStatement {
 	}
 	
 	@Test
+	// I won't do another one for InvalidExpression, because that has nothing to do with the print statement, but rather
+	// with the underlying expression - however, I do need that sweet sweet code coverage
+	public void GetTypeEnvironment_ValidExpression_TypeEnvironmentUnchanged() {
+		StatementInterface s1 = new VariableDeclarationStatement("a", new IntType());
+		StatementInterface s2 = new AssignmentStatement("a", new ValueExpression(new IntValue(23)));
+		StatementInterface s3 = new PrintStatement(new VariableExpression("a"));
+		
+		try {
+			s2.getTypeEnvironment(s1.getTypeEnvironment(typeEnvironment));
+		} 
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertEquals(typeEnvironment.size(), 1);
+		assertEquals(typeEnvironment.getValue("a"), new IntType());
+		try {
+			s3.getTypeEnvironment(typeEnvironment);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertEquals(typeEnvironment.size(), 1);
+		assertEquals(typeEnvironment.getValue("a"), new IntType());
+	}
+	
+	@Test
 	public void Execute_ExistentVariable_OutputUpdated() {
 		StatementInterface s1 = new VariableDeclarationStatement("a", new IntType());
 		StatementInterface s2 = new AssignmentStatement("a", new ValueExpression(new IntValue(23)));

@@ -16,7 +16,7 @@ import model.expression.ExpressionInterface;
 import model.expression.RelationalExpression;
 import model.expression.ValueExpression;
 import model.statement.StatementInterface;
-import model.type.IntType;
+import model.type.BoolType;
 import model.type.TypeInterface;
 import model.value.BoolValue;
 import model.value.IntValue;
@@ -95,7 +95,7 @@ public class TestRelationalExpression {
 	}
 	
 	@Test
-	public void TypeCheck_ValidOperands_ReturnsIntType() {
+	public void TypeCheck_ValidOperands_ReturnsBoolType() {
 		ExpressionInterface e1 = new RelationalExpression(
 			new ValueExpression(new IntValue(0)), 
 			new ValueExpression(new IntValue(0)), 
@@ -109,7 +109,7 @@ public class TestRelationalExpression {
 			fail(e.getMessage());
 		}
 		
-		assertEquals(result, new IntType());
+		assertEquals(result, new BoolType());
 	}
 	
 	@Test

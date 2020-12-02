@@ -61,16 +61,30 @@ public class TestOpenReadFileStatement {
 	}
 	
 	@Test
-	public void Execute_PathNotAString_ThrowsException() {
+	public void GetTypeEnvironment_PathNotAString_ThrowsException() {
 		StatementInterface s1 = new OpenReadFileStatement(new ValueExpression(new IntValue()));
 		
 		try {
-			s1.execute(crtState);
+			s1.getTypeEnvironment(typeEnvironment);
 			fail("Path should be a StringValue");
 		}
 		catch (Exception e) {
 			assertTrue(true);
 		}
+	}
+	
+	@Test
+	public void GetTypeEnvironment_PathIsString_EnvironmentUnchanged() {
+		StatementInterface s1 = new OpenReadFileStatement(new ValueExpression(new StringValue()));
+		
+		assertTrue(typeEnvironment.isEmpty());
+		try {
+			typeEnvironment = s1.getTypeEnvironment(typeEnvironment);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertTrue(typeEnvironment.isEmpty());
 	}
 	
 	@Test

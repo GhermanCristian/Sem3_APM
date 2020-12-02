@@ -64,6 +64,24 @@ public class TestCompoundStatement {
 	}
 	
 	@Test
+	public void GetTypeEnvironment_VariableDeclarationThenAssignment_VariableAddedToEnvironmentAndNoExceptionThrown() {
+		StatementInterface s1 = new CompoundStatement(
+			new VariableDeclarationStatement("abc", new IntType()), 
+			new AssignmentStatement("abc", new ValueExpression(new IntValue(23)))
+		);
+		
+		try {
+			typeEnvironment = s1.getTypeEnvironment(typeEnvironment);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertEquals(typeEnvironment.size(), 1);
+		assertEquals(typeEnvironment.getValue("abc"), new IntType());
+	}
+	
+	@Test
 	public void Execute_ValidInput_CorrectStackSize() {
 		StatementInterface s1 = new CompoundStatement(
 			new VariableDeclarationStatement("abc", new IntType()), 

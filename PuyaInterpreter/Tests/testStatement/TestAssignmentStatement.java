@@ -75,18 +75,50 @@ public class TestAssignmentStatement {
 	}
 	
 	@Test
-	public void Execute_TypeNotMatching_ThrowsException() {
+	public void GetTypeEnvironment_TypeNotMatching_ThrowsException() {
 		StatementInterface s1 = new VariableDeclarationStatement("abc", new BoolType());
 		StatementInterface s2 = new AssignmentStatement("abc", new ValueExpression(new IntValue(23)));
 		
 		try {
-			s1.execute(crtState);
-			s2.execute(crtState);
-			fail("Type doesn't match");
+			typeEnvironment = s1.getTypeEnvironment(typeEnvironment);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		try {
+			s2.getTypeEnvironment(typeEnvironment);
+			fail("TestAssignmentStatement: Type doesn't match");
 		}
 		catch (Exception e) {
 			assertTrue(true);
 		}
+	}
+	
+	@Test
+	public void GetTypeEnvironment_ValidOperandTypes_TypeEnvironmentUnchanged() {
+		StatementInterface s1 = new VariableDeclarationStatement("abc", new IntType());
+		StatementInterface s2 = new AssignmentStatement("abc", new ValueExpression(new IntValue(23)));
+		
+		try {
+			typeEnvironment = s1.getTypeEnvironment(typeEnvironment);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertEquals(typeEnvironment.size(), 1);
+		assertEquals(typeEnvironment.getValue("abc"), new IntType());
+		
+		try {
+			s2.getTypeEnvironment(typeEnvironment);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertEquals(typeEnvironment.size(), 1);
+		assertEquals(typeEnvironment.getValue("abc"), new IntType());
 	}
 	
 	@Test

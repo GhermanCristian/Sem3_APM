@@ -57,6 +57,18 @@ public class TestEmptyStatement {
 	}
 	
 	@Test
+	public void GetTypeEnvironment_ValidInput_TypeEnvironmentUnchanged() {
+		StatementInterface s1 = new EmptyStatement();
+		assertTrue(typeEnvironment.isEmpty());
+		try {
+			typeEnvironment = s1.getTypeEnvironment(typeEnvironment);
+		} 
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+	}
+	
+	@Test
 	public void Execute_ValidInput_NoEffect() {
 		StatementInterface s1 = new EmptyStatement();
 		

@@ -62,16 +62,30 @@ public class TestCloseReadFileStatement {
 	}
 	
 	@Test
-	public void Execute_FilePathNotAString_ThrowsException() {
+	public void GetTypeEnvironment_FilePathNotAString_ThrowsException() {
 		StatementInterface s1 = new CloseReadFileStatement(new ValueExpression(new IntValue()));
 		
 		try {
-			s1.execute(crtState);
+			s1.getTypeEnvironment(typeEnvironment);
 			fail("File path is not a string");
 		}
 		catch (Exception e) {
 			assertTrue(true);
 		}
+	}
+	
+	@Test
+	public void GetTypeEnvironment_FilePathIsString_TypeEnvironmentUnchanged() {
+		StatementInterface s1 = new CloseReadFileStatement(new ValueExpression(new StringValue()));
+		
+		assertTrue(typeEnvironment.isEmpty());
+		try {
+			s1.getTypeEnvironment(typeEnvironment);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertTrue(typeEnvironment.isEmpty());
 	}
 
 	@Test

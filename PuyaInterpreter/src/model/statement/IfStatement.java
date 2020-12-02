@@ -28,10 +28,6 @@ public class IfStatement implements StatementInterface{
 		DictionaryInterface<Integer, ValueInterface> heap = crtState.getHeap();
 		
 		ValueInterface conditionalExpressionValue = this.conditionalExpression.evaluate(symbolTable, heap);
-		if (conditionalExpressionValue.getType().equals(new BoolType()) == false) {
-			throw new InvalidTypeException("Conditional expression is not boolean");
-		}
-		
 		if (((BoolValue)conditionalExpressionValue).getValue() == true) { // the expression is true => go to the first branch
 			stack.push(this.trueConditionStatement);
 		}

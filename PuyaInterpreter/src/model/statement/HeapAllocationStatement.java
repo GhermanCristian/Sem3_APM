@@ -30,16 +30,8 @@ public class HeapAllocationStatement implements StatementInterface {
 		}
 		
 		ValueInterface variableValue = symbolTable.getValue(this.variableName);
-		if (variableValue instanceof ReferenceValue == false) {
-			throw new InvalidTypeException(this.variableName + " is not a Reference");
-		}
-		
 		ValueInterface expressionValue = this.expression.evaluate(symbolTable, heap);
 		TypeInterface referencedType = ((ReferenceValue)variableValue).getReferencedType();
-		
-		if (expressionValue.getType().equals(referencedType) == false){
-			throw new InvalidTypeException("Expression cannot be evaluated to a " + referencedType.toString());
-		}
 		
 		int newPositionInHeap = ((MyHeap<Integer, ValueInterface>)heap).getFirstAvailablePosition();
 		heap.insert(newPositionInHeap, expressionValue);
