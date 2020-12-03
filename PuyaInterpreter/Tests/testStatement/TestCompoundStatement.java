@@ -95,7 +95,7 @@ public class TestCompoundStatement {
 		catch (Exception e) {
 			fail(e.getMessage());
 		}
-		assertEquals(stack.size(), 2); // the stack now has two statements
+		assertEquals(stack.size(), 1); // the stack had 2 statements, the first of which was executed
 	}
 	
 	@Test
@@ -105,6 +105,7 @@ public class TestCompoundStatement {
 			new AssignmentStatement("abc", new ValueExpression(new IntValue(23)))
 		);
 		
+		assertFalse(symbolTable.isDefined("abc"));
 		try {
 			s1.execute(crtState);
 		}
@@ -112,13 +113,7 @@ public class TestCompoundStatement {
 			fail(e.getMessage());
 		}
 		
-		assertFalse(symbolTable.isDefined("abc"));
-		try { // execute the first statement (var decl)
-			stack.pop().execute(crtState);
-		}
-		catch (Exception e) {
-			fail(e.getMessage());
-		}
+		
 		assertTrue(symbolTable.isDefined("abc"));
 		assertEquals(((IntValue)symbolTable.getValue("abc")).getValue(), 0); // the default initialization value is 0
 		

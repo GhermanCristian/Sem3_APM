@@ -15,18 +15,22 @@ public class CompoundStatement implements StatementInterface {
 	
 	private void processStatement(ProgramState crtState, StatementInterface statement) throws Exception {
 		if (statement instanceof CompoundStatement) {
-			statement.execute(crtState);
+			((CompoundStatement) statement).addStatementsToStack(crtState);
 		}
 		else {
 			crtState.getExecutionStack().push(statement);
 		}
 	}
 	
-	@Override
-	public ProgramState execute(ProgramState crtState) throws Exception {
+	private void addStatementsToStack(ProgramState crtState) throws Exception {
 		this.processStatement(crtState, this.secondStatement);
 		this.processStatement(crtState, this.firstStatement);
-		return null;
+	}
+	
+	@Override
+	public ProgramState execute(ProgramState crtState) throws Exception {
+		this.addStatementsToStack(crtState);
+		return crtState.getExecutionStack().pop().execute(crtState);
 	}
 	
 	@Override
