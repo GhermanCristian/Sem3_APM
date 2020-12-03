@@ -34,9 +34,4 @@ public class BoolValue implements ValueInterface {
 	public TypeInterface getType() {
 		return new BoolType();
 	}
-
-	@Override
-	public ValueInterface getDeepCopy() {
-		return new BoolValue(this.value);
-	}
 }

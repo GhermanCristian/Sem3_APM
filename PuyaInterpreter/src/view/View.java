@@ -111,7 +111,7 @@ public class View {
 		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
 		
 		// openReadFile(str); int var; readFile(str); print(var); readFile(str); print(var); closeReadFile();
-		ValueExpression val = new ValueExpression(new StringValue(this.SRC_FOLDER_PATH + "\\log1.in"));
+		ValueExpression val = new ValueExpression(new StringValue(this.SRC_FOLDER_PATH + "\\example4.in"));
 		statementList.addLast(new OpenReadFileStatement(val));
 		statementList.addLast(new VariableDeclarationStatement("a", new IntType()));
 		statementList.addLast(new ReadFileStatement(val, "a"));

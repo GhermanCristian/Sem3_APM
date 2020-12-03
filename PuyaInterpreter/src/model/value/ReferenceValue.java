@@ -41,9 +41,4 @@ public class ReferenceValue implements ValueInterface{
 		representation += ("(0x" + Integer.toHexString(this.heapAddress) + ", " + this.referencedType.toString() + ")");
 		return representation;
 	}
-
-	@Override
-	public ValueInterface getDeepCopy() {
-		return new ReferenceValue(this.heapAddress, this.referencedType.getDeepCopy());
-	}
 }

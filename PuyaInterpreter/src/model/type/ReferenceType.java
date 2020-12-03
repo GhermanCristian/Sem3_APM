@@ -33,9 +33,4 @@ public class ReferenceType implements TypeInterface{
 		representation += ("Ref(" + this.innerType.toString() + ")");
 		return representation;
 	}
-
-	@Override
-	public TypeInterface getDeepCopy() {
-		return new ReferenceType(this.innerType.getDeepCopy());
-	}
 }

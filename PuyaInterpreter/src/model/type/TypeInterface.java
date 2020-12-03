@@ -4,5 +4,4 @@ import model.value.ValueInterface;
 
 public interface TypeInterface {
 	public ValueInterface getDefaultValue();
-	public TypeInterface getDeepCopy();
 }

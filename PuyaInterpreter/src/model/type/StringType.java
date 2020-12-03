@@ -20,9 +20,4 @@ public class StringType implements TypeInterface{
 	public ValueInterface getDefaultValue() {
 		return new StringValue(); // the default constructor sets the value to the default one
 	}
-
-	@Override
-	public TypeInterface getDeepCopy() {
-		return new StringType();
-	}
 }
