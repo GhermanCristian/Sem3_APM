@@ -46,6 +46,10 @@ public class ProgramState {
 		return newThreadID;
 	}
 	
+	public int getThreadID() {
+		return this.threadID;
+	}
+	
 	public StackInterface<StatementInterface> getExecutionStack() {
 		return this.executionStack;
 	}
