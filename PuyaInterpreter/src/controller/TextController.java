@@ -15,14 +15,14 @@ import model.value.ValueInterface;
 import repository.RepositoryInterface;
 
 public class TextController implements ControllerInterface{
-	private RepositoryInterface repository;
-	private ExecutorService executor;
+	protected RepositoryInterface repository;
+	protected ExecutorService executor;
 	
 	public TextController(RepositoryInterface repository) {
 		this.repository = repository;
 	}
 	
-	private List<Integer> getHeapAddressesFromSymbolTable(DictionaryInterface<String, ValueInterface> symbolTable) {
+	protected List<Integer> getHeapAddressesFromSymbolTable(DictionaryInterface<String, ValueInterface> symbolTable) {
 		return symbolTable.getAllValues()
 				.stream()
 				.filter(elem -> elem instanceof ReferenceValue)
@@ -30,7 +30,7 @@ public class TextController implements ControllerInterface{
 				.collect(Collectors.toList());
 	}
 	
-	private HashMap<Integer, ValueInterface> getGarbageCollectedHeap(List<ProgramState> threadList) {
+	protected HashMap<Integer, ValueInterface> getGarbageCollectedHeap(List<ProgramState> threadList) {
 		// the heap is the same for all threads, so we just pick one from which to get the heap
 		DictionaryInterface<Integer, ValueInterface> heap = threadList.get(0).getHeap();
 		
@@ -60,7 +60,7 @@ public class TextController implements ControllerInterface{
 		this.repository.setThreadList(threadsStillInExecution); // what is the purpose of this ??????
 	}
 	
-	private void oneStepExecutionAllThreads(List<ProgramState> threadList) throws Exception {
+	protected void oneStepExecutionAllThreads(List<ProgramState> threadList) throws Exception {
 		this.repository.logCompleteThreadListExecution(true);
 		List<Callable<ProgramState>> callableList = threadList.stream()
 									.map((ProgramState thread) -> (Callable<ProgramState>)(() -> {return thread.oneStepExecution();}))
