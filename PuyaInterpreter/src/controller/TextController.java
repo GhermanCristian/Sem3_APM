@@ -14,11 +14,11 @@ import model.value.ReferenceValue;
 import model.value.ValueInterface;
 import repository.RepositoryInterface;
 
-public class Controller implements ControllerInterface{
+public class TextController implements ControllerInterface{
 	private RepositoryInterface repository;
 	private ExecutorService executor;
 	
-	public Controller(RepositoryInterface repository) {
+	public TextController(RepositoryInterface repository) {
 		this.repository = repository;
 	}
 	
