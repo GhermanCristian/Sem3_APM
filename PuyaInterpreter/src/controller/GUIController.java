@@ -2,7 +2,6 @@ package controller;
 
 import java.io.BufferedReader;
 import java.util.List;
-
 import model.Example;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
@@ -55,6 +54,7 @@ public class GUIController extends TextController {
 	public void loadProgramStateIntoRepository(Example currentExample) throws Exception {
 		this.repository = new Repository(currentExample.getRepositoryLocation());
 		this.addProgramState(this.getProgramState(currentExample));
+		this.currentGUI.updateStructures();
 		System.out.println(this.repository.getThreadList().get(0).toString());
 	}
 	
