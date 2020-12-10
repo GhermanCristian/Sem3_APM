@@ -24,4 +24,9 @@ public class Example {
 	public String getRepositoryLocation() {
 		return this.repositoryLocation;
 	}
+	
+	@Override
+	public String toString() {
+		return this.currentStatement.toString();
+	}
 }
