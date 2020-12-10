@@ -3,6 +3,7 @@ package model.ADT;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.function.Consumer;
 
 import exception.EmptyADTException;
 
@@ -26,6 +27,13 @@ public class MyList<TElem> implements ListInterface<TElem> {
 	@Override
 	public ListIterator<TElem> getIterator() {
 		return this.list.listIterator();
+	}
+	
+	@Override
+	public void forEach(Consumer<? super TElem> action) {
+		for(TElem crtElem : this.list) {
+			action.accept(crtElem);
+		}
 	}
 	
 	@Override
