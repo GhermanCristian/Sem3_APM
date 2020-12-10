@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 
 import controller.Controller;
 import controller.ControllerInterface;
+import model.Example;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
 import model.ADT.ListInterface;
@@ -23,10 +24,10 @@ public class RunExampleCommand extends Command {
 	private final StatementInterface crtStatement;
 	private final String repositoryLocation;
 	
-	public RunExampleCommand(String key, String description, StatementInterface crtStatement, String repositoryLocation) {
-		super(key, description);
-		this.crtStatement = crtStatement;
-		this.repositoryLocation = repositoryLocation;
+	public RunExampleCommand(String key, Example exampleToRun) {
+		super(key, exampleToRun.getExampleDescription());
+		this.crtStatement = exampleToRun.getStatement();
+		this.repositoryLocation = exampleToRun.getRepositoryLocation();
 	}
 	
 	@Override
