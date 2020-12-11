@@ -54,13 +54,13 @@ public class GUIController extends TextController {
 	public void loadProgramStateIntoRepository(Example currentExample) throws Exception {
 		this.repository = new Repository(currentExample.getRepositoryLocation());
 		this.addProgramState(this.getProgramState(currentExample));
-		this.currentGUI.updateStructures();
-		System.out.println(this.repository.getThreadList().get(0).toString());
+		this.currentGUI.updateAllStructures();
+		//System.out.println(this.repository.getThreadList().get(0).toString());
 	}
 	
 	public void advanceOneStepAllThreads() throws Exception {
 		super.oneStepExecutionAllThreads(this.removeCompletedThreads(this.repository.getThreadList()));
-		this.currentGUI.updateStructures();
+		this.currentGUI.updateAllStructures();
 	}
 	
 	public MyList<Example> getAllExamples() {
