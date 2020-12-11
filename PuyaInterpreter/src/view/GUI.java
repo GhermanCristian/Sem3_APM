@@ -13,8 +13,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Example;
@@ -30,8 +30,10 @@ public class GUI extends Application {
 	private TableView<String> heapTableView;
 	private TableView<String> symbolTableTableView;
 	private TextField programStateCountTextField;
+	
 	private final int MINIMUM_MAIN_WINDOW_WIDTH = 700; // in pixels
 	private final int MINIMUM_MAIN_WINDOW_HEIGHT = 300; // in pixels
+	private final int MAXIMUM_MAIN_WINDOW_HEIGHT = 800; // in pixels
 	private final int UPPER_LAYOUT_GAP = 10;
 	private final int MAXIMUM_PROGRAM_STATE_COUNT_FIELD_WIDTH = 80;
 	private final int MAXIMUM_EXAMPLE_LIST_COMBO_BOX_WIDTH = 560;
@@ -79,10 +81,8 @@ public class GUI extends Application {
 		this.updateThreadDependantStructures(this.threadListView.getSelectionModel().getSelectedIndex());
 	}
 	
-	private GridPane createGridLayout() {
-		GridPane structuresLayout = new GridPane();
-		
-		// initialise the threadListView
+	private void initialiseThreadListView() {
+		this.threadListView = new ListView<Integer>();
 		this.threadListView.setMaxWidth(this.MAXIMUM_THREAD_LIST_VIEW_WIDTH);
 		this.threadListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Integer>() {
 			@Override
@@ -94,11 +94,66 @@ public class GUI extends Application {
 				}
 			}
 		});
+		this.threadListView.setMaxWidth(Double.MAX_VALUE);
+	}
+	
+	private void initialiseSymbolTableTableView() {
+		this.symbolTableTableView = new TableView<String>();
+		this.symbolTableTableView.setMaxWidth(Double.MAX_VALUE);
+	}
+	
+	private void initialiseOutputListView() {
+		this.outputListView = new ListView<String>();
+		this.outputListView.setMaxWidth(Double.MAX_VALUE);
+	}
+	
+	private void initialiseHeapTableTableView() {
+		this.heapTableView = new TableView<String>();
+		this.heapTableView.setMaxWidth(Double.MAX_VALUE);
+	}
+	
+	private void initialiseFileTableListView() {
+		this.fileTableListView = new ListView<String>();
+		this.fileTableListView.setMaxWidth(Double.MAX_VALUE);
+	}
+	
+	private void initialiseStackListView() {
+		this.stackListView = new ListView<String>();
+		this.stackListView.setMaxWidth(Double.MAX_VALUE);
+	}
+	
+	private HBox createStructuresLayout() {
+		HBox mainStructuresLayout = new HBox(5);
+		VBox rightLayout = new VBox(5);
+		HBox upperRightLayout = new HBox(5);
+		HBox lowerRightLayout = new HBox(5);
 		
-		// initialise the heap table view
-		// initialise the symbol table table view
+		this.initialiseThreadListView();
+		this.initialiseSymbolTableTableView();
+		this.initialiseOutputListView();
+		this.initialiseHeapTableTableView();
+		this.initialiseFileTableListView();
+		this.initialiseStackListView();
 		
-		return structuresLayout;
+		/*GridPane.setConstraints(this.threadListView, 0, 0, 1, 2, HPos.LEFT, VPos.CENTER);
+		GridPane.setConstraints(this.symbolTableTableView, 1, 0, 2, 1, HPos.LEFT, VPos.TOP);
+		GridPane.setConstraints(this.outputListView, 3, 0, 2, 1, HPos.CENTER, VPos.TOP);
+		GridPane.setConstraints(this.heapTableView, 5, 0, 2, 1, HPos.RIGHT, VPos.TOP);
+		GridPane.setConstraints(this.fileTableListView, 1, 1, 3, 1, HPos.LEFT, VPos.BOTTOM);
+		GridPane.setConstraints(this.stackListView, 4, 1, 3, 1, HPos.RIGHT, VPos.BOTTOM);
+		
+		structuresLayout.getChildren().addAll(this.threadListView, this.symbolTableTableView, this.outputListView, this.heapTableView, this.fileTableListView, this.stackListView);*/
+		HBox.setHgrow(this.symbolTableTableView, Priority.ALWAYS);
+		HBox.setHgrow(this.heapTableView, Priority.ALWAYS);
+		HBox.setHgrow(this.outputListView, Priority.ALWAYS);
+		HBox.setHgrow(this.stackListView, Priority.ALWAYS);
+		HBox.setHgrow(this.fileTableListView, Priority.ALWAYS);
+		
+		upperRightLayout.getChildren().addAll(this.symbolTableTableView, this.heapTableView, this.outputListView);
+		lowerRightLayout.getChildren().addAll(this.stackListView, this.fileTableListView);
+		rightLayout.getChildren().addAll(upperRightLayout, lowerRightLayout);
+		mainStructuresLayout.getChildren().addAll(this.threadListView, rightLayout);
+		return mainStructuresLayout;
 	}
 	
 	private Scene createScene() throws Exception {
@@ -137,7 +192,7 @@ public class GUI extends Application {
 		
 		//exampleComboBox.getStyleClass().add("comboBox");
 		upperLayout.getChildren().addAll(exampleComboBox, selectExampleButton);
-		mainLayout.getChildren().addAll(upperLayout, programStateCountTextField, this.threadListView);
+		mainLayout.getChildren().addAll(upperLayout, programStateCountTextField, this.createStructuresLayout());
 		newScene = new Scene(mainLayout);
 		newScene.getStylesheets().add(getClass().getResource("applicationStyle.css").toExternalForm());
 		return newScene;
@@ -146,11 +201,11 @@ public class GUI extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception { // this is basically the constructor
 		this.controller = new GUIController(this);
-		this.threadListView = new ListView<Integer>();
 		this.programStateCountTextField = new TextField("Threads: 0");
 		
 		primaryStage.setMinWidth(this.MINIMUM_MAIN_WINDOW_WIDTH);
 		primaryStage.setMinHeight(this.MINIMUM_MAIN_WINDOW_HEIGHT);
+		//primaryStage.setMaxHeight(this.MAXIMUM_MAIN_WINDOW_HEIGHT);
 		primaryStage.setTitle("PuyaInterpreter");
         primaryStage.setScene(this.createScene());
         primaryStage.show();
