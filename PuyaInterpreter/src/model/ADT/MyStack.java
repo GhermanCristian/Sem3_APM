@@ -2,6 +2,7 @@ package model.ADT;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.function.Consumer;
 
 public class MyStack<TElem> implements StackInterface<TElem>{
 	private Deque<TElem> stack;
@@ -42,5 +43,12 @@ public class MyStack<TElem> implements StackInterface<TElem>{
 			representation += (crtElem.toString());
 		}
 		return representation;
+	}
+
+	@Override
+	public void forEach(Consumer<? super TElem> action) {
+		for(TElem crtElem : this.stack) {
+			action.accept(crtElem);
+		}
 	}
 }
