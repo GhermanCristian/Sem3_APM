@@ -38,6 +38,7 @@ public class GUI extends Application {
 	private final int MAXIMUM_PROGRAM_STATE_COUNT_FIELD_WIDTH = 80;
 	private final int MAXIMUM_EXAMPLE_LIST_COMBO_BOX_WIDTH = 560;
 	private final int MAXIMUM_THREAD_LIST_VIEW_WIDTH = MAXIMUM_PROGRAM_STATE_COUNT_FIELD_WIDTH;
+	private final int FIRST_THREAD_POSITION_IN_THREAD_LIST = 0;
 	
 	/*
 	observer -> GUI
@@ -54,7 +55,8 @@ public class GUI extends Application {
 	}
 	
 	private void updateStackListView(Integer newSelectedThreadID) {
-		;
+		this.stackListView.getItems().clear();
+		this.controller.getThreadList().get(newSelectedThreadID).getExecutionStack().forEach(statement -> this.stackListView.getItems().add(statement.toString()));
 	}
 	
 	private void updateSymbolTableListView(Integer newSelectedThreadID) {
@@ -62,23 +64,46 @@ public class GUI extends Application {
 	}
 	
 	private void updateThreadDependantStructures(Integer newSelectedThreadID) {
+		newSelectedThreadID -= 1; // in the internal representation the threads start from 0; however, the threadID count starts from 1
 		this.updateStackListView(newSelectedThreadID);
 		this.updateSymbolTableListView(newSelectedThreadID);
+	}
+	
+	// the thread list view will change when a new thread is introduced / a thread is completed => taken out of the repo
+	private void updateThreadListView() {
+		this.threadListView.getItems().clear();
+		this.controller.getThreadList().forEach(thread -> this.threadListView.getItems().add(thread.getThreadID()));
+	}
+	
+	private void updateHeapTableView() {
+		
+	}
+	
+	private void updateOutputListView() {
+		
+	}
+	
+	private void updateFileTableListView() {
+		
+	}
+	
+	// threadList, heap, output, filetable - they don't depend on the current thread
+	private void updateGlobalStructures() {
+		this.updateThreadListView();
+		this.updateHeapTableView();
+		this.updateOutputListView();
+		this.updateFileTableListView();
 	}
 	
 	public void updateAllStructures() {
 		// normally I wouldn't need to call this from the controller, I could just call it here after each button press for next step
 		// however, what if there are some internal modifications that are done even when I don't press the button - then I need this
-		
-		// update the thread list view
-		this.threadListView.getItems().clear();
-		this.controller.getThreadList().forEach(thread -> this.threadListView.getItems().add(thread.getThreadID()));
-		
-		// update the textfield for the thread count
-		this.programStateCountTextField.setText("Threads: " + Integer.toString(this.threadListView.getItems().size()));
-		
+		this.updateGlobalStructures();
 		// what if the selected index is null ?
 		this.updateThreadDependantStructures(this.threadListView.getSelectionModel().getSelectedIndex());
+		
+		// update the textfield for the thread count; only after the threadListView is updated in updateGlobalStructures()
+		this.programStateCountTextField.setText("Threads: " + Integer.toString(this.threadListView.getItems().size()));
 	}
 	
 	private void initialiseThreadListView() {
@@ -135,14 +160,6 @@ public class GUI extends Application {
 		this.initialiseFileTableListView();
 		this.initialiseStackListView();
 		
-		/*GridPane.setConstraints(this.threadListView, 0, 0, 1, 2, HPos.LEFT, VPos.CENTER);
-		GridPane.setConstraints(this.symbolTableTableView, 1, 0, 2, 1, HPos.LEFT, VPos.TOP);
-		GridPane.setConstraints(this.outputListView, 3, 0, 2, 1, HPos.CENTER, VPos.TOP);
-		GridPane.setConstraints(this.heapTableView, 5, 0, 2, 1, HPos.RIGHT, VPos.TOP);
-		GridPane.setConstraints(this.fileTableListView, 1, 1, 3, 1, HPos.LEFT, VPos.BOTTOM);
-		GridPane.setConstraints(this.stackListView, 4, 1, 3, 1, HPos.RIGHT, VPos.BOTTOM);
-		
-		structuresLayout.getChildren().addAll(this.threadListView, this.symbolTableTableView, this.outputListView, this.heapTableView, this.fileTableListView, this.stackListView);*/
 		HBox.setHgrow(this.symbolTableTableView, Priority.ALWAYS);
 		HBox.setHgrow(this.heapTableView, Priority.ALWAYS);
 		HBox.setHgrow(this.outputListView, Priority.ALWAYS);
@@ -175,6 +192,9 @@ public class GUI extends Application {
             	catch (Exception e) {
 					displayErrorMessage(e.getMessage());
 				}
+            	
+            	// automatically select the first thread when selecting the example to run
+            	threadListView.getSelectionModel().select(FIRST_THREAD_POSITION_IN_THREAD_LIST); 
             	
             	selectExampleButton.setDisable(true);
             	exampleComboBox.hide();
