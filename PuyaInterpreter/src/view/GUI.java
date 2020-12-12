@@ -12,7 +12,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
@@ -20,9 +19,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import model.Example;
-import model.value.ValueInterface;
 
 public class GUI extends Application {
 	private GUIController controller;
@@ -32,7 +29,7 @@ public class GUI extends Application {
 	private ListView<String> outputListView;
 	private ListView<String> fileTableListView; // I might change this to a table view, because the file table is a dictionary after all
 	private ListView<String> stackListView;
-	private TableView<String> heapTableView;
+	private TableView<Integer> heapTableView; // here I need it to store Integers because that's the key of the Heap structure
 	private TableView<String> symbolTableTableView;
 	private TextField programStateCountTextField;
 	
@@ -82,7 +79,8 @@ public class GUI extends Application {
 	}
 	
 	private void updateHeapTableView() {
-		
+		this.heapTableView.getItems().clear();
+		this.controller.getThreadList().get(this.FIRST_THREAD_POSITION_IN_THREAD_LIST).getHeap().forEachKey(variableAddress -> this.heapTableView.getItems().add(variableAddress));
 	}
 	
 	private void updateOutputListView() {
@@ -152,7 +150,20 @@ public class GUI extends Application {
 	}
 	
 	private void initialiseHeapTableTableView() {
-		this.heapTableView = new TableView<String>();
+		this.heapTableView = new TableView<Integer>();
+		this.heapTableView.setEditable(false);
+		
+		TableColumn<Integer, String> variableAddressColumn = new TableColumn<Integer, String>("Variable address");
+		variableAddressColumn.setMinWidth(100);
+		// this approach should only be used as long as the table is non-editable (which it is in this app)
+		variableAddressColumn.setCellValueFactory(currentReference -> new ReadOnlyStringWrapper("0x" + Integer.toHexString(currentReference.getValue())));
+		
+		TableColumn<Integer, String> variableValueColumn = new TableColumn<Integer, String>("Value");
+		variableValueColumn.setMinWidth(100);
+		variableValueColumn.setCellValueFactory(currentReference -> new ReadOnlyStringWrapper(this.controller.getThreadList().get(this.threadListView.getSelectionModel().getSelectedIndex()).getHeap().getValue(currentReference.getValue()).toString()));
+		
+		this.heapTableView.getColumns().add(variableAddressColumn);
+		this.heapTableView.getColumns().add(variableValueColumn);
 		this.heapTableView.setMaxWidth(Double.MAX_VALUE);
 	}
 	
