@@ -2,6 +2,7 @@ package model.ADT;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.function.Consumer;
 
 public class MyDictionary<TKey, TValue> implements DictionaryInterface<TKey, TValue>{
 	protected HashMap<TKey, TValue> dictionary;
@@ -94,5 +95,12 @@ public class MyDictionary<TKey, TValue> implements DictionaryInterface<TKey, TVa
 		// in this case, all Types and Values (and the java String) are immutable
 		this.dictionary.entrySet().stream().forEach(pair -> newDictionary.insert(pair.getKey(), pair.getValue()));
 		return newDictionary;
+	}
+
+	@Override
+	public void forEachKey(Consumer<? super TKey> action) {
+		for(TKey crtKey : this.dictionary.keySet()) {
+			action.accept(crtKey);
+		}
 	}
 }
