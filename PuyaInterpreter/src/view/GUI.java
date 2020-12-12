@@ -2,6 +2,7 @@ package view;
 
 import controller.GUIController;
 import javafx.application.Application;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -10,6 +11,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
@@ -17,7 +20,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import model.Example;
+import model.value.ValueInterface;
 
 public class GUI extends Application {
 	private GUIController controller;
@@ -59,14 +64,15 @@ public class GUI extends Application {
 		this.controller.getThreadList().get(newSelectedThreadID).getExecutionStack().forEach(statement -> this.stackListView.getItems().add(statement.toString()));
 	}
 	
-	private void updateSymbolTableListView(Integer newSelectedThreadID) {
-		;
+	private void updateSymbolTableTableView(Integer newSelectedThreadID) {
+		this.symbolTableTableView.getItems().clear();
+		this.controller.getThreadList().get(newSelectedThreadID).getSymbolTable().forEachKey(variableName -> this.symbolTableTableView.getItems().add(variableName));
 	}
 	
 	private void updateThreadDependantStructures(Integer newSelectedThreadID) {
 		newSelectedThreadID -= 1; // in the internal representation the threads start from 0; however, the threadID count starts from 1
 		this.updateStackListView(newSelectedThreadID);
-		this.updateSymbolTableListView(newSelectedThreadID);
+		this.updateSymbolTableTableView(newSelectedThreadID);
 	}
 	
 	// the thread list view will change when a new thread is introduced / a thread is completed => taken out of the repo
@@ -124,6 +130,19 @@ public class GUI extends Application {
 	
 	private void initialiseSymbolTableTableView() {
 		this.symbolTableTableView = new TableView<String>();
+		this.symbolTableTableView.setEditable(false);
+		
+		TableColumn<String, String> variableNameColumn = new TableColumn<String, String>("Variable name");
+		variableNameColumn.setMinWidth(100);
+		// this approach should only be used as long as the table is non-editable (which it is in this app)
+		variableNameColumn.setCellValueFactory(currentValue -> new ReadOnlyStringWrapper(currentValue.getValue()));
+		
+		TableColumn<String, String> variableValueColumn = new TableColumn<String, String>("Value");
+		variableValueColumn.setMinWidth(100);
+		variableValueColumn.setCellValueFactory(currentValue -> new ReadOnlyStringWrapper(this.controller.getThreadList().get(this.threadListView.getSelectionModel().getSelectedIndex()).getSymbolTable().getValue(currentValue.getValue()).toString()));
+		
+		this.symbolTableTableView.getColumns().add(variableNameColumn);
+		this.symbolTableTableView.getColumns().add(variableValueColumn);
 		this.symbolTableTableView.setMaxWidth(Double.MAX_VALUE);
 	}
 	
