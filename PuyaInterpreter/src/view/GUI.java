@@ -157,11 +157,11 @@ public class GUI extends Application {
 	public void afterProgramExecution() {
 		this.updateThreadListView();
 		this.programStateCountTextField.setText("Threads: 0");
-		this.selectExampleButton.setDisable(false); // re-activate the select example button and the example combo box
+		this.selectExampleButton.setDisable(false); // re-activate / reset the select example button and the example combo box
 		this.exampleComboBox.setDisable(false);
+		this.exampleComboBox.getSelectionModel().clearSelection();
 		this.advanceOneStepButton.setDisable(true);
 		this.fullProgramExecutionButton.setDisable(true);
-		// reset the ability to select an example to run
 	}
 	
 	private void initialiseThreadListView() {
@@ -200,6 +200,8 @@ public class GUI extends Application {
 		this.symbolTableTableView = new TableView<String>();
 		this.symbolTableTableView.setEditable(false);
 		
+		this.symbolTableTableView.setMaxWidth(Double.MAX_VALUE);
+		
 		TableColumn<String, String> variableNameColumn = new TableColumn<String, String>("Variable name");
 		variableNameColumn.setMinWidth(100);
 		// this approach (with the readOnlyStringWrapper) should only be used as long as the table is non-editable (which it is in this app)
@@ -216,7 +218,6 @@ public class GUI extends Application {
 		
 		this.symbolTableTableView.getColumns().add(variableNameColumn);
 		this.symbolTableTableView.getColumns().add(variableValueColumn);
-		this.symbolTableTableView.setMaxWidth(Double.MAX_VALUE);
 	}
 	
 	private void initialiseOutputListView() {
@@ -279,6 +280,9 @@ public class GUI extends Application {
 		HBox.setHgrow(this.outputListView, Priority.ALWAYS);
 		HBox.setHgrow(this.stackListView, Priority.ALWAYS);
 		HBox.setHgrow(this.fileTableListView, Priority.ALWAYS);
+		HBox.setHgrow(upperRightLayout, Priority.ALWAYS);
+		HBox.setHgrow(lowerRightLayout, Priority.ALWAYS);
+		HBox.setHgrow(rightLayout, Priority.ALWAYS);
 		
 		upperRightLayout.getChildren().addAll(this.symbolTableTableView, this.heapTableView, this.outputListView);
 		lowerRightLayout.getChildren().addAll(this.stackListView, this.fileTableListView);
@@ -308,6 +312,7 @@ public class GUI extends Application {
             }
 		});
 		this.advanceOneStepButton.setDisable(true); // these buttons will be disabled until an example is selected
+		this.advanceOneStepButton.setMaxWidth(Double.MAX_VALUE);
 		
 		this.fullProgramExecutionButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -321,6 +326,11 @@ public class GUI extends Application {
             }
 		});
 		this.fullProgramExecutionButton.setDisable(true);
+		this.fullProgramExecutionButton.setMaxWidth(Double.MAX_VALUE);
+		
+		HBox.setHgrow(this.advanceOneStepButton, Priority.ALWAYS);
+		HBox.setHgrow(this.fullProgramExecutionButton, Priority.ALWAYS);
+		HBox.setHgrow(buttonAreaLayout, Priority.ALWAYS);
 		
 		buttonAreaLayout.getChildren().addAll(this.programStateCountTextField, this.advanceOneStepButton, this.fullProgramExecutionButton);
 		
@@ -336,6 +346,7 @@ public class GUI extends Application {
 		this.exampleComboBox.setVisibleRowCount(2);
 		this.exampleComboBox.setMaxWidth(this.MAXIMUM_EXAMPLE_LIST_COMBO_BOX_WIDTH);
 		this.controller.getAllExamples().forEach(example -> exampleComboBox.getItems().add(example));
+		this.exampleComboBox.setMaxWidth(Double.MAX_VALUE);
 		
 		this.selectExampleButton = new Button("Execute program");
 		this.selectExampleButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -347,19 +358,16 @@ public class GUI extends Application {
             	catch (Exception e) {
 					displayErrorMessage(e.getMessage());
 				}
-            	
-            	// automatically select the first thread when selecting the example to run
-            	//threadListView.getSelectionModel().select(FIRST_THREAD_POSITION_IN_THREAD_LIST); 
 
-            	exampleComboBox.hide();
             	exampleComboBox.setPromptText("Program changing unavailable: a program is currently in execution"); // do this with a more visible font
-            	exampleComboBox.show();
-            	exampleComboBox.setDisable(true);
-            	// for now I will try it like this, so that I can't accidentally click it and overwrite the current program
-            	// I can probably reactivate it when the program execution is finished
             }
 		});
 		this.selectExampleButton.setTooltip(new Tooltip("Only one program can be run at a time"));
+		this.selectExampleButton.setMaxWidth(Double.MAX_VALUE);
+		
+		HBox.setHgrow(this.exampleComboBox, Priority.ALWAYS);
+		HBox.setHgrow(this.selectExampleButton, Priority.ALWAYS);
+		HBox.setHgrow(upperLayout, Priority.ALWAYS);
 		
 		//exampleComboBox.getStyleClass().add("comboBox");
 		upperLayout.getChildren().addAll(this.exampleComboBox, this.selectExampleButton);
@@ -372,7 +380,6 @@ public class GUI extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception { // this is basically the constructor
 		this.controller = new GUIController(this);
-		
 		
 		primaryStage.setMinWidth(this.MINIMUM_MAIN_WINDOW_WIDTH);
 		primaryStage.setMinHeight(this.MINIMUM_MAIN_WINDOW_HEIGHT);
