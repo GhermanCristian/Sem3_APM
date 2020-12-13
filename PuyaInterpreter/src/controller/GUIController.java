@@ -29,14 +29,6 @@ public class GUIController extends TextController {
 		AllExamples allExamples = new AllExamples();
 		this.exampleList = allExamples.getAllExamples();
 	}
-	
-	@Override
-	public void fullProgramExecution() throws Exception {
-		if (this.repository == null) {
-			// normally this shouldn't happen
-			throw new Exception("GUIController: Repository not initialised before calling fullProgramExecution");
-		}
-	}
 
 	private ProgramState getProgramState(Example currentExample) throws Exception {
 		StackInterface<StatementInterface> stack = new MyStack<StatementInterface>();
@@ -55,12 +47,32 @@ public class GUIController extends TextController {
 		this.repository = new Repository(currentExample.getRepositoryLocation());
 		this.addProgramState(this.getProgramState(currentExample));
 		this.currentGUI.updateAllStructures();
-		//System.out.println(this.repository.getThreadList().get(0).toString());
+		this.beforeProgramExecution();
 	}
 	
 	public void advanceOneStepAllThreads() throws Exception {
 		super.oneStepExecutionAllThreads(this.removeCompletedThreads(this.repository.getThreadList()));
 		this.currentGUI.updateAllStructures();
+		
+		this.repository.setThreadList(this.removeCompletedThreads(this.repository.getThreadList()));
+		if (this.repository.getThreadList().size() == 0) {
+			super.afterProgramExecution();
+		}
+	}
+	
+	@Override
+	public void fullProgramExecution() throws Exception {
+		if (this.repository == null) {
+			// normally this shouldn't happen
+			throw new Exception("GUIController: Repository not initialised before calling fullProgramExecution");
+		}
+		
+		List<ProgramState> threadsStillInExecution = this.removeCompletedThreads(this.repository.getThreadList());
+		while (threadsStillInExecution.size() > 0) {
+			threadsStillInExecution.get(0).getHeap().setContent(this.getGarbageCollectedHeap(threadsStillInExecution));
+			this.advanceOneStepAllThreads();
+			threadsStillInExecution = this.removeCompletedThreads(this.repository.getThreadList());
+		}
 	}
 	
 	public MyList<Example> getAllExamples() {
@@ -73,4 +85,17 @@ public class GUIController extends TextController {
 		return this.repository.getThreadList();
 	}
 
+	public ProgramState getThreadByID(Integer threadID) {
+		if (threadID == null) {
+			return null;
+		}
+		
+		for (ProgramState currentThread : this.repository.getThreadList()) {
+			if (currentThread.getThreadID() == threadID) {
+				return currentThread;
+			}
+		}
+		
+		return null;
+	}
 }

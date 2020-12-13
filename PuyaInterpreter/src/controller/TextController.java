@@ -46,9 +46,14 @@ public class TextController implements ControllerInterface{
 											.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 	}
 
+	protected void beforeProgramExecution() {
+		this.executor = Executors.newFixedThreadPool(2);
+	}
+	
 	@Override
 	public void fullProgramExecution() throws Exception {
-		this.executor = Executors.newFixedThreadPool(2);
+		this.beforeProgramExecution();
+		
 		List<ProgramState> threadsStillInExecution = this.removeCompletedThreads(this.repository.getThreadList());
 		while (threadsStillInExecution.size() > 0) {
 			threadsStillInExecution.get(0).getHeap().setContent(this.getGarbageCollectedHeap(threadsStillInExecution));
@@ -56,8 +61,7 @@ public class TextController implements ControllerInterface{
 			threadsStillInExecution = this.removeCompletedThreads(this.repository.getThreadList());
 		}
 		
-		this.executor.shutdownNow();
-		this.repository.setThreadList(threadsStillInExecution); // what is the purpose of this ??????
+		this.afterProgramExecution();
 	}
 	
 	protected void oneStepExecutionAllThreads(List<ProgramState> threadList) throws Exception {
@@ -81,6 +85,10 @@ public class TextController implements ControllerInterface{
 		threadList.addAll(advancedThreadList);
 		this.repository.logCompleteThreadListExecution(false);
 		this.repository.setThreadList(threadList);
+	}
+	
+	protected void afterProgramExecution() {
+		this.executor.shutdownNow();
 	}
 
 	@Override

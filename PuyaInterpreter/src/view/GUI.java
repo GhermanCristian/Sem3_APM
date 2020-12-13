@@ -8,6 +8,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
@@ -15,14 +16,18 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Example;
+import model.ProgramState;
 
 public class GUI extends Application {
 	private GUIController controller;
+	private Integer selectedThreadID;
+	
 	// here I need the actual value of the thread ID because selecting from this list affects the program
 	// selecting from the output, filetable etc does not affect the program, so I'll just display the string
 	private ListView<Integer> threadListView; 
@@ -53,23 +58,31 @@ public class GUI extends Application {
 	*/
 	
 	private void displayErrorMessage(String message) {
-		;
+		Alert errorAlert = new Alert(AlertType.ERROR);
+		errorAlert.setTitle("Error");
+		errorAlert.setContentText(message);
+		errorAlert.setResizable(true);
+		errorAlert.showAndWait();
 	}
 	
-	private void updateStackListView(Integer newSelectedThreadID) {
+	private void updateStackListView(ProgramState currentThread) {
 		this.stackListView.getItems().clear();
-		this.controller.getThreadList().get(newSelectedThreadID).getExecutionStack().forEach(statement -> this.stackListView.getItems().add(statement.toString()));
+		currentThread.getExecutionStack().forEach(statement -> this.stackListView.getItems().add(statement.toString()));
 	}
 	
-	private void updateSymbolTableTableView(Integer newSelectedThreadID) {
+	private void updateSymbolTableTableView(ProgramState currentThread) {
 		this.symbolTableTableView.getItems().clear();
-		this.controller.getThreadList().get(newSelectedThreadID).getSymbolTable().forEachKey(variableName -> this.symbolTableTableView.getItems().add(variableName));
+		currentThread.getSymbolTable().forEachKey(variableName -> this.symbolTableTableView.getItems().add(variableName));
 	}
 	
-	private void updateThreadDependantStructures(Integer newSelectedThreadID) {
-		newSelectedThreadID -= 1; // in the internal representation the threads start from 0; however, the threadID count starts from 1
-		this.updateStackListView(newSelectedThreadID);
-		this.updateSymbolTableTableView(newSelectedThreadID);
+	private void updateThreadDependantStructures() {
+		ProgramState selectedThread = this.controller.getThreadByID(this.selectedThreadID);
+		if (selectedThread == null) {
+			return;
+		}
+		
+		this.updateStackListView(selectedThread);
+		this.updateSymbolTableTableView(selectedThread);
 	}
 	
 	// the thread list view will change when a new thread is introduced / a thread is completed => taken out of the repo
@@ -84,7 +97,8 @@ public class GUI extends Application {
 	}
 	
 	private void updateOutputListView() {
-		
+		this.outputListView.getItems().clear();
+		this.controller.getThreadList().get(this.FIRST_THREAD_POSITION_IN_THREAD_LIST).getOutput().forEach(message -> this.outputListView.getItems().add(message.toString()));
 	}
 	
 	private void updateFileTableListView() {
@@ -103,24 +117,34 @@ public class GUI extends Application {
 		// normally I wouldn't need to call this from the controller, I could just call it here after each button press for next step
 		// however, what if there are some internal modifications that are done even when I don't press the button - then I need this
 		this.updateGlobalStructures();
-		// what if the selected index is null ?
-		this.updateThreadDependantStructures(this.threadListView.getSelectionModel().getSelectedIndex());
+		this.updateThreadDependantStructures();
 		
 		// update the textfield for the thread count; only after the threadListView is updated in updateGlobalStructures()
 		this.programStateCountTextField.setText("Threads: " + Integer.toString(this.threadListView.getItems().size()));
 	}
 	
 	private void initialiseThreadListView() {
+		//TO-DO: instead of selecting the index and then searching the index.. - select the value (imagine if you have 10 threads 1..10, and only threads 1 and 9 remain (on positions 0 and 1) => position doesn't match the threadIDs
 		this.threadListView = new ListView<Integer>();
 		this.threadListView.setMaxWidth(this.MAXIMUM_THREAD_LIST_VIEW_WIDTH);
 		this.threadListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Integer>() {
 			@Override
 			public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
-				if (newValue != null) {
-					// It's no use to pass the currently selected thread to the controller (and back again to the GUI)
-					// because it doesn't affect the program execution, just the content displayed in the GUI
-					updateThreadDependantStructures(newValue);
+				// It's no use to pass the currently selected thread to the controller (and back again to the GUI)
+				// because it doesn't affect the program execution, just the content displayed in the GUI
+				
+				if (newValue == oldValue) {
+					// also, if I click on the ID that's already clicked, there's no use in updating anything
+					return;
 				}
+				
+				if (newValue == null || newValue < 0) {
+					// this is only a temporary solution - I need a method to get the first available thread
+					newValue = controller.getThreadList().get(FIRST_THREAD_POSITION_IN_THREAD_LIST).getThreadID();
+				}
+				
+				selectedThreadID = newValue;
+				updateThreadDependantStructures();
 			}
 		});
 		this.threadListView.setMaxWidth(Double.MAX_VALUE);
@@ -137,7 +161,7 @@ public class GUI extends Application {
 		
 		TableColumn<String, String> variableValueColumn = new TableColumn<String, String>("Value");
 		variableValueColumn.setMinWidth(100);
-		variableValueColumn.setCellValueFactory(currentValue -> new ReadOnlyStringWrapper(this.controller.getThreadList().get(this.threadListView.getSelectionModel().getSelectedIndex()).getSymbolTable().getValue(currentValue.getValue()).toString()));
+		variableValueColumn.setCellValueFactory(currentValue -> {if (this.controller.getThreadList().isEmpty()) {return null;} return new ReadOnlyStringWrapper(this.controller.getThreadByID(this.selectedThreadID).getSymbolTable().getValue(currentValue.getValue()).toString());});
 		
 		this.symbolTableTableView.getColumns().add(variableNameColumn);
 		this.symbolTableTableView.getColumns().add(variableValueColumn);
@@ -160,7 +184,7 @@ public class GUI extends Application {
 		
 		TableColumn<Integer, String> variableValueColumn = new TableColumn<Integer, String>("Value");
 		variableValueColumn.setMinWidth(100);
-		variableValueColumn.setCellValueFactory(currentReference -> new ReadOnlyStringWrapper(this.controller.getThreadList().get(this.threadListView.getSelectionModel().getSelectedIndex()).getHeap().getValue(currentReference.getValue()).toString()));
+		variableValueColumn.setCellValueFactory(currentReference -> {if (this.controller.getThreadList().isEmpty()) {return null;} return new ReadOnlyStringWrapper(this.controller.getThreadByID(this.selectedThreadID).getHeap().getValue(currentReference.getValue()).toString());});
 		
 		this.heapTableView.getColumns().add(variableAddressColumn);
 		this.heapTableView.getColumns().add(variableValueColumn);
@@ -203,15 +227,42 @@ public class GUI extends Application {
 		return mainStructuresLayout;
 	}
 	
+	private HBox createExecuteAreaLayout() {
+		HBox buttonAreaLayout = new HBox(5);
+		Button advanceOneStepButton = new Button("One step");
+		Button fullExecutionButton = new Button("Full execution");
+		
+		this.programStateCountTextField = new TextField("Threads: 0");
+		this.programStateCountTextField.setEditable(false);
+		this.programStateCountTextField.setMaxWidth(this.MAXIMUM_PROGRAM_STATE_COUNT_FIELD_WIDTH);
+		
+		advanceOneStepButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+            public void handle(ActionEvent event) {
+            	try {
+					controller.advanceOneStepAllThreads();
+				} 
+            	catch (Exception e) {
+					displayErrorMessage(e.getMessage());
+				}
+            }
+		});
+		
+		buttonAreaLayout.getChildren().addAll(this.programStateCountTextField, advanceOneStepButton, fullExecutionButton);
+		
+		return buttonAreaLayout;
+	}
+	
 	private Scene createScene() throws Exception {
 		Scene newScene;
-		VBox mainLayout = new VBox();
+		VBox mainLayout = new VBox(10);
 		HBox upperLayout = new HBox(this.UPPER_LAYOUT_GAP);
 		
 		ComboBox<Example> exampleComboBox = new ComboBox<Example>();
 		exampleComboBox.setVisibleRowCount(2);
 		exampleComboBox.setMaxWidth(this.MAXIMUM_EXAMPLE_LIST_COMBO_BOX_WIDTH);
 		this.controller.getAllExamples().forEach(example -> exampleComboBox.getItems().add(example));
+		
 		Button selectExampleButton = new Button("Execute program");
 		selectExampleButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -224,7 +275,7 @@ public class GUI extends Application {
 				}
             	
             	// automatically select the first thread when selecting the example to run
-            	threadListView.getSelectionModel().select(FIRST_THREAD_POSITION_IN_THREAD_LIST); 
+            	//threadListView.getSelectionModel().select(FIRST_THREAD_POSITION_IN_THREAD_LIST); 
             	
             	selectExampleButton.setDisable(true);
             	exampleComboBox.hide();
@@ -237,12 +288,9 @@ public class GUI extends Application {
 		});
 		selectExampleButton.setTooltip(new Tooltip("Only one program can be run at a time"));
 		
-		this.programStateCountTextField.setEditable(false);
-		this.programStateCountTextField.setMaxWidth(this.MAXIMUM_PROGRAM_STATE_COUNT_FIELD_WIDTH);
-		
 		//exampleComboBox.getStyleClass().add("comboBox");
 		upperLayout.getChildren().addAll(exampleComboBox, selectExampleButton);
-		mainLayout.getChildren().addAll(upperLayout, programStateCountTextField, this.createStructuresLayout());
+		mainLayout.getChildren().addAll(upperLayout, this.createExecuteAreaLayout(), this.createStructuresLayout());
 		newScene = new Scene(mainLayout);
 		newScene.getStylesheets().add(getClass().getResource("applicationStyle.css").toExternalForm());
 		return newScene;
@@ -251,7 +299,7 @@ public class GUI extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception { // this is basically the constructor
 		this.controller = new GUIController(this);
-		this.programStateCountTextField = new TextField("Threads: 0");
+		
 		
 		primaryStage.setMinWidth(this.MINIMUM_MAIN_WINDOW_WIDTH);
 		primaryStage.setMinHeight(this.MINIMUM_MAIN_WINDOW_HEIGHT);
