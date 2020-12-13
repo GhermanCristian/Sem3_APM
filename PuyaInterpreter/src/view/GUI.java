@@ -105,7 +105,8 @@ public class GUI extends Application {
 	}
 	
 	private void updateFileTableListView() {
-		
+		this.fileTableListView.getItems().clear();
+		this.controller.getThreadList().get(this.FIRST_THREAD_POSITION_IN_THREAD_LIST).getFileTable().forEachKey(fileName -> this.fileTableListView.getItems().add(fileName.toString()));
 	}
 	
 	// threadList, heap, output, filetable - they don't depend on the current thread
@@ -215,18 +216,22 @@ public class GUI extends Application {
 		this.stackListView.setMaxWidth(Double.MAX_VALUE);
 	}
 	
-	private HBox createStructuresLayout() {
-		HBox mainStructuresLayout = new HBox(5);
-		VBox rightLayout = new VBox(5);
-		HBox upperRightLayout = new HBox(5);
-		HBox lowerRightLayout = new HBox(5);
-		
+	private void initialiseAllStructures() {
 		this.initialiseThreadListView();
 		this.initialiseSymbolTableTableView();
 		this.initialiseOutputListView();
 		this.initialiseHeapTableTableView();
 		this.initialiseFileTableListView();
 		this.initialiseStackListView();
+	}
+	
+	private HBox createStructuresLayout() {
+		HBox mainStructuresLayout = new HBox(5);
+		VBox rightLayout = new VBox(5);
+		HBox upperRightLayout = new HBox(5);
+		HBox lowerRightLayout = new HBox(5);
+		
+		this.initialiseAllStructures();
 		
 		HBox.setHgrow(this.symbolTableTableView, Priority.ALWAYS);
 		HBox.setHgrow(this.heapTableView, Priority.ALWAYS);
