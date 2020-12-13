@@ -7,6 +7,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -49,11 +50,12 @@ public class GUI extends Application {
 	
 	private final int MINIMUM_MAIN_WINDOW_WIDTH = 700; // in pixels
 	private final int MINIMUM_MAIN_WINDOW_HEIGHT = 300; // in pixels
-	private final int MAXIMUM_MAIN_WINDOW_HEIGHT = 800; // in pixels
 	private final int UPPER_LAYOUT_GAP = 10;
-	private final int MAXIMUM_PROGRAM_STATE_COUNT_FIELD_WIDTH = 80;
+	private final int MAXIMUM_PROGRAM_STATE_COUNT_FIELD_WIDTH = 120;
 	private final int MAXIMUM_THREAD_LIST_VIEW_WIDTH = MAXIMUM_PROGRAM_STATE_COUNT_FIELD_WIDTH;
 	private final int MINIMUM_SELECT_EXAMPlE_BUTTON_WIDTH = 150;
+	private final int MAXIMUM_MAIN_STRUCTURES_LAYOUT_HEIGHT = 650;
+	private final double COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH = 0.5;
 	
 	/*
 	observer -> GUI
@@ -192,7 +194,6 @@ public class GUI extends Application {
 				updateThreadDependantStructures();
 			}
 		});
-		this.threadListView.setMaxWidth(Double.MAX_VALUE);
 	}
 	
 	private void initialiseSymbolTableTableView() {
@@ -202,12 +203,12 @@ public class GUI extends Application {
 		this.symbolTableTableView.setMaxWidth(Double.MAX_VALUE);
 		
 		TableColumn<String, String> variableNameColumn = new TableColumn<String, String>("Variable name");
-		variableNameColumn.setMinWidth(100);
+		variableNameColumn.prefWidthProperty().bind(this.symbolTableTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH));
 		// this approach (with the readOnlyStringWrapper) should only be used as long as the table is non-editable (which it is in this app)
 		variableNameColumn.setCellValueFactory(currentValue -> new ReadOnlyStringWrapper(currentValue.getValue()));
 		
 		TableColumn<String, String> variableValueColumn = new TableColumn<String, String>("Value");
-		variableValueColumn.setMinWidth(100);
+		variableValueColumn.prefWidthProperty().bind(this.symbolTableTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH));
 		variableValueColumn.setCellValueFactory(currentValue -> {
 			if (this.selectedThread == null) {
 				return null;
@@ -229,12 +230,12 @@ public class GUI extends Application {
 		this.heapTableView.setEditable(false);
 		
 		TableColumn<Integer, String> variableAddressColumn = new TableColumn<Integer, String>("Variable address");
-		variableAddressColumn.setMinWidth(100);
+		variableAddressColumn.prefWidthProperty().bind(this.heapTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH));
 		// this approach should only be used as long as the table is non-editable (which it is in this app)
 		variableAddressColumn.setCellValueFactory(currentReference -> new ReadOnlyStringWrapper("0x" + Integer.toHexString(currentReference.getValue())));
 		
 		TableColumn<Integer, String> variableValueColumn = new TableColumn<Integer, String>("Value");
-		variableValueColumn.setMinWidth(100);
+		variableValueColumn.prefWidthProperty().bind(this.heapTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH));
 		variableValueColumn.setCellValueFactory(currentReference -> {
 			if (this.selectedThread == null) {
 				return null;
@@ -289,6 +290,8 @@ public class GUI extends Application {
 		lowerRightLayout.getChildren().addAll(this.stackListView, this.fileTableListView);
 		rightLayout.getChildren().addAll(upperRightLayout, lowerRightLayout);
 		mainStructuresLayout.getChildren().addAll(this.threadListView, rightLayout);
+		mainStructuresLayout.setMaxHeight(this.MAXIMUM_MAIN_STRUCTURES_LAYOUT_HEIGHT);
+		mainStructuresLayout.setId("mainStructuresLayout");
 		return mainStructuresLayout;
 	}
 	
@@ -327,22 +330,24 @@ public class GUI extends Application {
 	}
 	
 	private HBox createExecuteAreaLayout() {
-		HBox buttonAreaLayout = new HBox(5);
+		HBox executeAreaLayout = new HBox(5);
 		
 		this.programStateCountTextField = new TextField("Threads: 0");
 		this.programStateCountTextField.setEditable(false);
 		this.programStateCountTextField.setMaxWidth(this.MAXIMUM_PROGRAM_STATE_COUNT_FIELD_WIDTH);
+		this.programStateCountTextField.setId("threadCountTextField");
 		
 		this.initialiseAdvanceOneStepButton();
 		this.intialiseFullProgramExecutionButton();
 		
 		HBox.setHgrow(this.advanceOneStepButton, Priority.ALWAYS);
 		HBox.setHgrow(this.fullProgramExecutionButton, Priority.ALWAYS);
-		HBox.setHgrow(buttonAreaLayout, Priority.ALWAYS);
+		HBox.setHgrow(executeAreaLayout, Priority.ALWAYS);
 		
-		buttonAreaLayout.getChildren().addAll(this.programStateCountTextField, this.advanceOneStepButton, this.fullProgramExecutionButton);
+		executeAreaLayout.getChildren().addAll(this.programStateCountTextField, this.advanceOneStepButton, this.fullProgramExecutionButton);
+		executeAreaLayout.setId("executeAreaLayout");
 		
-		return buttonAreaLayout;
+		return executeAreaLayout;
 	}
 	
 	private void initialiseExampleComboBox() {
@@ -362,9 +367,11 @@ public class GUI extends Application {
 				} 
             	catch (Exception e) {
 					displayErrorMessage(e.getMessage());
+					return;
 				}
 
-            	exampleComboBox.setPromptText("Program changing unavailable: a program is currently in execution"); // do this with a more visible font
+            	// I don't think this works ?
+            	exampleComboBox.setPromptText("Program changing unavailable: a program is currently in execution");
             }
 		});
 		this.selectExampleButton.setTooltip(new Tooltip("Only one program can be run at a time"));
@@ -382,8 +389,8 @@ public class GUI extends Application {
 		HBox.setHgrow(this.selectExampleButton, Priority.ALWAYS);
 		HBox.setHgrow(upperLayout, Priority.ALWAYS);
 		
-		//exampleComboBox.getStyleClass().add("comboBox");
 		upperLayout.getChildren().addAll(this.exampleComboBox, this.selectExampleButton);
+		upperLayout.setId("upperLayout"); // css stuff
 		
 		return upperLayout;
 	}
@@ -392,9 +399,10 @@ public class GUI extends Application {
 		Scene mainScene;
 		VBox mainLayout = new VBox(10);
 		
-		mainLayout.getChildren().addAll(this.createUpperLayout(), this.createExecuteAreaLayout(), this.createStructuresLayout());
 		mainScene = new Scene(mainLayout);
 		mainScene.getStylesheets().add(getClass().getResource("applicationStyle.css").toExternalForm());
+		mainLayout.getChildren().addAll(this.createUpperLayout(), this.createExecuteAreaLayout(), this.createStructuresLayout());
+		
 		return mainScene;
 	}
 	
@@ -404,7 +412,6 @@ public class GUI extends Application {
 		
 		primaryStage.setMinWidth(this.MINIMUM_MAIN_WINDOW_WIDTH);
 		primaryStage.setMinHeight(this.MINIMUM_MAIN_WINDOW_HEIGHT);
-		//primaryStage.setMaxHeight(this.MAXIMUM_MAIN_WINDOW_HEIGHT);
 		primaryStage.setTitle("PuyaInterpreter");
         primaryStage.setScene(this.createMainScene());
         primaryStage.show();
