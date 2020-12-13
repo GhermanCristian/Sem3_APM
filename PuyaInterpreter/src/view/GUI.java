@@ -127,7 +127,7 @@ public class GUI extends Application {
 	}
 	
 	private void initialiseThreadListView() {
-		//TO-DO: instead of selecting the index and then searching the index.. - select the value (imagine if you have 10 threads 1..10, and only threads 1 and 9 remain (on positions 0 and 1) => position doesn't match the threadIDs
+		// should the threadList display all the threads (including those which are completed) ?
 		this.threadListView = new ListView<Integer>();
 		this.threadListView.setMaxWidth(this.MAXIMUM_THREAD_LIST_VIEW_WIDTH);
 		this.threadListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Integer>() {
@@ -255,6 +255,18 @@ public class GUI extends Application {
             public void handle(ActionEvent event) {
             	try {
 					controller.advanceOneStepAllThreads();
+				} 
+            	catch (Exception e) {
+					displayErrorMessage(e.getMessage());
+				}
+            }
+		});
+		
+		fullExecutionButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+            public void handle(ActionEvent event) {
+            	try {
+					controller.fullProgramExecution();
 				} 
             	catch (Exception e) {
 					displayErrorMessage(e.getMessage());
