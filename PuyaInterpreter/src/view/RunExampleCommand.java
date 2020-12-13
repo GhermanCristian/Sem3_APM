@@ -3,7 +3,7 @@ package view;
 import java.io.BufferedReader;
 
 import controller.TextController;
-import controller.ControllerInterface;
+import controller.Controller;
 import model.Example;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
@@ -43,7 +43,7 @@ public class RunExampleCommand extends Command {
 		ProgramState crtProgramState = new ProgramState(stack, symbolTable, output, fileTable, heap, this.crtStatement);
 		
 		RepositoryInterface repo = new Repository(this.repositoryLocation);
-		ControllerInterface controller = new TextController(repo);
+		Controller controller = new TextController(repo);
 		controller.addProgramState(crtProgramState);
 		controller.fullProgramExecution();
 	}

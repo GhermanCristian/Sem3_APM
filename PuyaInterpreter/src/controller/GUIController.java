@@ -19,12 +19,11 @@ import repository.Repository;
 import view.AllExamples;
 import view.GUI;
 
-public class GUIController extends TextController {
+public class GUIController extends Controller {
 	private GUI currentGUI;
 	private MyList<Example> exampleList;
 	
 	public GUIController(GUI currentGUI) {
-		super(null);
 		this.currentGUI = currentGUI;
 		AllExamples allExamples = new AllExamples();
 		this.exampleList = allExamples.getAllExamples();
@@ -93,23 +92,5 @@ public class GUIController extends TextController {
 		// I store the exampleList and don't just call AllExamples.getAllExamples() because that method requires actually
 		// building the list and creating new examples each time, so this is faster, though it consumes a bit more memory
 		return this.exampleList;
-	}
-	
-	public List<ProgramState> getThreadList() {
-		return this.repository.getThreadList();
-	}
-
-	public ProgramState getThreadByID(Integer threadID) {
-		if (threadID == null) {
-			return null;
-		}
-		
-		for (ProgramState currentThread : this.repository.getThreadList()) {
-			if (currentThread.getThreadID() == threadID) {
-				return currentThread;
-			}
-		}
-		
-		return null;
 	}
 }
