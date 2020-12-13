@@ -8,17 +8,19 @@ public class TextMenu {
 	private MyDictionary<String, Command> commands;
 	
 	public TextMenu() {
+		AllExamples allExamples = new AllExamples();
 		this.commands = new MyDictionary<String, Command>();
+		
+		this.addCommand(new ExitCommand("0", "Exit program"));
+		allExamples.getAllExamples().forEach(example -> this.addCommand(new RunExampleCommand(Integer.toString(this.commands.size()), example)));
 	}
 	
-	public void addCommand(Command newCommand) {
+	private void addCommand(Command newCommand) {
 		this.commands.insert(newCommand.getKey(), newCommand);
 	}
 	
 	private void printMenu() {
-		for (Command crtCommand : this.commands.getAllValues()) {
-			System.out.println(crtCommand.getKey() + ". " + crtCommand.getDescription());
-		}
+		this.commands.forEachValue(command -> System.out.println(command.getKey() + ". " + command.getDescription()));
 	}
 	
 	public void show() {
