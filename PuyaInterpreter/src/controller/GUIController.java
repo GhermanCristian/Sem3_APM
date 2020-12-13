@@ -21,7 +21,6 @@ import view.GUI;
 
 public class GUIController extends Controller {
 	private GUI currentGUI;
-	private MyList<Example> exampleList;
 	
 	public GUIController(GUI currentGUI) {
 		this.currentGUI = currentGUI;
@@ -86,11 +85,5 @@ public class GUIController extends Controller {
 		
 		// afterProgramExecution will be called even when we do a fullexec, because when advanceOneStep finds that it has no threads
 		// left, it calls afterProgramExecution - this way, afterProgramExecution is called in both cases (when running one step or the entire program)
-	}
-	
-	public MyList<Example> getAllExamples() {
-		// I store the exampleList and don't just call AllExamples.getAllExamples() because that method requires actually
-		// building the list and creating new examples each time, so this is faster, though it consumes a bit more memory
-		return this.exampleList;
 	}
 }

@@ -8,8 +8,11 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+
+import model.Example;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
+import model.ADT.MyList;
 import model.value.ReferenceValue;
 import model.value.ValueInterface;
 import repository.RepositoryInterface;
@@ -17,6 +20,7 @@ import repository.RepositoryInterface;
 public abstract class Controller {
 	protected RepositoryInterface repository;
 	protected ExecutorService executor;
+	protected MyList<Example> exampleList; // the code which initialises the exampleList needs to be added manually to each constructor
 	
 	protected final int FIRST_THREAD_POSITION_IN_THREAD_LIST = 0;
 	
@@ -108,5 +112,11 @@ public abstract class Controller {
 		}
 		
 		return null;
+	}
+	
+	public MyList<Example> getAllExamples() {
+		// I store the exampleList and don't just call AllExamples.getAllExamples() because that method requires actually
+		// building the list and creating new examples each time, so this is faster, though it consumes a bit more memory
+		return this.exampleList;
 	}
 }

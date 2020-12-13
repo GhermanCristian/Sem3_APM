@@ -3,10 +3,13 @@ package controller;
 import java.util.List;
 import model.ProgramState;
 import repository.RepositoryInterface;
+import view.AllExamples;
 
 public class TextController extends Controller {	
 	public TextController(RepositoryInterface repository) {
 		this.repository = repository;
+		AllExamples allExamples = new AllExamples();
+		this.exampleList = allExamples.getAllExamples();
 	}
 	
 	@Override
