@@ -15,6 +15,7 @@ public interface DictionaryInterface<TKey, TValue> {
 	public void insert(TKey key, TValue newValue);
 	public void clear();
 	public void forEachKey(Consumer<? super TKey> action);
+	public void forEachValue(Consumer<? super TValue> action);
 	public TValue getValue(TKey key);
 	public TValue remove(TKey key);
 	public Collection<TValue> getAllValues();

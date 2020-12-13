@@ -103,4 +103,11 @@ public class MyDictionary<TKey, TValue> implements DictionaryInterface<TKey, TVa
 			action.accept(crtKey);
 		}
 	}
+
+	@Override
+	public void forEachValue(Consumer<? super TValue> action) {
+		for(TValue crtValue : this.dictionary.values()) {
+			action.accept(crtValue);
+		}
+	}
 }
