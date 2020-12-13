@@ -52,8 +52,8 @@ public class GUI extends Application {
 	private final int MAXIMUM_MAIN_WINDOW_HEIGHT = 800; // in pixels
 	private final int UPPER_LAYOUT_GAP = 10;
 	private final int MAXIMUM_PROGRAM_STATE_COUNT_FIELD_WIDTH = 80;
-	private final int MAXIMUM_EXAMPLE_LIST_COMBO_BOX_WIDTH = 560;
 	private final int MAXIMUM_THREAD_LIST_VIEW_WIDTH = MAXIMUM_PROGRAM_STATE_COUNT_FIELD_WIDTH;
+	private final int MINIMUM_SELECT_EXAMPlE_BUTTON_WIDTH = 150;
 	
 	/*
 	observer -> GUI
@@ -182,9 +182,8 @@ public class GUI extends Application {
 				if (newValue == null || newValue < 0) {
 					// by doing this we reduce the possibility of not having a thread selected at a time, which did occur frequently for some reason
 					ProgramState firstAvailableThread = controller.getFirstAvailableThread();
-					// what happens if there are no threads left ?
 					if (firstAvailableThread == null) {
-						; // then what ?
+						; // what happens if there are no threads left ?
 					}
 					newValue = firstAvailableThread.getThreadID();
 				}
@@ -275,6 +274,8 @@ public class GUI extends Application {
 		
 		this.initialiseAllStructures();
 		
+		// for now I don't know whether I should move these setHgrows to their corresponding item's initialise method, 
+		// in case I might want to change from a HBox to sth else
 		HBox.setHgrow(this.symbolTableTableView, Priority.ALWAYS);
 		HBox.setHgrow(this.heapTableView, Priority.ALWAYS);
 		HBox.setHgrow(this.outputListView, Priority.ALWAYS);
@@ -291,15 +292,8 @@ public class GUI extends Application {
 		return mainStructuresLayout;
 	}
 	
-	private HBox createExecuteAreaLayout() {
-		HBox buttonAreaLayout = new HBox(5);
+	private void initialiseAdvanceOneStepButton() {
 		this.advanceOneStepButton = new Button("One step");
-		this.fullProgramExecutionButton = new Button("Full execution");
-		
-		this.programStateCountTextField = new TextField("Threads: 0");
-		this.programStateCountTextField.setEditable(false);
-		this.programStateCountTextField.setMaxWidth(this.MAXIMUM_PROGRAM_STATE_COUNT_FIELD_WIDTH);
-		
 		this.advanceOneStepButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
             public void handle(ActionEvent event) {
@@ -313,7 +307,10 @@ public class GUI extends Application {
 		});
 		this.advanceOneStepButton.setDisable(true); // these buttons will be disabled until an example is selected
 		this.advanceOneStepButton.setMaxWidth(Double.MAX_VALUE);
-		
+	}
+	
+	private void intialiseFullProgramExecutionButton() {
+		this.fullProgramExecutionButton = new Button("Full execution");
 		this.fullProgramExecutionButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
             public void handle(ActionEvent event) {
@@ -327,6 +324,17 @@ public class GUI extends Application {
 		});
 		this.fullProgramExecutionButton.setDisable(true);
 		this.fullProgramExecutionButton.setMaxWidth(Double.MAX_VALUE);
+	}
+	
+	private HBox createExecuteAreaLayout() {
+		HBox buttonAreaLayout = new HBox(5);
+		
+		this.programStateCountTextField = new TextField("Threads: 0");
+		this.programStateCountTextField.setEditable(false);
+		this.programStateCountTextField.setMaxWidth(this.MAXIMUM_PROGRAM_STATE_COUNT_FIELD_WIDTH);
+		
+		this.initialiseAdvanceOneStepButton();
+		this.intialiseFullProgramExecutionButton();
 		
 		HBox.setHgrow(this.advanceOneStepButton, Priority.ALWAYS);
 		HBox.setHgrow(this.fullProgramExecutionButton, Priority.ALWAYS);
@@ -337,17 +345,14 @@ public class GUI extends Application {
 		return buttonAreaLayout;
 	}
 	
-	private Scene createScene() throws Exception {
-		Scene newScene;
-		VBox mainLayout = new VBox(10);
-		HBox upperLayout = new HBox(this.UPPER_LAYOUT_GAP);
-		
+	private void initialiseExampleComboBox() {
 		this.exampleComboBox = new ComboBox<Example>();
 		this.exampleComboBox.setVisibleRowCount(2);
-		this.exampleComboBox.setMaxWidth(this.MAXIMUM_EXAMPLE_LIST_COMBO_BOX_WIDTH);
-		this.controller.getAllExamples().forEach(example -> exampleComboBox.getItems().add(example));
 		this.exampleComboBox.setMaxWidth(Double.MAX_VALUE);
-		
+		this.controller.getAllExamples().forEach(example -> exampleComboBox.getItems().add(example));
+	}
+	
+	private void initialiseSelectExampleButton() {
 		this.selectExampleButton = new Button("Execute program");
 		this.selectExampleButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -364,6 +369,14 @@ public class GUI extends Application {
 		});
 		this.selectExampleButton.setTooltip(new Tooltip("Only one program can be run at a time"));
 		this.selectExampleButton.setMaxWidth(Double.MAX_VALUE);
+		this.selectExampleButton.setMinWidth(this.MINIMUM_SELECT_EXAMPlE_BUTTON_WIDTH);
+	}
+	
+	private HBox createUpperLayout() {
+		HBox upperLayout = new HBox(this.UPPER_LAYOUT_GAP);
+		
+		this.initialiseExampleComboBox();
+		this.initialiseSelectExampleButton();
 		
 		HBox.setHgrow(this.exampleComboBox, Priority.ALWAYS);
 		HBox.setHgrow(this.selectExampleButton, Priority.ALWAYS);
@@ -371,10 +384,18 @@ public class GUI extends Application {
 		
 		//exampleComboBox.getStyleClass().add("comboBox");
 		upperLayout.getChildren().addAll(this.exampleComboBox, this.selectExampleButton);
-		mainLayout.getChildren().addAll(upperLayout, this.createExecuteAreaLayout(), this.createStructuresLayout());
-		newScene = new Scene(mainLayout);
-		newScene.getStylesheets().add(getClass().getResource("applicationStyle.css").toExternalForm());
-		return newScene;
+		
+		return upperLayout;
+	}
+	
+	private Scene createMainScene() throws Exception {
+		Scene mainScene;
+		VBox mainLayout = new VBox(10);
+		
+		mainLayout.getChildren().addAll(this.createUpperLayout(), this.createExecuteAreaLayout(), this.createStructuresLayout());
+		mainScene = new Scene(mainLayout);
+		mainScene.getStylesheets().add(getClass().getResource("applicationStyle.css").toExternalForm());
+		return mainScene;
 	}
 	
 	@Override
@@ -385,7 +406,7 @@ public class GUI extends Application {
 		primaryStage.setMinHeight(this.MINIMUM_MAIN_WINDOW_HEIGHT);
 		//primaryStage.setMaxHeight(this.MAXIMUM_MAIN_WINDOW_HEIGHT);
 		primaryStage.setTitle("PuyaInterpreter");
-        primaryStage.setScene(this.createScene());
+        primaryStage.setScene(this.createMainScene());
         primaryStage.show();
 	}
 
