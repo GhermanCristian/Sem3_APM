@@ -34,9 +34,7 @@ public class ProgramState {
 		this.fileTable = fileTable;
 		this.heap = heap;
 		//this.originalProgram = program.deepCopy();
-		if (program != null) { // we don't add null values to the exeStack because the Deque doesn't accept it
-			this.executionStack.push(program);
-		}
+		this.setStatement(program);
 		this.threadID = ProgramState.manageThreadID();
 	}
 	
@@ -72,6 +70,13 @@ public class ProgramState {
 	
 	public StatementInterface getOriginalProgram() {
 		return this.originalProgram;
+	}
+	
+	public void setStatement(StatementInterface statement) {
+		// we don't add null values to the exeStack because the Deque doesn't accept it
+		if (statement != null) {
+			this.executionStack.push(statement);
+		}
 	}
 	
 	public boolean isCompleted() {
