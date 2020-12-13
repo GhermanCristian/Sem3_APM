@@ -42,6 +42,11 @@ public class GUI extends Application {
 	private TableView<String> symbolTableTableView;
 	private TextField programStateCountTextField;
 	
+	private Button advanceOneStepButton;
+	private Button fullProgramExecutionButton;
+	private Button selectExampleButton;
+	private ComboBox<Example> exampleComboBox;
+	
 	private final int MINIMUM_MAIN_WINDOW_WIDTH = 700; // in pixels
 	private final int MINIMUM_MAIN_WINDOW_HEIGHT = 300; // in pixels
 	private final int MAXIMUM_MAIN_WINDOW_HEIGHT = 800; // in pixels
@@ -143,12 +148,19 @@ public class GUI extends Application {
 	
 	public void beforeProgramExecution() {
 		this.updateAllStructures();
+		this.selectExampleButton.setDisable(true); // deactivate the select example button and the example combo box
+		this.exampleComboBox.setDisable(true);
+		this.advanceOneStepButton.setDisable(false);
+		this.fullProgramExecutionButton.setDisable(false);
 	}
 	
 	public void afterProgramExecution() {
 		this.updateThreadListView();
 		this.programStateCountTextField.setText("Threads: 0");
-		//this.updateAllStructures();
+		this.selectExampleButton.setDisable(false); // re-activate the select example button and the example combo box
+		this.exampleComboBox.setDisable(false);
+		this.advanceOneStepButton.setDisable(true);
+		this.fullProgramExecutionButton.setDisable(true);
 		// reset the ability to select an example to run
 	}
 	
@@ -277,14 +289,14 @@ public class GUI extends Application {
 	
 	private HBox createExecuteAreaLayout() {
 		HBox buttonAreaLayout = new HBox(5);
-		Button advanceOneStepButton = new Button("One step");
-		Button fullExecutionButton = new Button("Full execution");
+		this.advanceOneStepButton = new Button("One step");
+		this.fullProgramExecutionButton = new Button("Full execution");
 		
 		this.programStateCountTextField = new TextField("Threads: 0");
 		this.programStateCountTextField.setEditable(false);
 		this.programStateCountTextField.setMaxWidth(this.MAXIMUM_PROGRAM_STATE_COUNT_FIELD_WIDTH);
 		
-		advanceOneStepButton.setOnAction(new EventHandler<ActionEvent>() {
+		this.advanceOneStepButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
             public void handle(ActionEvent event) {
             	try {
@@ -295,8 +307,9 @@ public class GUI extends Application {
 				}
             }
 		});
+		this.advanceOneStepButton.setDisable(true); // these buttons will be disabled until an example is selected
 		
-		fullExecutionButton.setOnAction(new EventHandler<ActionEvent>() {
+		this.fullProgramExecutionButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
             public void handle(ActionEvent event) {
             	try {
@@ -307,8 +320,9 @@ public class GUI extends Application {
 				}
             }
 		});
+		this.fullProgramExecutionButton.setDisable(true);
 		
-		buttonAreaLayout.getChildren().addAll(this.programStateCountTextField, advanceOneStepButton, fullExecutionButton);
+		buttonAreaLayout.getChildren().addAll(this.programStateCountTextField, this.advanceOneStepButton, this.fullProgramExecutionButton);
 		
 		return buttonAreaLayout;
 	}
@@ -318,13 +332,13 @@ public class GUI extends Application {
 		VBox mainLayout = new VBox(10);
 		HBox upperLayout = new HBox(this.UPPER_LAYOUT_GAP);
 		
-		ComboBox<Example> exampleComboBox = new ComboBox<Example>();
-		exampleComboBox.setVisibleRowCount(2);
-		exampleComboBox.setMaxWidth(this.MAXIMUM_EXAMPLE_LIST_COMBO_BOX_WIDTH);
+		this.exampleComboBox = new ComboBox<Example>();
+		this.exampleComboBox.setVisibleRowCount(2);
+		this.exampleComboBox.setMaxWidth(this.MAXIMUM_EXAMPLE_LIST_COMBO_BOX_WIDTH);
 		this.controller.getAllExamples().forEach(example -> exampleComboBox.getItems().add(example));
 		
-		Button selectExampleButton = new Button("Execute program");
-		selectExampleButton.setOnAction(new EventHandler<ActionEvent>() {
+		this.selectExampleButton = new Button("Execute program");
+		this.selectExampleButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
             	try {
@@ -336,8 +350,7 @@ public class GUI extends Application {
             	
             	// automatically select the first thread when selecting the example to run
             	//threadListView.getSelectionModel().select(FIRST_THREAD_POSITION_IN_THREAD_LIST); 
-            	
-            	selectExampleButton.setDisable(true);
+
             	exampleComboBox.hide();
             	exampleComboBox.setPromptText("Program changing unavailable: a program is currently in execution"); // do this with a more visible font
             	exampleComboBox.show();
@@ -346,10 +359,10 @@ public class GUI extends Application {
             	// I can probably reactivate it when the program execution is finished
             }
 		});
-		selectExampleButton.setTooltip(new Tooltip("Only one program can be run at a time"));
+		this.selectExampleButton.setTooltip(new Tooltip("Only one program can be run at a time"));
 		
 		//exampleComboBox.getStyleClass().add("comboBox");
-		upperLayout.getChildren().addAll(exampleComboBox, selectExampleButton);
+		upperLayout.getChildren().addAll(this.exampleComboBox, this.selectExampleButton);
 		mainLayout.getChildren().addAll(upperLayout, this.createExecuteAreaLayout(), this.createStructuresLayout());
 		newScene = new Scene(mainLayout);
 		newScene.getStylesheets().add(getClass().getResource("applicationStyle.css").toExternalForm());
