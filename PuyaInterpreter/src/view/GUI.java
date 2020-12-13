@@ -26,7 +26,11 @@ import model.ProgramState;
 
 public class GUI extends Application {
 	private GUIController controller;
-	private Integer selectedThreadID;
+	
+	// I store the actual thread and not the threadID because I won't have to repeatedly call getThreadByID, which can prove costly,
+	// especially in the tableViews, where it has to be called for each row
+	// on the other hand, the size of a ProgramState is not too large (around 7 bytes)
+	private ProgramState selectedThread;
 	
 	// here I need the actual value of the thread ID because selecting from this list affects the program
 	// selecting from the output, filetable etc does not affect the program, so I'll just display the string
@@ -65,24 +69,23 @@ public class GUI extends Application {
 		errorAlert.showAndWait();
 	}
 	
-	private void updateStackListView(ProgramState currentThread) {
+	private void updateStackListView() {
 		this.stackListView.getItems().clear();
-		currentThread.getExecutionStack().forEach(statement -> this.stackListView.getItems().add(statement.toString()));
+		this.selectedThread.getExecutionStack().forEach(statement -> this.stackListView.getItems().add(statement.toString()));
 	}
 	
-	private void updateSymbolTableTableView(ProgramState currentThread) {
+	private void updateSymbolTableTableView() {
 		this.symbolTableTableView.getItems().clear();
-		currentThread.getSymbolTable().forEachKey(variableName -> this.symbolTableTableView.getItems().add(variableName));
+		this.selectedThread.getSymbolTable().forEachKey(variableName -> this.symbolTableTableView.getItems().add(variableName));
 	}
 	
 	private void updateThreadDependantStructures() {
-		ProgramState selectedThread = this.controller.getThreadByID(this.selectedThreadID);
-		if (selectedThread == null) {
+		if (this.selectedThread == null) {
 			return;
 		}
 		
-		this.updateStackListView(selectedThread);
-		this.updateSymbolTableTableView(selectedThread);
+		this.updateStackListView();
+		this.updateSymbolTableTableView();
 	}
 	
 	// the thread list view will change when a new thread is introduced / a thread is completed => taken out of the repo
@@ -131,19 +134,20 @@ public class GUI extends Application {
 			@Override
 			public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
 				// It's no use to pass the currently selected thread to the controller (and back again to the GUI)
-				// because it doesn't affect the program execution, just the content displayed in the GUI
+				// because the currentThread doesn't affect the program execution, just the content displayed in the GUI
 				
+				// also, if I click on the ID that's already clicked, there's no use in updating anything
 				if (newValue == oldValue) {
-					// also, if I click on the ID that's already clicked, there's no use in updating anything
 					return;
 				}
 				
 				if (newValue == null || newValue < 0) {
-					// this is only a temporary solution - I need a method to get the first available thread
+					// by doing this we reduce the possibility of not having a thread selected at a time, which did occur frequently for some reason
+					// what happens if there are no threads left ?
 					newValue = controller.getThreadList().get(FIRST_THREAD_POSITION_IN_THREAD_LIST).getThreadID();
 				}
 				
-				selectedThreadID = newValue;
+				selectedThread = controller.getThreadByID(newValue);
 				updateThreadDependantStructures();
 			}
 		});
@@ -156,12 +160,17 @@ public class GUI extends Application {
 		
 		TableColumn<String, String> variableNameColumn = new TableColumn<String, String>("Variable name");
 		variableNameColumn.setMinWidth(100);
-		// this approach should only be used as long as the table is non-editable (which it is in this app)
+		// this approach (with the readOnlyStringWrapper) should only be used as long as the table is non-editable (which it is in this app)
 		variableNameColumn.setCellValueFactory(currentValue -> new ReadOnlyStringWrapper(currentValue.getValue()));
 		
 		TableColumn<String, String> variableValueColumn = new TableColumn<String, String>("Value");
 		variableValueColumn.setMinWidth(100);
-		variableValueColumn.setCellValueFactory(currentValue -> {if (this.controller.getThreadList().isEmpty()) {return null;} return new ReadOnlyStringWrapper(this.controller.getThreadByID(this.selectedThreadID).getSymbolTable().getValue(currentValue.getValue()).toString());});
+		variableValueColumn.setCellValueFactory(currentValue -> {
+			if (this.selectedThread == null) {
+				return null;
+			} 
+			return new ReadOnlyStringWrapper(this.selectedThread.getSymbolTable().getValue(currentValue.getValue()).toString());
+		});
 		
 		this.symbolTableTableView.getColumns().add(variableNameColumn);
 		this.symbolTableTableView.getColumns().add(variableValueColumn);
@@ -184,7 +193,12 @@ public class GUI extends Application {
 		
 		TableColumn<Integer, String> variableValueColumn = new TableColumn<Integer, String>("Value");
 		variableValueColumn.setMinWidth(100);
-		variableValueColumn.setCellValueFactory(currentReference -> {if (this.controller.getThreadList().isEmpty()) {return null;} return new ReadOnlyStringWrapper(this.controller.getThreadByID(this.selectedThreadID).getHeap().getValue(currentReference.getValue()).toString());});
+		variableValueColumn.setCellValueFactory(currentReference -> {
+			if (this.selectedThread == null) {
+				return null;
+			} 
+			return new ReadOnlyStringWrapper(this.selectedThread.getHeap().getValue(currentReference.getValue()).toString());
+		});
 		
 		this.heapTableView.getColumns().add(variableAddressColumn);
 		this.heapTableView.getColumns().add(variableValueColumn);
