@@ -18,8 +18,17 @@ public class TextController implements ControllerInterface{
 	protected RepositoryInterface repository;
 	protected ExecutorService executor;
 	
+	private final int FIRST_THREAD_POSITION_IN_THREAD_LIST = 0;
+	
 	public TextController(RepositoryInterface repository) {
 		this.repository = repository;
+	}
+	
+	public ProgramState getFirstAvailableThread() {
+		if (this.repository.getThreadList().isEmpty()) {
+			return null;
+		}
+		return this.repository.getThreadList().get(this.FIRST_THREAD_POSITION_IN_THREAD_LIST);
 	}
 	
 	protected List<Integer> getHeapAddressesFromSymbolTable(DictionaryInterface<String, ValueInterface> symbolTable) {
@@ -32,7 +41,7 @@ public class TextController implements ControllerInterface{
 	
 	protected HashMap<Integer, ValueInterface> getGarbageCollectedHeap(List<ProgramState> threadList) {
 		// the heap is the same for all threads, so we just pick one from which to get the heap
-		DictionaryInterface<Integer, ValueInterface> heap = threadList.get(0).getHeap();
+		DictionaryInterface<Integer, ValueInterface> heap = this.getFirstAvailableThread().getHeap();
 		
 		List<Integer> symbolTableAddresses = new ArrayList<Integer>();
 		threadList.forEach(thread -> symbolTableAddresses.addAll(this.getHeapAddressesFromSymbolTable(thread.getSymbolTable())));

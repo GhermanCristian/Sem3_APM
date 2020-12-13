@@ -49,7 +49,6 @@ public class GUI extends Application {
 	private final int MAXIMUM_PROGRAM_STATE_COUNT_FIELD_WIDTH = 80;
 	private final int MAXIMUM_EXAMPLE_LIST_COMBO_BOX_WIDTH = 560;
 	private final int MAXIMUM_THREAD_LIST_VIEW_WIDTH = MAXIMUM_PROGRAM_STATE_COUNT_FIELD_WIDTH;
-	private final int FIRST_THREAD_POSITION_IN_THREAD_LIST = 0;
 	
 	/*
 	observer -> GUI
@@ -96,17 +95,32 @@ public class GUI extends Application {
 	
 	private void updateHeapTableView() {
 		this.heapTableView.getItems().clear();
-		this.controller.getThreadList().get(this.FIRST_THREAD_POSITION_IN_THREAD_LIST).getHeap().forEachKey(variableAddress -> this.heapTableView.getItems().add(variableAddress));
+		ProgramState firstAvailableThread = this.controller.getFirstAvailableThread();
+		if (firstAvailableThread == null) {
+			return ;
+		}
+		
+		firstAvailableThread.getHeap().forEachKey(variableAddress -> this.heapTableView.getItems().add(variableAddress));
 	}
 	
 	private void updateOutputListView() {
 		this.outputListView.getItems().clear();
-		this.controller.getThreadList().get(this.FIRST_THREAD_POSITION_IN_THREAD_LIST).getOutput().forEach(message -> this.outputListView.getItems().add(message.toString()));
+		ProgramState firstAvailableThread = this.controller.getFirstAvailableThread();
+		if (firstAvailableThread == null) {
+			return ;
+		}
+		
+		firstAvailableThread.getOutput().forEach(message -> this.outputListView.getItems().add(message.toString()));
 	}
 	
 	private void updateFileTableListView() {
 		this.fileTableListView.getItems().clear();
-		this.controller.getThreadList().get(this.FIRST_THREAD_POSITION_IN_THREAD_LIST).getFileTable().forEachKey(fileName -> this.fileTableListView.getItems().add(fileName.toString()));
+		ProgramState firstAvailableThread = this.controller.getFirstAvailableThread();
+		if (firstAvailableThread == null) {
+			return ;
+		}
+		
+		firstAvailableThread.getFileTable().forEachKey(fileName -> this.fileTableListView.getItems().add(fileName.toString()));
 	}
 	
 	// threadList, heap, output, filetable - they don't depend on the current thread
@@ -127,6 +141,17 @@ public class GUI extends Application {
 		this.programStateCountTextField.setText("Threads: " + Integer.toString(this.threadListView.getItems().size()));
 	}
 	
+	public void beforeProgramExecution() {
+		this.updateAllStructures();
+	}
+	
+	public void afterProgramExecution() {
+		this.updateThreadListView();
+		this.programStateCountTextField.setText("Threads: 0");
+		//this.updateAllStructures();
+		// reset the ability to select an example to run
+	}
+	
 	private void initialiseThreadListView() {
 		// should the threadList display all the threads (including those which are completed) ?
 		this.threadListView = new ListView<Integer>();
@@ -144,8 +169,12 @@ public class GUI extends Application {
 				
 				if (newValue == null || newValue < 0) {
 					// by doing this we reduce the possibility of not having a thread selected at a time, which did occur frequently for some reason
+					ProgramState firstAvailableThread = controller.getFirstAvailableThread();
 					// what happens if there are no threads left ?
-					newValue = controller.getThreadList().get(FIRST_THREAD_POSITION_IN_THREAD_LIST).getThreadID();
+					if (firstAvailableThread == null) {
+						; // then what ?
+					}
+					newValue = firstAvailableThread.getThreadID();
 				}
 				
 				selectedThread = controller.getThreadByID(newValue);

@@ -43,10 +43,15 @@ public class GUIController extends TextController {
 		return crtProgramState;
 	}
 	
+	@Override
+	protected void beforeProgramExecution() {
+		super.beforeProgramExecution();
+		this.currentGUI.beforeProgramExecution();
+	}
+	
 	public void loadProgramStateIntoRepository(Example currentExample) throws Exception {
 		this.repository = new Repository(currentExample.getRepositoryLocation());
 		this.addProgramState(this.getProgramState(currentExample));
-		this.currentGUI.updateAllStructures();
 		this.beforeProgramExecution();
 	}
 	
@@ -56,8 +61,14 @@ public class GUIController extends TextController {
 		
 		this.repository.setThreadList(this.removeCompletedThreads(this.repository.getThreadList()));
 		if (this.repository.getThreadList().size() == 0) {
-			super.afterProgramExecution();
+			this.afterProgramExecution();
 		}
+	}
+	
+	@Override
+	protected void afterProgramExecution() {
+		super.afterProgramExecution();
+		this.currentGUI.afterProgramExecution();
 	}
 	
 	@Override
@@ -73,6 +84,9 @@ public class GUIController extends TextController {
 			this.advanceOneStepAllThreads();
 			threadsStillInExecution = this.removeCompletedThreads(this.repository.getThreadList());
 		}
+		
+		// afterProgramExecution will be called even when we do a fullexec, because when advanceOneStep finds that it has no threads
+		// left, it calls afterProgramExecution - this way, afterProgramExecution is called in both cases (when running one step or the entire program)
 	}
 	
 	public MyList<Example> getAllExamples() {
