@@ -6,6 +6,7 @@ import java.util.ListIterator;
 import java.util.function.Consumer;
 
 import exception.EmptyADTException;
+import exception.InvalidPositionException;
 
 public class MyList<TElem> implements ListInterface<TElem> {	
 	private List<TElem> list;
@@ -76,5 +77,13 @@ public class MyList<TElem> implements ListInterface<TElem> {
 			throw new EmptyADTException("Empty list");
 		}
 		return this.list.get(size - 1);
+	}
+
+	@Override
+	public TElem get(int index) throws Exception {
+		if (index < 0 || index >= this.list.size()) {
+			throw new InvalidPositionException("MyList: invalid position");
+		}
+		return this.list.get(index);
 	}
 }
