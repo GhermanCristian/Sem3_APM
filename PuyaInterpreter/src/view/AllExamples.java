@@ -56,7 +56,7 @@ public class AllExamples {
 		return lastStatement;
 	}
 	
-	public StatementInterface getFirstExampleStatement() {
+	public Example getExample1() {
 		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
 		
 		// int a; a = 23; print(a);
@@ -64,10 +64,10 @@ public class AllExamples {
 		statementList.addLast(new AssignmentStatement("a", new ValueExpression(new IntValue(23))));
 		statementList.addLast(new PrintStatement(new VariableExpression("a")));
 		
-		return this.composeStatement(statementList);
+		return new Example(this.composeStatement(statementList), "int a; a = 23; print(a);", this.SRC_FOLDER_PATH + "\\log1.in");
 	}
 	
-	public StatementInterface getSecondExampleStatement() {
+	public Example getExample2() {
 		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
 		
 		// int a; int b; a = 2 + 3 * 5; b = a + 1; print(b);
@@ -86,10 +86,10 @@ public class AllExamples {
 								"+"))); // b = a + 1);
 		statementList.addLast(new PrintStatement(new VariableExpression("b")));
 		
-		return this.composeStatement(statementList);
+		return new Example(this.composeStatement(statementList), "int a; int b; a = 2 + 3 * 5; b = a + 1; print(b);", this.SRC_FOLDER_PATH + "\\log2.in");
 	}
 	
-	public StatementInterface getThirdExampleStatement() {
+	public Example getExample3() {
 		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
 		
 		//bool a; int v; a=true; (If a Then v=2 Else v=3); print(v);
@@ -103,10 +103,10 @@ public class AllExamples {
 							));
 		statementList.addLast(new PrintStatement(new VariableExpression("v")));
 		
-		return this.composeStatement(statementList);
+		return new Example(this.composeStatement(statementList), "bool a; int v; a=true; (If a Then v=2 Else v=3); print(v);", this.SRC_FOLDER_PATH + "\\log3.in");
 	}
 	
-	public StatementInterface getFourthExampleStatement() {
+	public Example getExample4() {
 		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
 		
 		// openReadFile(str); int var; readFile(str); print(var); readFile(str); print(var); closeReadFile();
@@ -119,10 +119,10 @@ public class AllExamples {
 		statementList.addLast(new PrintStatement(new VariableExpression("a")));
 		statementList.addLast(new CloseReadFileStatement(val));
 		
-		return this.composeStatement(statementList);
+		return new Example(this.composeStatement(statementList), "openReadFile(str); int var; readFile(str); print(var); readFile(str); print(var); closeReadFile();", this.SRC_FOLDER_PATH + "\\log4.in");
 	}
 	
-	public StatementInterface getFifthExampleStatement() {
+	public Example getExample5() {
 		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
 		
 		// Ref int v; new(v, 23); Ref Ref int a; new(a, v); print(v); print(a);
@@ -133,10 +133,10 @@ public class AllExamples {
 		statementList.addLast(new PrintStatement(new VariableExpression("v")));
 		statementList.addLast(new PrintStatement(new VariableExpression("a")));
 		
-		return this.composeStatement(statementList);
+		return new Example(this.composeStatement(statementList), "Ref int v; new(v, 23); Ref Ref int a; new(a, v); print(v); print(a);", this.SRC_FOLDER_PATH + "\\log5.in");
 	}
 	
-	public StatementInterface getSixthExampleStatement() {
+	public Example getExample6() {
 		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
 		
 		// Ref int v; new(v, 23); Ref Ref int a; new(a, v); print(rH(v)); print(rH(rH(a)) + 5);
@@ -150,10 +150,10 @@ public class AllExamples {
 													new ValueExpression(new IntValue(5)), 
 													"+")));
 		
-		return this.composeStatement(statementList);
+		return new Example(this.composeStatement(statementList), "Ref int v; new(v, 23); Ref Ref int a; new(a, v); print(rH(v)); print(rH(rH(a)) + 5);", this.SRC_FOLDER_PATH + "\\log6.in");
 	}
 	
-	public StatementInterface getSeventhExampleStatement() {
+	public Example getExample7() {
 		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
 		
 		// Ref int v; new(v, 23); print(rH(v)); wH(v, 24); print(rH(v) + 5);
@@ -166,10 +166,10 @@ public class AllExamples {
 													new ValueExpression(new IntValue(5)), 
 													"+")));
 		
-		return this.composeStatement(statementList);
+		return new Example(this.composeStatement(statementList), "Ref int v; new(v, 23); print(rH(v)); wH(v, 24); print(rH(v) + 5);", this.SRC_FOLDER_PATH + "\\log7.in");
 	}
 	
-	public StatementInterface getEighthExampleStatement() {
+	public Example getExample8() {
 		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
 		
 		// int v; v=4; (while (v>0) print(v); v = v - 1); print(v)
@@ -188,10 +188,10 @@ public class AllExamples {
 											"-")))));
 		statementList.addLast(new PrintStatement(new VariableExpression("v")));
 		
-		return this.composeStatement(statementList);
+		return new Example(this.composeStatement(statementList), "int v; v=4; (while (v>0) print(v); v = v - 1); print(v)", this.SRC_FOLDER_PATH + "\\log8.in");
 	}
 	
-	public StatementInterface getNinthExampleStatement() {
+	public Example getExample9() {
 		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
 		
 		// Ref int v; new(v, 23); Ref Ref int a; new(a, v); new(v, 24); print(rH(rH(a)));
@@ -202,10 +202,10 @@ public class AllExamples {
 		statementList.addLast(new HeapAllocationStatement("v", new ValueExpression(new IntValue(24))));
 		statementList.addLast(new PrintStatement(new HeapReadingExpression(new HeapReadingExpression(new VariableExpression("a")))));
 		
-		return this.composeStatement(statementList);
+		return new Example(this.composeStatement(statementList), "Ref int v; new(v, 23); Ref Ref int a; new(a, v); new(v, 24); print(rH(rH(a)));", this.SRC_FOLDER_PATH + "\\log9.in");
 	}
 	
-	public StatementInterface getTenthExampleStatement() {
+	public Example getExample10() {
 		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
 		
 		//int v; Ref int a; v=10; new(a,22); fork(wH(a,30); v=32; print(v); print(rH(a))); print(v); print(rH(a));
@@ -224,22 +224,22 @@ public class AllExamples {
 		statementList.addLast(new PrintStatement(new VariableExpression("v")));
 		statementList.addLast(new PrintStatement(new HeapReadingExpression(new VariableExpression("a"))));
 		
-		return this.composeStatement(statementList);
+		return new Example(this.composeStatement(statementList), "int v; Ref int a; v=10; new(a,22); fork(wH(a,30); v=32; print(v); print(rH(a))); print(v); print(rH(a));", this.SRC_FOLDER_PATH + "\\log10.in");
 	}
 	
 	public MyList<Example> getAllExamples() {
 		MyList<Example> exampleList = new MyList<Example>();
 		
-		exampleList.addLast(new Example(this.getFirstExampleStatement(), "int a; a = 23; print(a);", this.SRC_FOLDER_PATH + "\\log1.in"));
-		exampleList.addLast(new Example(this.getSecondExampleStatement(), "int a; int b; a = 2 + 3 * 5; b = a + 1; print(b);", this.SRC_FOLDER_PATH + "\\log2.in"));
-		exampleList.addLast(new Example(this.getThirdExampleStatement(), "bool a; int v; a=true; (If a Then v=2 Else v=3); print(v);", this.SRC_FOLDER_PATH + "\\log3.in"));
-		exampleList.addLast(new Example(this.getFourthExampleStatement(), "openReadFile(str); int var; readFile(str); print(var); readFile(str); print(var); closeReadFile();", this.SRC_FOLDER_PATH + "\\log4.in"));
-		exampleList.addLast(new Example(this.getFifthExampleStatement(), "Ref int v; new(v, 23); Ref Ref int a; new(a, v); print(v); print(a);", this.SRC_FOLDER_PATH + "\\log5.in"));
-		exampleList.addLast(new Example(this.getSixthExampleStatement(), "Ref int v; new(v, 23); Ref Ref int a; new(a, v); print(rH(v)); print(rH(rH(a)) + 5);", this.SRC_FOLDER_PATH + "\\log6.in"));
-		exampleList.addLast(new Example(this.getSeventhExampleStatement(), "Ref int v; new(v, 23); print(rH(v)); wH(v, 24); print(rH(v) + 5);", this.SRC_FOLDER_PATH + "\\log7.in"));
-		exampleList.addLast(new Example(this.getEighthExampleStatement(), "int v; v=4; (while (v>0) print(v); v = v - 1); print(v)", this.SRC_FOLDER_PATH + "\\log8.in"));
-		exampleList.addLast(new Example(this.getNinthExampleStatement(), "Ref int v; new(v, 23); Ref Ref int a; new(a, v); new(v, 24); print(rH(rH(a)));", this.SRC_FOLDER_PATH + "\\log9.in"));
-		exampleList.addLast(new Example(this.getTenthExampleStatement(), "int v; Ref int a; v=10; new(a,22); fork(wH(a,30); v=32; print(v); print(rH(a))); print(v); print(rH(a));", this.SRC_FOLDER_PATH + "\\log10.in"));
+		exampleList.addLast(this.getExample1());
+		exampleList.addLast(this.getExample2());
+		exampleList.addLast(this.getExample3());
+		exampleList.addLast(this.getExample4());
+		exampleList.addLast(this.getExample5());
+		exampleList.addLast(this.getExample6());
+		exampleList.addLast(this.getExample7());
+		exampleList.addLast(this.getExample8());
+		exampleList.addLast(this.getExample9());
+		exampleList.addLast(this.getExample10());
 
 		return exampleList;
 	}
