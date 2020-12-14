@@ -109,7 +109,7 @@ public class AllExamples {
 	public Example getExample4() {
 		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
 		
-		// openReadFile(str); int var; readFile(str); print(var); readFile(str); print(var); closeReadFile();
+		// openReadFile(str); int a; readFile(str); print(a); readFile(str); print(a); closeReadFile();
 		ValueExpression val = new ValueExpression(new StringValue(this.SRC_FOLDER_PATH + "\\example4.in"));
 		statementList.addLast(new OpenReadFileStatement(val));
 		statementList.addLast(new VariableDeclarationStatement("a", new IntType()));
@@ -119,7 +119,7 @@ public class AllExamples {
 		statementList.addLast(new PrintStatement(new VariableExpression("a")));
 		statementList.addLast(new CloseReadFileStatement(val));
 		
-		return new Example(this.composeStatement(statementList), "openReadFile(str); int var; readFile(str); print(var); readFile(str); print(var); closeReadFile();", this.SRC_FOLDER_PATH + "\\log4.in");
+		return new Example(this.composeStatement(statementList), "openReadFile(str); int a; readFile(str); print(a); readFile(str); print(a); closeReadFile();", this.SRC_FOLDER_PATH + "\\log4.in");
 	}
 	
 	public Example getExample5() {
