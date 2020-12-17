@@ -81,7 +81,9 @@ public class TestExample8 {
 			System.out.println(e);
 		}
 		
+		repo.getThreadList().clear();
 		crtState.setStatement(example.getStatement());
+		controller.addProgramState(crtState);
 	}
 	//"int v; v=4; (while (v>0) print(v); v = v - 1); print(v)"
 	
@@ -156,4 +158,15 @@ public class TestExample8 {
 		assertEquals(symbolTable.getValue("v"), new IntValue(0));
 	}
 
+	@Test
+	public void FullProgramExecution_Example8_EmptyThreadList() {
+		try {
+			controller.fullProgramExecution();
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertTrue(repo.getThreadList().isEmpty());
+	}
 }

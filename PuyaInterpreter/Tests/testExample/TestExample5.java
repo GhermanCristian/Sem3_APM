@@ -84,7 +84,9 @@ public class TestExample5 {
 			System.out.println(e);
 		}
 		
+		repo.getThreadList().clear();
 		crtState.setStatement(example.getStatement());
+		controller.addProgramState(crtState);
 	}
 	//"Ref int v; new(v, 23); Ref Ref int a; new(a, v); print(v); print(a);"
 	
@@ -159,4 +161,15 @@ public class TestExample5 {
 		assertEquals(new ReferenceValue(2, new ReferenceType(new IntType())), symbolTable.getValue("a"));
 	}
 
+	@Test
+	public void FullProgramExecution_Example5_EmptyThreadList() {
+		try {
+			controller.fullProgramExecution();
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertTrue(repo.getThreadList().isEmpty());
+	}
 }

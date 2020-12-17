@@ -81,7 +81,9 @@ public class TestExample2 {
 			System.out.println(e);
 		}
 		
+		repo.getThreadList().clear();
 		crtState.setStatement(example.getStatement());
+		controller.addProgramState(crtState);
 	}
 	//"int a; int b; a = 2 + 3 * 5; b = a + 1; print(b);"
 	
@@ -152,5 +154,16 @@ public class TestExample2 {
 		assertEquals(new IntValue(17), symbolTable.getValue("a"));
 		assertEquals(new IntValue(18), symbolTable.getValue("b"));
 	}
-
+	
+	@Test
+	public void FullProgramExecution_Example2_EmptyThreadList() {
+		try {
+			controller.fullProgramExecution();
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertTrue(repo.getThreadList().isEmpty());
+	}
 }

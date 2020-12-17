@@ -83,7 +83,9 @@ public class TestExample1 {
 			System.out.println(e);
 		}
 		
+		repo.getThreadList().clear();
 		crtState.setStatement(example.getStatement());
+		controller.addProgramState(crtState);
 	}
 	//"int a; a = 23; print(a);"
 	
@@ -154,4 +156,15 @@ public class TestExample1 {
 		assertEquals(new IntValue(23), symbolTable.getValue("a"));
 	}
 
+	@Test
+	public void FullProgramExecution_Example1_EmptyThreadList() {
+		try {
+			controller.fullProgramExecution();
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertTrue(repo.getThreadList().isEmpty());
+	}
 }

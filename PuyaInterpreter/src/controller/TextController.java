@@ -24,6 +24,7 @@ public class TextController extends Controller {
 			threadsStillInExecution = this.removeCompletedThreads(this.repository.getThreadList());
 		}
 		
+		this.repository.setThreadList(threadsStillInExecution); // I FOUND THE PURPOSE OF THIS
 		this.afterProgramExecution();
 	}
 }

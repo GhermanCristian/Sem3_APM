@@ -82,7 +82,9 @@ public class TestExample3 {
 			System.out.println(e);
 		}
 		
+		repo.getThreadList().clear();
 		crtState.setStatement(example.getStatement());
+		controller.addProgramState(crtState);
 	}
 	//"bool a; int v; a=true; (If a Then v=2 Else v=3); print(v);"
 	
@@ -154,4 +156,15 @@ public class TestExample3 {
 		assertEquals(new IntValue(2), symbolTable.getValue("v"));
 	}
 
+	@Test
+	public void FullProgramExecution_Example3_EmptyThreadList() {
+		try {
+			controller.fullProgramExecution();
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertTrue(repo.getThreadList().isEmpty());
+	}
 }

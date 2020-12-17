@@ -83,7 +83,9 @@ public class TestExample7 {
 			System.out.println(e);
 		}
 		
+		repo.getThreadList().clear();
 		crtState.setStatement(example.getStatement());
+		controller.addProgramState(crtState);
 	}
 	//"Ref int v; new(v, 23); print(rH(v)); wH(v, 24); print(rH(v) + 5);"
 	
@@ -156,4 +158,15 @@ public class TestExample7 {
 		assertEquals(new ReferenceValue(1, new IntType()), symbolTable.getValue("v"));
 	}
 
+	@Test
+	public void FullProgramExecution_Example7_EmptyThreadList() {
+		try {
+			controller.fullProgramExecution();
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertTrue(repo.getThreadList().isEmpty());
+	}
 }

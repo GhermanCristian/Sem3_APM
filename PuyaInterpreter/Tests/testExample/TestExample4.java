@@ -81,7 +81,9 @@ public class TestExample4 {
 			System.out.println(e);
 		}
 		
+		repo.getThreadList().clear();
 		crtState.setStatement(example.getStatement());
+		controller.addProgramState(crtState);
 	}
 	//"openReadFile(str); int a; readFile(str); print(a); readFile(str); print(a); closeReadFile();"
 	
@@ -153,4 +155,15 @@ public class TestExample4 {
 		assertEquals(new IntValue(5555), symbolTable.getValue("a"));
 	}
 
+	@Test
+	public void FullProgramExecution_Example4_EmptyThreadList() {
+		try {
+			controller.fullProgramExecution();
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertTrue(repo.getThreadList().isEmpty());
+	}
 }

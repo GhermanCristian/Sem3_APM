@@ -164,4 +164,16 @@ public class TestExample10 {
 		assertEquals(symbolTable.getValue("v"), new IntValue(10));
 		assertEquals(symbolTable.getValue("a"), new ReferenceValue(1, new IntType()));
 	}
+	
+	@Test
+	public void FullProgramExecution_Example10_EmptyThreadList() {
+		try {
+			controller.fullProgramExecution();
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertTrue(repo.getThreadList().isEmpty());
+	}
 }
