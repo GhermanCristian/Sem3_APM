@@ -48,6 +48,8 @@ public class GUIController extends Controller {
 	}
 	
 	public void loadProgramStateIntoRepository(Example currentExample) throws Exception {
+		DictionaryInterface<String, TypeInterface> typeEnvironment = new MyDictionary<String, TypeInterface>();
+		currentExample.getStatement().getTypeEnvironment(typeEnvironment);
 		this.repository = new Repository(currentExample.getRepositoryLocation());
 		this.addProgramState(this.getProgramState(currentExample));
 		this.beforeProgramExecution();

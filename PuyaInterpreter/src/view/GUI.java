@@ -7,7 +7,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -37,7 +36,7 @@ public class GUI extends Application {
 	// selecting from the output, filetable etc does not affect the program, so I'll just display the string
 	private ListView<Integer> threadListView; 
 	private ListView<String> outputListView;
-	private ListView<String> fileTableListView; // I might change this to a table view, because the file table is a dictionary after all
+	private ListView<String> fileTableListView;
 	private ListView<String> stackListView;
 	private TableView<Integer> heapTableView; // here I need it to store Integers because that's the key of the Heap structure
 	private TableView<String> symbolTableTableView;
@@ -395,13 +394,20 @@ public class GUI extends Application {
 		return upperLayout;
 	}
 	
+	private Scene createSelectExampleScene() {
+		Scene createExampleScene;
+		createExampleScene = new Scene(this.createUpperLayout());
+		createExampleScene.getStylesheets().add(getClass().getResource("applicationStyle.css").toExternalForm());
+		return createExampleScene;
+	}
+	
 	private Scene createMainScene() throws Exception {
 		Scene mainScene;
 		VBox mainLayout = new VBox(10);
 		
 		mainScene = new Scene(mainLayout);
 		mainScene.getStylesheets().add(getClass().getResource("applicationStyle.css").toExternalForm());
-		mainLayout.getChildren().addAll(this.createUpperLayout(), this.createExecuteAreaLayout(), this.createStructuresLayout());
+		mainLayout.getChildren().addAll(this.createExecuteAreaLayout(), this.createStructuresLayout());
 		
 		return mainScene;
 	}
@@ -409,6 +415,11 @@ public class GUI extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception { // this is basically the constructor
 		this.controller = new GUIController(this);
+		
+		Stage selectExampleStage = new Stage();
+		selectExampleStage.setScene(this.createSelectExampleScene());
+		selectExampleStage.setTitle("Select example");
+		selectExampleStage.show();
 		
 		primaryStage.setMinWidth(this.MINIMUM_MAIN_WINDOW_WIDTH);
 		primaryStage.setMinHeight(this.MINIMUM_MAIN_WINDOW_HEIGHT);
