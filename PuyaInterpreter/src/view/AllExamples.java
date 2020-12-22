@@ -255,20 +255,49 @@ public class AllExamples {
 		return new Example(this.composeStatement(statementList), "int v; Ref int a; v=10; new(a,22); fork(wH(a,30); fork(v=33; print(v)); v=32; print(v); print(rH(a))); print(v); print(rH(a));", this.SRC_FOLDER_PATH + "\\log11.in");
 	}
 	
+	public Example getExample12() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+		
+		//int v; Ref int a; v=10; new(a,22); fork(wH(a,30); fork(v=33; wH(a,24);); print(rH(a)); v=32; print(rH(a))); print(v); print(rH(a));
+		statementList.addLast(new VariableDeclarationStatement("v", new IntType()));
+		statementList.addLast(new VariableDeclarationStatement("a", new ReferenceType(new IntType())));
+		statementList.addLast(new AssignmentStatement("v", new ValueExpression(new IntValue(10))));
+		statementList.addLast(new HeapAllocationStatement("a", new ValueExpression(new IntValue(22))));
+		
+		MyList<StatementInterface> threadStatementList = new MyList<StatementInterface>();
+		threadStatementList.addLast(new HeapWritingStatement("a", new ValueExpression(new IntValue(30))));
+		
+		MyList<StatementInterface> innerThreadStatementList = new MyList<StatementInterface>();
+		innerThreadStatementList.addLast(new AssignmentStatement("v", new ValueExpression(new IntValue(33))));
+		innerThreadStatementList.addLast(new HeapWritingStatement("a", new ValueExpression(new IntValue(24))));
+		
+		threadStatementList.addLast(new ForkStatement(this.composeStatement(innerThreadStatementList)));
+		threadStatementList.addLast(new PrintStatement(new HeapReadingExpression(new VariableExpression("a"))));
+		threadStatementList.addLast(new AssignmentStatement("v", new ValueExpression(new IntValue(32))));
+		threadStatementList.addLast(new PrintStatement(new HeapReadingExpression(new VariableExpression("a"))));
+		
+		statementList.addLast(new ForkStatement(this.composeStatement(threadStatementList)));
+		statementList.addLast(new PrintStatement(new VariableExpression("v")));
+		statementList.addLast(new PrintStatement(new HeapReadingExpression(new VariableExpression("a"))));
+		
+		return new Example(this.composeStatement(statementList), "int v; Ref int a; v=10; new(a,22); fork(wH(a,30); fork(v=33; wH(a,24);); print(rH(a)); v=32; print(rH(a))); print(v); print(rH(a));", this.SRC_FOLDER_PATH + "\\log12.in");
+	}
+	
 	public MyList<Example> getAllExamples() {
 		MyList<Example> exampleList = new MyList<Example>();
 		
 		exampleList.addLast(this.getExample1());
-		exampleList.addLast(this.getExample2());
+		/*exampleList.addLast(this.getExample2());
 		exampleList.addLast(this.getExample3());
 		exampleList.addLast(this.getExample4());
 		exampleList.addLast(this.getExample5());
 		exampleList.addLast(this.getExample6());
 		exampleList.addLast(this.getExample7());
 		exampleList.addLast(this.getExample8());
-		exampleList.addLast(this.getExample9());
+		exampleList.addLast(this.getExample9());*/
 		exampleList.addLast(this.getExample10());
 		exampleList.addLast(this.getExample11());
+		exampleList.addLast(this.getExample12());
 
 		return exampleList;
 	}

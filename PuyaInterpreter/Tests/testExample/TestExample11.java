@@ -138,9 +138,9 @@ public class TestExample11 {
 	}
 	
 	// when I have multiple threads, the threadList becomes empty after the execution, so there's no way of checking each tread
-	// however, in this example, the last executed thread is thread2 = crtState, and that one we can check
+	// crtState will always represent thread1, so we can at least check that
 	@Test
-	public void FullProgramExecution_Example11Thread2_EmptyStack() {
+	public void FullProgramExecution_Example11Thread1_EmptyStack() {
 		try {
 			controller.fullProgramExecution();
 		}
@@ -152,7 +152,7 @@ public class TestExample11 {
 	}
 	
 	@Test
-	public void FullProgramExecution_Example11Thread2_CorrectSymbolTable() {
+	public void FullProgramExecution_Example11Thread1_CorrectSymbolTable() {
 		try {
 			controller.fullProgramExecution();
 		}
