@@ -27,7 +27,7 @@ import repository.Repository;
 import repository.RepositoryInterface;
 import view.AllExamples;
 
-public class TestExample10 {
+public class TestExample11 {
 	static StackInterface<StatementInterface> stack;
 	static DictionaryInterface<String, ValueInterface> symbolTable;
 	static ListInterface<ValueInterface> output;
@@ -39,7 +39,7 @@ public class TestExample10 {
 	static RepositoryInterface repo;
 	static Controller controller;
 	
-	private static final String REPOSITORY_PATH = "C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter\\log10.in";
+	private static final String REPOSITORY_PATH = "C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter\\log11.in";
 	
 	@BeforeClass
 	public static void initialiseData() {
@@ -50,7 +50,7 @@ public class TestExample10 {
 		heap = new MyHeap<Integer, ValueInterface>();
 		typeEnvironment = new MyDictionary<String, TypeInterface>();
 		AllExamples allExamples = new AllExamples();
-		example = allExamples.getExample10();
+		example = allExamples.getExample11();
 		
 		crtState = new ProgramState(stack, symbolTable, output, fileTable, heap, example.getStatement());
 		repo = new Repository(REPOSITORY_PATH);
@@ -88,10 +88,10 @@ public class TestExample10 {
 		crtState.setStatement(example.getStatement());
 		controller.addProgramState(crtState);
 	}
-	//"int v; Ref int a; v=10; new(a,22); fork(wH(a,30); v=32; print(v); print(rH(a))); print(v); print(rH(a));"
+	//"int v; Ref int a; v=10; new(a,22); fork(wH(a,30); fork(v=33; print(v)); v=32; print(v); print(rH(a))); print(v); print(rH(a));"
 	
 	@Test
-	public void FullProgramExecution_Example10_CorrectOutput() {
+	public void FullProgramExecution_Example11_CorrectOutput() {
 		try {
 			controller.fullProgramExecution();
 		}
@@ -99,12 +99,13 @@ public class TestExample10 {
 			fail(e.getMessage());
 		}
 		
-		assertEquals(output.size(), 4);
+		assertEquals(output.size(), 5);
 		try {
 			assertEquals(output.get(0), new IntValue(10));
 			assertEquals(output.get(1), new IntValue(30));
 			assertEquals(output.get(2), new IntValue(32));
-			assertEquals(output.get(3), new IntValue(30));
+			assertEquals(output.get(3), new IntValue(33));
+			assertEquals(output.get(4), new IntValue(30));
 		} 
 		catch (Exception e) {
 			fail(e.getMessage());
@@ -112,7 +113,7 @@ public class TestExample10 {
 	}
 	
 	@Test
-	public void FullProgramExecution_Example10_CorrectHeapTable() {
+	public void FullProgramExecution_Example11_CorrectHeapTable() {
 		try {
 			controller.fullProgramExecution();
 		}
@@ -125,7 +126,7 @@ public class TestExample10 {
 	}
 	
 	@Test
-	public void FullProgramExecution_Example10_CorrectFileTable() {
+	public void FullProgramExecution_Example11_CorrectFileTable() {
 		try {
 			controller.fullProgramExecution();
 		}
@@ -137,9 +138,9 @@ public class TestExample10 {
 	}
 	
 	// when I have multiple threads, the threadList becomes empty after the execution, so there's no way of checking each tread
-	// however, in this example, the last executed thread is thread1 = crtState, and that one we can check
+	// however, in this example, the last executed thread is thread2 = crtState, and that one we can check
 	@Test
-	public void FullProgramExecution_Example10Thread1_EmptyStack() {
+	public void FullProgramExecution_Example11Thread2_EmptyStack() {
 		try {
 			controller.fullProgramExecution();
 		}
@@ -151,7 +152,7 @@ public class TestExample10 {
 	}
 	
 	@Test
-	public void FullProgramExecution_Example10Thread1_CorrectSymbolTable() {
+	public void FullProgramExecution_Example11Thread2_CorrectSymbolTable() {
 		try {
 			controller.fullProgramExecution();
 		}
@@ -165,7 +166,7 @@ public class TestExample10 {
 	}
 	
 	@Test
-	public void FullProgramExecution_Example10_EmptyThreadList() {
+	public void FullProgramExecution_Example11_EmptyThreadList() {
 		try {
 			controller.fullProgramExecution();
 		}

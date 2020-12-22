@@ -353,6 +353,7 @@ public class GUI extends Application {
 		this.exampleComboBox = new ComboBox<Example>();
 		this.exampleComboBox.setVisibleRowCount(2);
 		this.exampleComboBox.setMaxWidth(Double.MAX_VALUE);
+		this.exampleComboBox.setMaxHeight(100);
 		this.controller.getAllExamples().forEach(example -> exampleComboBox.getItems().add(example));
 	}
 	
@@ -407,7 +408,8 @@ public class GUI extends Application {
 		
 		mainScene = new Scene(mainLayout);
 		mainScene.getStylesheets().add(getClass().getResource("applicationStyle.css").toExternalForm());
-		mainLayout.getChildren().addAll(this.createExecuteAreaLayout(), this.createStructuresLayout());
+		//mainLayout.getChildren().addAll(this.createExecuteAreaLayout(), this.createStructuresLayout());
+		mainLayout.getChildren().addAll(this.createUpperLayout(), this.createExecuteAreaLayout(), this.createStructuresLayout());
 		
 		return mainScene;
 	}
@@ -416,10 +418,10 @@ public class GUI extends Application {
 	public void start(Stage primaryStage) throws Exception { // this is basically the constructor
 		this.controller = new GUIController(this);
 		
-		Stage selectExampleStage = new Stage();
+		/*Stage selectExampleStage = new Stage();
 		selectExampleStage.setScene(this.createSelectExampleScene());
 		selectExampleStage.setTitle("Select example");
-		selectExampleStage.show();
+		selectExampleStage.show();*/
 		
 		primaryStage.setMinWidth(this.MINIMUM_MAIN_WINDOW_WIDTH);
 		primaryStage.setMinHeight(this.MINIMUM_MAIN_WINDOW_HEIGHT);
