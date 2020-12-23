@@ -35,7 +35,7 @@ public class LogicalExpression implements ExpressionInterface{
 			return new BoolValue(firstBoolean || secondBoolean);
 		}
 		else {
-			throw new InvalidOperatorException();
+			throw new InvalidOperatorException("LogicalExpression: Invalid operator");
 		}
 	}
 	
@@ -56,10 +56,10 @@ public class LogicalExpression implements ExpressionInterface{
 		boolType = new BoolType();
 		
 		if (firstType.equals(boolType) == false) {
-			throw new InvalidTypeException("First expression is not a boolean");
+			throw new InvalidTypeException("LogicalExpression: First expression is not a boolean");
 		}
 		if (secondType.equals(boolType) == false) {
-			throw new InvalidTypeException("Second expression is not a boolean");
+			throw new InvalidTypeException("LogicalExpression: Second expression is not a boolean");
 		}
 		
 		return boolType;

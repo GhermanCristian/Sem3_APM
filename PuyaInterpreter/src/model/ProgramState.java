@@ -85,7 +85,7 @@ public class ProgramState {
 	
 	public ProgramState oneStepExecution() throws Exception{
 		if (this.executionStack.size() == 0) {
-			throw new EmptyADTException("No program states available");
+			throw new EmptyADTException("ProgramState: No program states available");
 		}
 		StatementInterface currentStatement = this.executionStack.pop();
 		return currentStatement.execute(this);

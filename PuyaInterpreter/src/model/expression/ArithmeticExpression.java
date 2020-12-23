@@ -40,12 +40,12 @@ public class ArithmeticExpression implements ExpressionInterface{
 		}
 		if (this.operator.equals("/")) {
 			if (secondInt == 0) {
-				throw new DivisionByZeroException("Division by zero");
+				throw new DivisionByZeroException("ArithmeticExpression: Division by zero");
 			}
 			return new IntValue(firstInt / secondInt);
 		}
 		else { // If I check the correctness of the operand before this (eg. in the controller/repo), I could just have case 3 as else
-			throw new InvalidOperatorException();
+			throw new InvalidOperatorException("ArithmeticExpression: Invalid operator");
 		}
 	}
 	
@@ -66,10 +66,10 @@ public class ArithmeticExpression implements ExpressionInterface{
 		intType = new IntType();
 		
 		if (firstType.equals(intType) == false) {
-			throw new InvalidTypeException("First expression is not an integer");
+			throw new InvalidTypeException("ArithmeticExpression: First expression is not an integer");
 		}
 		if (secondType.equals(intType) == false) {
-			throw new InvalidTypeException("Second expression is not an integer");
+			throw new InvalidTypeException("ArithmeticExpression: Second expression is not an integer");
 		}
 		
 		return intType;

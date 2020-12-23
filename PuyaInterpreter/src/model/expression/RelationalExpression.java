@@ -49,7 +49,7 @@ public class RelationalExpression implements ExpressionInterface{
 			return new BoolValue(firstInt != secondInt);
 		}
 		else {
-			throw new InvalidOperatorException();
+			throw new InvalidOperatorException("RelationalExpression: Invalid operator");
 		}
 				
 	}
@@ -71,10 +71,10 @@ public class RelationalExpression implements ExpressionInterface{
 		intType = new IntType();
 		
 		if (firstType.equals(intType) == false) {
-			throw new InvalidTypeException("First expression is not an integer");
+			throw new InvalidTypeException("RelationalExpression: First expression is not an integer");
 		}
 		if (secondType.equals(intType) == false) {
-			throw new InvalidTypeException("Second expression is not an integer");
+			throw new InvalidTypeException("RelationalExpression: Second expression is not an integer");
 		}
 		
 		return new BoolType();

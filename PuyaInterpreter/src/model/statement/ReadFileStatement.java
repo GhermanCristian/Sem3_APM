@@ -27,7 +27,7 @@ public class ReadFileStatement implements StatementInterface{
 		DictionaryInterface<String, ValueInterface> symbolTable = crtState.getSymbolTable();
 		
 		if (symbolTable.isDefined(this.variableName) == false) {
-			throw new UndefinedVariableException(this.variableName + " is not defined in the symbolTable");
+			throw new UndefinedVariableException("ReadFileStatement: " + this.variableName + " is not defined in the symbolTable");
 		}
 		
 		DictionaryInterface<StringValue, BufferedReader> fileTable = crtState.getFileTable();
@@ -37,7 +37,7 @@ public class ReadFileStatement implements StatementInterface{
 		// we know filePathValue is a StringValue, we can cast
 		String filePathString = ((StringValue)filePathValue).getValue();
 		if (fileTable.isDefined((StringValue)filePathValue) == false) {
-			throw new UndefinedVariableException("File path " + filePathString + " is not defined in the file table");
+			throw new UndefinedVariableException("ReadFileStatement: File path " + filePathString + " is not defined in the file table");
 		}
 		
 		BufferedReader fileBuffer = fileTable.getValue((StringValue)filePathValue);

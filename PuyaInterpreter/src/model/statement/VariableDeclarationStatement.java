@@ -25,7 +25,7 @@ public class VariableDeclarationStatement implements StatementInterface{
 		DictionaryInterface<String, ValueInterface> symbolTable = crtState.getSymbolTable();
 		
 		if (symbolTable.isDefined(this.variableName) == true) {
-			throw new AlreadyDefinedVariableException("Variable " + this.variableName + " is already defined");
+			throw new AlreadyDefinedVariableException("VariableDeclarationStatement: Variable " + this.variableName + " is already defined");
 		}
 		
 		if (this.variableType.equals(new IntType())) { // variable is of type int
@@ -43,7 +43,7 @@ public class VariableDeclarationStatement implements StatementInterface{
 		// I'm not sure if this part will ever be reached, because the compiler doesn't allow for anything but a TypeInterface
 		// to be added, but just in case...
 		else {
-			throw new InvalidTypeException("Invalid type when trying to declare " + this.variableName);
+			throw new InvalidTypeException("VariableDeclarationStatement: Invalid type when trying to declare " + this.variableName);
 		}
 		
 		return null;

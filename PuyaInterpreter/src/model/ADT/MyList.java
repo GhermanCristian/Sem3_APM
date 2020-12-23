@@ -60,7 +60,7 @@ public class MyList<TElem> implements ListInterface<TElem> {
 	public TElem pop() throws Exception{
 		int size = this.list.size();
 		if (size == 0) {
-			throw new EmptyADTException("Empty list");
+			throw new EmptyADTException("MyList: Empty list");
 		}
 		return this.list.remove(size - 1);
 	}
@@ -74,7 +74,7 @@ public class MyList<TElem> implements ListInterface<TElem> {
 	public TElem getLast() throws Exception {
 		int size = this.list.size();
 		if (size == 0) {
-			throw new EmptyADTException("Empty list");
+			throw new EmptyADTException("MyList: Empty list");
 		}
 		return this.list.get(size - 1);
 	}

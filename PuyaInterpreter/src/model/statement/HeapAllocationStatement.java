@@ -26,7 +26,7 @@ public class HeapAllocationStatement implements StatementInterface {
 		DictionaryInterface<Integer, ValueInterface> heap = crtState.getHeap();
 		
 		if (symbolTable.isDefined(this.variableName) == false) {
-			throw new UndefinedVariableException(this.variableName + " is not defined in the symbol table");
+			throw new UndefinedVariableException("HeapAllocationStatement: " + this.variableName + " is not defined in the symbol table");
 		}
 		
 		ValueInterface variableValue = symbolTable.getValue(this.variableName);

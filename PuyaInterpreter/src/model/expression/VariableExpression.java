@@ -15,7 +15,7 @@ public class VariableExpression implements ExpressionInterface{
 	@Override
 	public ValueInterface evaluate(DictionaryInterface<String, ValueInterface> symbolTable, DictionaryInterface<Integer, ValueInterface> heap) throws Exception {
 		if (symbolTable.isDefined(this.variableName) == false) {
-			throw new UndefinedVariableException("Variable " + this.variableName + " is not defined");
+			throw new UndefinedVariableException("VariableExpression: Variable " + this.variableName + " is not defined");
 		}
 		return symbolTable.getValue(this.variableName);
 	}

@@ -24,13 +24,13 @@ public class HeapWritingStatement implements StatementInterface {
 		DictionaryInterface<String, ValueInterface> symbolTable = crtState.getSymbolTable();
 		DictionaryInterface<Integer, ValueInterface> heap = crtState.getHeap();
 		if (symbolTable.isDefined(this.variableName) == false) {
-			throw new UndefinedVariableException(this.variableName + " is not defined in the symbol table");
+			throw new UndefinedVariableException("HeapWritingStatement: " + this.variableName + " is not defined in the symbol table");
 		}
 		
 		ValueInterface variableValue = symbolTable.getValue(this.variableName);
 		int positionInHeap = ((ReferenceValue)variableValue).getHeapAddress();
 		if (heap.isDefined(positionInHeap) == false) {
-			throw new UndefinedVariableException("Undefined variable at address 0x" + Integer.toHexString(positionInHeap));
+			throw new UndefinedVariableException("HeapWritingStatement: Undefined variable at address 0x" + Integer.toHexString(positionInHeap));
 		}
 		
 		ValueInterface expressionValue = this.expression.evaluate(symbolTable, heap);

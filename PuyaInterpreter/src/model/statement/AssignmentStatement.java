@@ -23,7 +23,7 @@ public class AssignmentStatement implements StatementInterface{
 		DictionaryInterface<Integer, ValueInterface> heap = crtState.getHeap();
 		
 		if (symbolTable.isDefined(this.variableName) == false) {
-			throw new UndefinedVariableException("Variable " + this.variableName + " is not defined");
+			throw new UndefinedVariableException("AssignmentStatement: Variable " + this.variableName + " is not defined");
 		}
 		
 		// the value of the new expression (the one we want to assign to the existing variable)

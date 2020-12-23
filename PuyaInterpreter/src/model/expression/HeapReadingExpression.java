@@ -21,7 +21,7 @@ public class HeapReadingExpression implements ExpressionInterface{
 		
 		int heapAddress = ((ReferenceValue)expressionValue).getHeapAddress();
 		if (heap.isDefined(heapAddress) == false) {
-			throw new UndefinedVariableException("Undefined variable at address 0x" + Integer.toHexString(heapAddress));
+			throw new UndefinedVariableException("HeapReadingExpression: Undefined variable at address 0x" + Integer.toHexString(heapAddress));
 		}
 		return heap.getValue(heapAddress);
 	}
@@ -37,7 +37,7 @@ public class HeapReadingExpression implements ExpressionInterface{
 	public TypeInterface typeCheck(DictionaryInterface<String, TypeInterface> typeEnvironment) throws Exception {
 		TypeInterface expressionType = this.expression.typeCheck(typeEnvironment);
 		if (expressionType instanceof ReferenceType == false) {
-			throw new InvalidTypeException("Expression is not a reference");
+			throw new InvalidTypeException("HeapReadingExpression: Expression is not a reference");
 		}
 		return ((ReferenceType)expressionType).getInnerType();
 	}
