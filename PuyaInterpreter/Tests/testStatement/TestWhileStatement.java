@@ -127,9 +127,10 @@ public class TestWhileStatement {
 	}
 	
 	@Test
-	public void Execute_FalseCondition_DoesNothing() {
-		StatementInterface s1 = new WhileStatement(new ValueExpression(new BoolValue(false)), 
-												new VariableDeclarationStatement("a", new IntType()));
+	public void Execute_FalseConditionShouldBeTrue_DoesNothing() {
+		StatementInterface s1 = new WhileStatement(
+									new ValueExpression(new BoolValue(false)), 
+									new VariableDeclarationStatement("a", new IntType()));
 		assertTrue(symbolTable.isEmpty());
 		try {
 			s1.execute(crtState);
@@ -141,9 +142,42 @@ public class TestWhileStatement {
 	}
 	
 	@Test
-	public void Execute_FalseCondition_ReturnsNull() {
-		StatementInterface s1 = new WhileStatement(new ValueExpression(new BoolValue(false)), 
-												new VariableDeclarationStatement("a", new IntType()));
+	public void Execute_FalseConditionShouldBeTrue_ReturnsNull() {
+		StatementInterface s1 = new WhileStatement(
+									new ValueExpression(new BoolValue(false)), 
+									new VariableDeclarationStatement("a", new IntType()));
+		ProgramState result = null;
+		try {
+			result = s1.execute(crtState);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertNull(result);
+	}
+	
+	@Test
+	public void Execute_TrueConditionShouldBeFalse_DoesNothing() {
+		StatementInterface s1 = new WhileStatement(
+									new ValueExpression(new BoolValue(true)), 
+									new VariableDeclarationStatement("a", new IntType()),
+									false);
+		assertTrue(symbolTable.isEmpty());
+		try {
+			s1.execute(crtState);
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertTrue(symbolTable.isEmpty());
+	}
+	
+	@Test
+	public void Execute_TrueConditionShouldBeFalse_ReturnsNull() {
+		StatementInterface s1 = new WhileStatement(
+									new ValueExpression(new BoolValue(true)), 
+									new VariableDeclarationStatement("a", new IntType()),
+									false);
 		ProgramState result = null;
 		try {
 			result = s1.execute(crtState);

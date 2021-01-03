@@ -13,10 +13,18 @@ import model.value.ValueInterface;
 public class WhileStatement implements StatementInterface {
 	private final ExpressionInterface conditionalExpression;
 	private final StatementInterface statement;
+	private final boolean expectedLogicalValue; // this is used so that we can have conditions like 'while (x == false)'
 	
 	public WhileStatement(ExpressionInterface conditionalExpression, StatementInterface statement) {
 		this.conditionalExpression = conditionalExpression;
 		this.statement = statement;
+		this.expectedLogicalValue = true;
+	}
+	
+	public WhileStatement(ExpressionInterface conditionalExpression, StatementInterface statement, boolean expectedLogicalValue) {
+		this.conditionalExpression = conditionalExpression;
+		this.statement = statement;
+		this.expectedLogicalValue = expectedLogicalValue;
 	}
 	
 	@Override
@@ -26,12 +34,12 @@ public class WhileStatement implements StatementInterface {
 		DictionaryInterface<Integer, ValueInterface> heap = crtState.getHeap();
 		
 		ValueInterface conditionalExpressionValue = this.conditionalExpression.evaluate(symbolTable, heap);
-		if (((BoolValue)conditionalExpressionValue).getValue() == true) {
+		if (((BoolValue)conditionalExpressionValue).getValue() == expectedLogicalValue) {
 			stack.push(this);
 			return this.statement.execute(crtState);
 		}
 		
-		return null; // if the condition is false, obviously no new threads can be created
+		return null; // if the condition is not met, obviously no new threads can be created
 	}
 	
 	public String toString() {
