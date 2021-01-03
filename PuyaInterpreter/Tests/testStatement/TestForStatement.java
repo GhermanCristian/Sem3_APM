@@ -69,6 +69,7 @@ public class TestForStatement {
 
 	@Test
 	public void GetTypeEnvironment_NonBooleanCondition_ThrowsException() {
+		StatementInterface s0 = new VariableDeclarationStatement("v", new IntType());
 		StatementInterface s1 = new ForStatement(
 									new AssignmentStatement("v", new ValueExpression(new IntValue(4))), 
 									new ValueExpression(new IntValue(12)), 
@@ -79,7 +80,7 @@ public class TestForStatement {
 									new PrintStatement(new VariableExpression("v"))
 								);
 		try {
-			s1.getTypeEnvironment(typeEnvironment);
+			s1.getTypeEnvironment(s0.getTypeEnvironment(typeEnvironment));
 			fail("Conditional expression is not boolean");
 		}
 		catch (Exception e) {
@@ -149,6 +150,45 @@ public class TestForStatement {
 			fail(e.getMessage());
 		}
 		assertFalse(typeEnvironment.isDefined("new v"));
+	}
+	
+	@Test
+	public void Execute_InitialStatementIsNotAssignment_ThrowsException() {
+		StatementInterface s1 = new ForStatement(
+				new PrintStatement(new VariableExpression("v")), 
+				new ValueExpression(new BoolValue(false)), 
+				new AssignmentStatement("v", new ArithmeticExpression(
+						new VariableExpression("v"), 
+						new ValueExpression(new IntValue(1)), 
+						"-")), 
+				new PrintStatement(new VariableExpression("v"))
+			);
+		
+		try {
+			s1.execute(crtState);
+			fail("InitialStatement is not an AssignmentStatement");
+		}
+		catch (Exception e) {
+			assertTrue(true);
+		}
+	}
+	
+	@Test
+	public void Execute_FinalStatementIsNotAssignment_ThrowsException() {
+		StatementInterface s1 = new ForStatement(
+				new AssignmentStatement("v", new ValueExpression(new IntValue(1))), 
+				new ValueExpression(new BoolValue(false)), 
+				new PrintStatement(new VariableExpression("v")), 
+				new PrintStatement(new VariableExpression("v"))
+			);
+		
+		try {
+			s1.execute(crtState);
+			fail("FinalStatement is not an AssignmentStatement");
+		}
+		catch (Exception e) {
+			assertTrue(true);
+		}
 	}
 	
 	@Test
