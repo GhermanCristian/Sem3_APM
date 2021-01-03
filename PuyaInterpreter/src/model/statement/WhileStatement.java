@@ -44,8 +44,12 @@ public class WhileStatement implements StatementInterface {
 	
 	public String toString() {
 		String representation = "";
+		String negationSymbolString = "";
 		// this indentation doesn't work past 1 level - I'm going to need sth like an indentationLevel when creating the statement
-		representation += ("while ("+ this.conditionalExpression.toString() + ") {\n\t");
+		if (this.expectedLogicalValue == false) {
+			negationSymbolString += "! ";
+		}
+		representation += ("while (" + negationSymbolString + this.conditionalExpression.toString() + ") {\n\t");
 		representation += (this.statement.toString() + "}\n");
 		return representation;
 	}

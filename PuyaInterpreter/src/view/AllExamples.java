@@ -19,6 +19,7 @@ import model.statement.IfStatement;
 import model.statement.OpenReadFileStatement;
 import model.statement.PrintStatement;
 import model.statement.ReadFileStatement;
+import model.statement.RepeatUntilStatement;
 import model.statement.StatementInterface;
 import model.statement.VariableDeclarationStatement;
 import model.statement.WhileStatement;
@@ -425,6 +426,32 @@ public class AllExamples {
 		return new Example(this.composeStatement(statementList), "int v; for(v = 2; v > 0; v = v - 1) (fork(print(v + 23);) print(v);", this.SRC_FOLDER_PATH + "\\log17.in");
 	}
 	
+	public Example getExample18() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+		
+		// int v; v = 0; repeat(fork(print(v); v = v - 1;); v = v + 1;) until (v == 3); int x; x = 1; print(v * 10);
+		statementList.addLast(new VariableDeclarationStatement("v", new IntType()));
+		statementList.addLast(new AssignmentStatement("v", new ValueExpression(new IntValue(0))));
+		statementList.addLast(new RepeatUntilStatement(
+								new CompoundStatement(
+									new ForkStatement(new CompoundStatement(
+														new PrintStatement(new VariableExpression("v")), 
+														new AssignmentStatement("v", new ArithmeticExpression(
+																new VariableExpression("v"), 
+																new ValueExpression(new IntValue(1)), 
+																"-")))), 
+									new AssignmentStatement("v", new ArithmeticExpression(
+										new VariableExpression("v"), 
+										new ValueExpression(new IntValue(1)), 
+										"+"))), 
+								new RelationalExpression(new VariableExpression("v"), new ValueExpression(new IntValue(3)), "==")));
+		statementList.addLast(new VariableDeclarationStatement("x", new IntType()));
+		statementList.addLast(new AssignmentStatement("x", new ValueExpression(new IntValue(1))));
+		statementList.addLast(new PrintStatement(new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(10)), "*")));
+		
+		return new Example(this.composeStatement(statementList), "int v; v = 0; repeat(fork(print(v); v = v - 1;); v = v + 1;) until (v == 3); int x; x = 1; print(v * 10);", this.SRC_FOLDER_PATH + "\\log18.in");
+	}
+	
 	public MyList<Example> getAllExamples() {
 		MyList<Example> exampleList = new MyList<Example>();
 		
@@ -436,15 +463,16 @@ public class AllExamples {
 		exampleList.addLast(this.getExample6());
 		exampleList.addLast(this.getExample7());
 		exampleList.addLast(this.getExample8());
-		exampleList.addLast(this.getExample9());*/
+		exampleList.addLast(this.getExample9());
 		exampleList.addLast(this.getExample10());
 		exampleList.addLast(this.getExample11());
 		exampleList.addLast(this.getExample12());
 		exampleList.addLast(this.getExample13());
 		exampleList.addLast(this.getExample14());
 		exampleList.addLast(this.getExample15());
-		exampleList.addLast(this.getExample16());
+		exampleList.addLast(this.getExample16());*/
 		exampleList.addLast(this.getExample17());
+		exampleList.addLast(this.getExample18());
 
 		return exampleList;
 	}
