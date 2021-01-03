@@ -28,10 +28,10 @@ public class WhileStatement implements StatementInterface {
 		ValueInterface conditionalExpressionValue = this.conditionalExpression.evaluate(symbolTable, heap);
 		if (((BoolValue)conditionalExpressionValue).getValue() == true) {
 			stack.push(this);
-			stack.push(this.statement);
+			return this.statement.execute(crtState);
 		}
 		
-		return null;
+		return null; // if the condition is false, obviously no new threads can be created
 	}
 	
 	public String toString() {

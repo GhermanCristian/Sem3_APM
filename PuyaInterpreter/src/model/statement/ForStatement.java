@@ -35,9 +35,8 @@ public class ForStatement implements StatementInterface {
 					this.conditionalExpression,
 					new CompoundStatement(this.bodyStatement, this.finalStatement)
 				));
-		stack.push(this.initialStatement);
 		
-		return null;
+		return this.initialStatement.execute(crtState);
 	}
 	
 	public String toString() {
