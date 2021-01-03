@@ -19,9 +19,9 @@ import model.expression.VariableExpression;
 import model.statement.AssignmentStatement;
 import model.statement.CompoundStatement;
 import model.statement.PrintStatement;
+import model.statement.RepeatUntilStatement;
 import model.statement.StatementInterface;
 import model.statement.VariableDeclarationStatement;
-import model.statement.WhileStatement;
 import model.type.IntType;
 import model.type.TypeInterface;
 import model.value.BoolValue;
@@ -29,7 +29,7 @@ import model.value.IntValue;
 import model.value.StringValue;
 import model.value.ValueInterface;
 
-public class TestWhileStatement {
+public class TestRepeatUntilStatement {
 	static StackInterface<StatementInterface> stack;
 	static DictionaryInterface<String, ValueInterface> symbolTable;
 	static ListInterface<ValueInterface> output;
@@ -67,11 +67,12 @@ public class TestWhileStatement {
 		heap.clear();
 		typeEnvironment.clear();
 	}
-	
+
 	@Test
 	public void GetTypeEnvironment_NonBooleanCondition_ThrowsException() {
-		StatementInterface s1 = new WhileStatement(new ValueExpression(new IntValue(23)), 
-												new VariableDeclarationStatement("a", new IntType()));
+		StatementInterface s1 = new RepeatUntilStatement(
+									new VariableDeclarationStatement("a", new IntType()),
+									new ValueExpression(new IntValue(23)));
 		try {
 			s1.getTypeEnvironment(typeEnvironment);
 			fail("Conditional expression is not boolean");
@@ -83,8 +84,9 @@ public class TestWhileStatement {
 	
 	@Test
 	public void GetTypeEnvironment_BooleanCondition_TypeEnvironmentUnchanged() {
-		StatementInterface s1 = new WhileStatement(new ValueExpression(new BoolValue(true)), 
-												new VariableDeclarationStatement("a", new IntType()));
+		StatementInterface s1 = new RepeatUntilStatement(
+									new VariableDeclarationStatement("a", new IntType()),
+									new ValueExpression(new BoolValue(true)));
 		assertTrue(typeEnvironment.isEmpty());
 		try {
 			typeEnvironment = s1.getTypeEnvironment(typeEnvironment);
@@ -99,17 +101,17 @@ public class TestWhileStatement {
 	public void GetTypeEnvironment_BooleanCondition_VariableNotDefinedInTheOuterTypeEnvironment() {
 		StatementInterface s1 = new VariableDeclarationStatement("a", new IntType());
 		StatementInterface s2 = new AssignmentStatement("a", new ValueExpression(new IntValue(1)));
-		StatementInterface s3 = new WhileStatement(
-									new RelationalExpression(
-										new VariableExpression("a"), 
-										new ValueExpression(new IntValue()), 
-										">"), 
+		StatementInterface s3 = new RepeatUntilStatement(
 									new CompoundStatement(
 											new VariableDeclarationStatement("new a", new IntType()), 
 											new AssignmentStatement("a", new ArithmeticExpression(
 																			new VariableExpression("a"), 
 																			new ValueExpression(new IntValue(1)), 
-																			"-"))));
+																			"-"))),
+									new RelationalExpression(
+											new VariableExpression("a"), 
+											new ValueExpression(new IntValue()), 
+											"<="));
 		try {
 			typeEnvironment = s3.getTypeEnvironment(s2.getTypeEnvironment(s1.getTypeEnvironment(typeEnvironment)));
 		}
@@ -121,57 +123,25 @@ public class TestWhileStatement {
 	}
 	
 	@Test
-	public void Execute_FalseConditionShouldBeTrue_DoesNothing() {
-		StatementInterface s1 = new WhileStatement(
-									new ValueExpression(new BoolValue(false)), 
-									new VariableDeclarationStatement("a", new IntType()));
-		assertTrue(symbolTable.isEmpty());
+	public void Execute_TrueCondition_ExecutesOnlyOnce() {
+		StatementInterface s1 = new RepeatUntilStatement(
+									new PrintStatement(new ValueExpression(new IntValue(23))),
+									new ValueExpression(new BoolValue(true)));
+		assertTrue(output.isEmpty());
 		try {
 			s1.execute(crtState);
 		}
 		catch (Exception e) {
 			fail(e.getMessage());
 		}
-		assertTrue(symbolTable.isEmpty());
+		assertEquals(1, output.size());
 	}
 	
 	@Test
-	public void Execute_FalseConditionShouldBeTrue_ReturnsNull() {
-		StatementInterface s1 = new WhileStatement(
-									new ValueExpression(new BoolValue(false)), 
-									new VariableDeclarationStatement("a", new IntType()));
-		ProgramState result = null;
-		try {
-			result = s1.execute(crtState);
-		}
-		catch (Exception e) {
-			fail(e.getMessage());
-		}
-		assertNull(result);
-	}
-	
-	@Test
-	public void Execute_TrueConditionShouldBeFalse_DoesNothing() {
-		StatementInterface s1 = new WhileStatement(
-									new ValueExpression(new BoolValue(true)), 
+	public void Execute_TrueCondition_ReturnsNull() {
+		StatementInterface s1 = new RepeatUntilStatement(
 									new VariableDeclarationStatement("a", new IntType()),
-									false);
-		assertTrue(symbolTable.isEmpty());
-		try {
-			s1.execute(crtState);
-		}
-		catch (Exception e) {
-			fail(e.getMessage());
-		}
-		assertTrue(symbolTable.isEmpty());
-	}
-	
-	@Test
-	public void Execute_TrueConditionShouldBeFalse_ReturnsNull() {
-		StatementInterface s1 = new WhileStatement(
-									new ValueExpression(new BoolValue(true)), 
-									new VariableDeclarationStatement("a", new IntType()),
-									false);
+									new ValueExpression(new BoolValue(true)));
 		ProgramState result = null;
 		try {
 			result = s1.execute(crtState);
@@ -186,17 +156,17 @@ public class TestWhileStatement {
 	public void Execute_5IterationsCompoundStatement_CorrectOutputSize() {
 		StatementInterface s1 = new VariableDeclarationStatement("a", new IntType());
 		StatementInterface s2 = new AssignmentStatement("a", new ValueExpression(new IntValue(5)));
-		StatementInterface s3 = new WhileStatement(
-									new RelationalExpression(
-										new VariableExpression("a"), 
-										new ValueExpression(new IntValue()), 
-										">"), 
+		StatementInterface s3 = new RepeatUntilStatement(
 									new CompoundStatement(
-											new PrintStatement(new VariableExpression("a")), 
-											new AssignmentStatement("a", new ArithmeticExpression(
-																			new VariableExpression("a"), 
-																			new ValueExpression(new IntValue(1)), 
-																			"-"))));
+										new PrintStatement(new VariableExpression("a")), 
+										new AssignmentStatement("a", new ArithmeticExpression(
+																		new VariableExpression("a"), 
+																		new ValueExpression(new IntValue(1)), 
+																		"-"))),
+									new RelationalExpression(
+											new VariableExpression("a"), 
+											new ValueExpression(new IntValue()), 
+											"<="));
 		assertTrue(output.isEmpty());
 		try {
 			s1.execute(crtState);
@@ -216,17 +186,18 @@ public class TestWhileStatement {
 	public void Execute_5IterationsCompoundStatement_CorrectOutputContent() {
 		StatementInterface s1 = new VariableDeclarationStatement("a", new IntType());
 		StatementInterface s2 = new AssignmentStatement("a", new ValueExpression(new IntValue(5)));
-		StatementInterface s3 = new WhileStatement(
-									new RelationalExpression(
-										new VariableExpression("a"), 
-										new ValueExpression(new IntValue()), 
-										">"), 
+		StatementInterface s3 = new RepeatUntilStatement(
 									new CompoundStatement(
-											new PrintStatement(new VariableExpression("a")), 
-											new AssignmentStatement("a", new ArithmeticExpression(
-																			new VariableExpression("a"), 
-																			new ValueExpression(new IntValue(1)), 
-																			"-"))));
+										new PrintStatement(new VariableExpression("a")), 
+										new AssignmentStatement("a", new ArithmeticExpression(
+																		new VariableExpression("a"), 
+																		new ValueExpression(new IntValue(1)), 
+																		"-"))),
+									new RelationalExpression(
+											new VariableExpression("a"), 
+											new ValueExpression(new IntValue()), 
+											"<="));
+		assertTrue(output.isEmpty());
 		try {
 			s1.execute(crtState);
 			s2.execute(crtState);
