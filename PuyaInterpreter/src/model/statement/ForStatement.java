@@ -36,7 +36,7 @@ public class ForStatement implements StatementInterface {
 					new CompoundStatement(this.bodyStatement, this.finalStatement)
 				));
 		
-		return this.initialStatement.execute(crtState);
+		return this.initialStatement.execute(crtState); // this is an AssignmentStatement so it always returns null, but this way is more elegant
 	}
 	
 	public String toString() {

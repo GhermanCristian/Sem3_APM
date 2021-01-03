@@ -399,6 +399,32 @@ public class AllExamples {
 		return new Example(this.composeStatement(statementList), "int v; for(v = 4; v > 0; v = v - 1) (print(v);) print(v);", this.SRC_FOLDER_PATH + "\\log16.in");
 	}
 	
+	public Example getExample17() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+		
+		// int v; for(v = 2; v > 0; v = v - 1) (fork(print(v + 23);) print(v);
+		statementList.addLast(new VariableDeclarationStatement("v", new IntType()));
+		statementList.addLast(new ForStatement(
+								new AssignmentStatement("v", new ValueExpression(new IntValue(2))), 
+								new RelationalExpression(
+										new VariableExpression("v"), 
+										new ValueExpression(new IntValue(0)), 
+										">"), 
+								new AssignmentStatement("v", new ArithmeticExpression(
+										new VariableExpression("v"), 
+										new ValueExpression(new IntValue(1)), 
+										"-")), 
+								new ForkStatement(new PrintStatement(
+													new ArithmeticExpression(
+														new VariableExpression("v"), 
+														new ValueExpression(new IntValue(23)), 
+														"+")))
+							));
+		statementList.addLast(new PrintStatement(new VariableExpression("v")));
+		
+		return new Example(this.composeStatement(statementList), "int v; for(v = 2; v > 0; v = v - 1) (fork(print(v + 23);) print(v);", this.SRC_FOLDER_PATH + "\\log17.in");
+	}
+	
 	public MyList<Example> getAllExamples() {
 		MyList<Example> exampleList = new MyList<Example>();
 		
@@ -418,6 +444,7 @@ public class AllExamples {
 		exampleList.addLast(this.getExample14());
 		exampleList.addLast(this.getExample15());
 		exampleList.addLast(this.getExample16());
+		exampleList.addLast(this.getExample17());
 
 		return exampleList;
 	}
