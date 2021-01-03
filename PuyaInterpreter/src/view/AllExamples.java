@@ -11,6 +11,7 @@ import model.statement.AssignmentStatement;
 import model.statement.CloseReadFileStatement;
 import model.statement.CompoundStatement;
 import model.statement.EmptyStatement;
+import model.statement.ForStatement;
 import model.statement.ForkStatement;
 import model.statement.HeapAllocationStatement;
 import model.statement.HeapWritingStatement;
@@ -376,6 +377,28 @@ public class AllExamples {
 		return new Example(this.composeStatement(statementList), "int v; v=2; (while (v>0) fork(print(v + 23);); v = v - 1;); print(v);", this.SRC_FOLDER_PATH + "\\log15.in");
 	}
 	
+	public Example getExample16() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+		
+		// int v; for(v = 4; v > 0; v = v - 1) (print(v);) print(v);
+		statementList.addLast(new VariableDeclarationStatement("v", new IntType()));
+		statementList.addLast(new ForStatement(
+								new AssignmentStatement("v", new ValueExpression(new IntValue(4))), 
+								new RelationalExpression(
+										new VariableExpression("v"), 
+										new ValueExpression(new IntValue(0)), 
+										">"), 
+								new AssignmentStatement("v", new ArithmeticExpression(
+										new VariableExpression("v"), 
+										new ValueExpression(new IntValue(1)), 
+										"-")), 
+								new PrintStatement(new VariableExpression("v"))
+							));
+		statementList.addLast(new PrintStatement(new VariableExpression("v")));
+		
+		return new Example(this.composeStatement(statementList), "int v; for(v = 4; v > 0; v = v - 1) (print(v);) print(v);", this.SRC_FOLDER_PATH + "\\log16.in");
+	}
+	
 	public MyList<Example> getAllExamples() {
 		MyList<Example> exampleList = new MyList<Example>();
 		
@@ -394,6 +417,7 @@ public class AllExamples {
 		exampleList.addLast(this.getExample13());
 		exampleList.addLast(this.getExample14());
 		exampleList.addLast(this.getExample15());
+		exampleList.addLast(this.getExample16());
 
 		return exampleList;
 	}
