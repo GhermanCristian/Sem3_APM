@@ -96,7 +96,7 @@ public class TestWhileStatement {
 	}
 	
 	@Test
-	public void GetTypeEnvironment_1IterationCompoundStatement_VariableNotDefinedOutsideScope() {
+	public void GetTypeEnvironment_1IterationCompoundStatement_VariableNotDefinedInTheOuterTypeEnvironment() {
 		StatementInterface s1 = new VariableDeclarationStatement("a", new IntType());
 		StatementInterface s2 = new AssignmentStatement("a", new ValueExpression(new IntValue(1)));
 		StatementInterface s3 = new WhileStatement(
@@ -211,12 +211,12 @@ public class TestWhileStatement {
 			fail(e.getMessage());
 		}
 		
-		int crtValue = 1;
 		try {
-			while (output.size() > 0) {
-				assertEquals(output.pop(), new IntValue(crtValue));
-				crtValue++;
-			}
+			assertEquals(new IntValue(5), output.get(0));
+			assertEquals(new IntValue(4), output.get(1));
+			assertEquals(new IntValue(3), output.get(2));
+			assertEquals(new IntValue(2), output.get(3));
+			assertEquals(new IntValue(1), output.get(4));
 		}
 		catch (Exception e) {
 			fail(e.getMessage());
