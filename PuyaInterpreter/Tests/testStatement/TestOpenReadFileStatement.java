@@ -21,7 +21,7 @@ import model.value.StringValue;
 import model.value.ValueInterface;
 
 public class TestOpenReadFileStatement {
-	private final String SRC_FOLDER_PATH = "C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter";
+	private final String SRC_FOLDER_PATH = "C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter\\logs";
 	static StackInterface<StatementInterface> stack;
 	static DictionaryInterface<String, ValueInterface> symbolTable;
 	static ListInterface<ValueInterface> output;

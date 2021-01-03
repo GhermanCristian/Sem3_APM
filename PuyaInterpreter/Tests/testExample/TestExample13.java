@@ -39,7 +39,7 @@ public class TestExample13 {
 	static RepositoryInterface repo;
 	static Controller controller;
 	
-	private static final String REPOSITORY_PATH = "C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter\\log13.in";
+	private static final String REPOSITORY_PATH = "C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter\\logs\\log13.in";
 	
 	@BeforeClass
 	public static void initialiseData() {

@@ -17,10 +17,8 @@ import model.ADT.MyList;
 import model.ADT.MyStack;
 import model.ADT.StackInterface;
 import model.statement.StatementInterface;
-import model.type.IntType;
 import model.type.TypeInterface;
 import model.value.IntValue;
-import model.value.ReferenceValue;
 import model.value.StringValue;
 import model.value.ValueInterface;
 import repository.Repository;
@@ -39,7 +37,7 @@ public class TestExample15 {
 	static RepositoryInterface repo;
 	static Controller controller;
 	
-	private static final String REPOSITORY_PATH = "C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter\\log15.in";
+	private static final String REPOSITORY_PATH = "C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter\\logs\\log15.in";
 	
 	@BeforeClass
 	public static void initialiseData() {

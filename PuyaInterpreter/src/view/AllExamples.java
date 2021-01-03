@@ -31,7 +31,7 @@ import model.value.IntValue;
 import model.value.StringValue;
 
 public class AllExamples {
-	private final String SRC_FOLDER_PATH = "C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter";
+	private final String SRC_FOLDER_PATH = "C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter\\logs";
 	
 	private StatementInterface composeStatement(MyList<StatementInterface> crtList){
 		if (crtList.size() == 0) {
