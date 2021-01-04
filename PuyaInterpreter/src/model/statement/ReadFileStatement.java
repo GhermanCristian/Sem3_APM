@@ -62,6 +62,9 @@ public class ReadFileStatement implements StatementInterface{
 	@Override
 	public DictionaryInterface<String, TypeInterface> getTypeEnvironment(
 			DictionaryInterface<String, TypeInterface> initialTypeEnvironment) throws Exception {
+		if (initialTypeEnvironment.isDefined(this.variableName) == false) {
+			throw new UndefinedVariableException("ReadFileStatement: " + this.variableName + " is not defined in the typeEnvironment");
+		}
 		if (initialTypeEnvironment.getValue(this.variableName).equals(new IntType()) == false) {
 			throw new InvalidTypeException("ReadFileStatement: " + this.variableName + " is not an integer");
 		}

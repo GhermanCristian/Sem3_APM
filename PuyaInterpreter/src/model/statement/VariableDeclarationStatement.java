@@ -25,16 +25,16 @@ public class VariableDeclarationStatement implements StatementInterface{
 		DictionaryInterface<String, ValueInterface> symbolTable = crtState.getSymbolTable();
 		
 		if (symbolTable.isDefined(this.variableName) == true) {
-			throw new AlreadyDefinedVariableException("VariableDeclarationStatement: Variable " + this.variableName + " is already defined");
+			throw new AlreadyDefinedVariableException("VariableDeclarationStatement: Variable " + this.variableName + " is already defined in the symbolTable");
 		}
 		
-		if (this.variableType.equals(new IntType())) { // variable is of type int
+		if (this.variableType instanceof IntType) { // variable is of type int
 			symbolTable.insert(this.variableName, this.variableType.getDefaultValue());
 		}
-		else if(this.variableType.equals(new BoolType())) { // variable is of type bool
+		else if(this.variableType instanceof BoolType) { // variable is of type bool
 			symbolTable.insert(this.variableName, this.variableType.getDefaultValue());
 		}
-		else if(this.variableType.equals(new StringType())) {
+		else if(this.variableType instanceof StringType) {
 			symbolTable.insert(this.variableName, this.variableType.getDefaultValue());
 		}
 		else if (this.variableType instanceof ReferenceType) {
@@ -58,6 +58,9 @@ public class VariableDeclarationStatement implements StatementInterface{
 	@Override
 	public DictionaryInterface<String, TypeInterface> getTypeEnvironment(
 			DictionaryInterface<String, TypeInterface> initialTypeEnvironment) throws Exception {
+		if (initialTypeEnvironment.isDefined(this.variableName) == true) {
+			throw new AlreadyDefinedVariableException("VariableDeclarationStatement: Variable " + this.variableName + " is already defined in the typeEnvironment");
+		}
 		initialTypeEnvironment.insert(this.variableName, this.variableType);
 		return initialTypeEnvironment; // this is the only statement that changes the type environment
 	}

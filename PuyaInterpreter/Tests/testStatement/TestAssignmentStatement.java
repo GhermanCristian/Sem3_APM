@@ -75,6 +75,19 @@ public class TestAssignmentStatement {
 	}
 	
 	@Test
+	public void GetTypeEnvironment_UndefinedVariable_ThrowsException() {
+		StatementInterface s2 = new AssignmentStatement("abc", new ValueExpression(new IntValue(23)));
+		
+		try {
+			s2.getTypeEnvironment(typeEnvironment);
+			fail("TestAssignmentStatement: undefined variable");
+		}
+		catch (Exception e) {
+			assertTrue(true);
+		}
+	}
+	
+	@Test
 	public void GetTypeEnvironment_TypeNotMatching_ThrowsException() {
 		StatementInterface s1 = new VariableDeclarationStatement("abc", new BoolType());
 		StatementInterface s2 = new AssignmentStatement("abc", new ValueExpression(new IntValue(23)));

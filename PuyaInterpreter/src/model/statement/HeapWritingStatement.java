@@ -53,6 +53,9 @@ public class HeapWritingStatement implements StatementInterface {
 		// the type of the reference that "variableName" is allocated to
 		// if getValue does not return a ReferenceValue, the equals will fail; it will also fail if the inner types don't match
 		// so we're doing both checks simultaneously
+		if (initialTypeEnvironment.isDefined(this.variableName) == false) {
+			throw new UndefinedVariableException("HeapWritingStatement: " + this.variableName + " is not defined in the typeEnvironment");
+		}
 		if (initialTypeEnvironment.getValue(this.variableName).equals(expressionReferenceType) == false) {
 			throw new InvalidTypeException("HeapWritingStatement: Expression cannot be evaluated to a " + expressionReferenceType.toString());
 		}

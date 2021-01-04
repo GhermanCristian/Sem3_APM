@@ -65,6 +65,19 @@ public class TestHeapWritingStatement {
 	}
 	
 	@Test
+	public void GetTypeEnvironment_UndefinedVariable_ThrowsException() {
+		StatementInterface s2 = new HeapWritingStatement("a", new ValueExpression(new IntValue(23)));
+
+		try {
+			s2.getTypeEnvironment(typeEnvironment);
+			fail("TestHeapWritingStatement: variable is undefined");
+		}
+		catch (Exception e) {
+			assertTrue(true);
+		}
+	}
+	
+	@Test
 	public void GetTypeEnvironment_VariableNotAReference_ThrowsException() {
 		StatementInterface s1 = new VariableDeclarationStatement("a", new IntType());
 		StatementInterface s2 = new HeapWritingStatement("a", new ValueExpression(new IntValue(23)));

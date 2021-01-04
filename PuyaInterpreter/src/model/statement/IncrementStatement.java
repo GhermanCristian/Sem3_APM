@@ -32,7 +32,7 @@ public class IncrementStatement implements StatementInterface {
 	public ProgramState execute(ProgramState crtState) throws Exception {
 		DictionaryInterface<String, ValueInterface> symbolTable = crtState.getSymbolTable();
 		if (symbolTable.isDefined(this.variableName) == false) {
-			throw new UndefinedVariableException("IncrementStatement: variable " + this.variableName + " is undefined");
+			throw new UndefinedVariableException("IncrementStatement: variable " + this.variableName + " is undefined in the symbolTable");
 		}
 		
 		int previousValueAsInteger = ((IntValue)symbolTable.getValue(this.variableName)).getValue();
@@ -67,7 +67,7 @@ public class IncrementStatement implements StatementInterface {
 	public DictionaryInterface<String, TypeInterface> getTypeEnvironment(
 			DictionaryInterface<String, TypeInterface> initialTypeEnvironment) throws Exception {
 		if (initialTypeEnvironment.isDefined(this.variableName) == false) {
-			throw new UndefinedVariableException("IncrementStatement: variable " + this.variableName + " is undefined");
+			throw new UndefinedVariableException("IncrementStatement: variable " + this.variableName + " is undefined in the typeEnvironment");
 		}
 		if (initialTypeEnvironment.getValue(this.variableName).equals(new IntType()) == false) {
 			throw new InvalidTypeException("IncrementStatement: variable " + this.variableName + " should be an integer");

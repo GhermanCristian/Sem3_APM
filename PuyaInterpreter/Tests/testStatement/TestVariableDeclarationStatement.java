@@ -64,6 +64,19 @@ public class TestVariableDeclarationStatement{
 	}
 	
 	@Test
+	public void GetTypeEnvironment_VariableAlreadyDefined_ThrowsException() {
+		StatementInterface s1 = new VariableDeclarationStatement("abc", new IntType());
+
+		try {
+			s1.getTypeEnvironment(s1.getTypeEnvironment(typeEnvironment));
+			fail("Variable 'abc' is already defined");
+		}
+		catch (Exception e) {
+			assertTrue(true);
+		}
+	}
+	
+	@Test
 	public void GetTypeEnvironment_NewVariable_VariableAddedToTypeEnvironment() {
 		StatementInterface s1 = new VariableDeclarationStatement("abc", new IntType());
 
