@@ -12,12 +12,12 @@ import model.ADT.MyHeap;
 import model.ADT.MyList;
 import model.ADT.MyStack;
 import model.ADT.StackInterface;
-import model.expression.ArithmeticExpression;
 import model.expression.RelationalExpression;
 import model.expression.ValueExpression;
 import model.expression.VariableExpression;
 import model.statement.AssignmentStatement;
 import model.statement.ForStatement;
+import model.statement.IncrementStatement;
 import model.statement.PrintStatement;
 import model.statement.StatementInterface;
 import model.statement.VariableDeclarationStatement;
@@ -73,10 +73,7 @@ public class TestForStatement {
 		StatementInterface s1 = new ForStatement(
 									new AssignmentStatement("v", new ValueExpression(new IntValue(4))), 
 									new ValueExpression(new IntValue(12)), 
-									new AssignmentStatement("v", new ArithmeticExpression(
-											new VariableExpression("v"), 
-											new ValueExpression(new IntValue(1)), 
-											"-")), 
+									new IncrementStatement("v", "-"), 
 									new PrintStatement(new VariableExpression("v"))
 								);
 		try {
@@ -97,10 +94,7 @@ public class TestForStatement {
 											new VariableExpression("v"), 
 											new ValueExpression(new IntValue(0)), 
 											">"), 
-									new AssignmentStatement("v", new ArithmeticExpression(
-											new VariableExpression("v"), 
-											new ValueExpression(new IntValue(1)), 
-											"-")), 
+									new IncrementStatement("v", "-"), 
 									new PrintStatement(new VariableExpression("v"))
 								);
 		try {
@@ -131,10 +125,7 @@ public class TestForStatement {
 											new VariableExpression("v"), 
 											new ValueExpression(new IntValue(0)), 
 											">"), 
-									new AssignmentStatement("v", new ArithmeticExpression(
-											new VariableExpression("v"), 
-											new ValueExpression(new IntValue(1)), 
-											"-")), 
+									new IncrementStatement("v", "-"), 
 									new VariableDeclarationStatement("new v", new IntType())
 								);
 		assertFalse(typeEnvironment.isDefined("new v"));
@@ -155,14 +146,11 @@ public class TestForStatement {
 	@Test
 	public void Execute_InitialStatementIsNotAssignment_ThrowsException() {
 		StatementInterface s1 = new ForStatement(
-				new PrintStatement(new VariableExpression("v")), 
-				new ValueExpression(new BoolValue(false)), 
-				new AssignmentStatement("v", new ArithmeticExpression(
-						new VariableExpression("v"), 
-						new ValueExpression(new IntValue(1)), 
-						"-")), 
-				new PrintStatement(new VariableExpression("v"))
-			);
+									new PrintStatement(new VariableExpression("v")), 
+									new ValueExpression(new BoolValue(false)), 
+									new IncrementStatement("v", "-"), 
+									new PrintStatement(new VariableExpression("v"))
+								);
 		
 		try {
 			s1.execute(crtState);
@@ -174,13 +162,13 @@ public class TestForStatement {
 	}
 	
 	@Test
-	public void Execute_FinalStatementIsNotAssignment_ThrowsException() {
+	public void Execute_FinalStatementIsNotAssignmentNorIncrement_ThrowsException() {
 		StatementInterface s1 = new ForStatement(
-				new AssignmentStatement("v", new ValueExpression(new IntValue(1))), 
-				new ValueExpression(new BoolValue(false)), 
-				new PrintStatement(new VariableExpression("v")), 
-				new PrintStatement(new VariableExpression("v"))
-			);
+									new AssignmentStatement("v", new ValueExpression(new IntValue(1))), 
+									new ValueExpression(new BoolValue(false)), 
+									new PrintStatement(new VariableExpression("v")), 
+									new PrintStatement(new VariableExpression("v"))
+								);
 		
 		try {
 			s1.execute(crtState);
@@ -197,10 +185,7 @@ public class TestForStatement {
 		StatementInterface s1 = new ForStatement(
 									new AssignmentStatement("v", new ValueExpression(new IntValue(4))), 
 									new ValueExpression(new BoolValue(false)), 
-									new AssignmentStatement("v", new ArithmeticExpression(
-											new VariableExpression("v"), 
-											new ValueExpression(new IntValue(1)), 
-											"-")), 
+									new IncrementStatement("v", "-"), 
 									new PrintStatement(new VariableExpression("v"))
 								);
 		
@@ -222,10 +207,7 @@ public class TestForStatement {
 		StatementInterface s1 = new ForStatement(
 									new AssignmentStatement("v", new ValueExpression(new IntValue(4))), 
 									new ValueExpression(new BoolValue(false)), 
-									new AssignmentStatement("v", new ArithmeticExpression(
-											new VariableExpression("v"), 
-											new ValueExpression(new IntValue(1)), 
-											"-")), 
+									new IncrementStatement("v", "-"), 
 									new PrintStatement(new VariableExpression("v"))
 								);
 		
@@ -249,10 +231,7 @@ public class TestForStatement {
 											new VariableExpression("v"), 
 											new ValueExpression(new IntValue(0)), 
 											">"), 
-									new AssignmentStatement("v", new ArithmeticExpression(
-											new VariableExpression("v"), 
-											new ValueExpression(new IntValue(1)), 
-											"-")), 
+									new IncrementStatement("v", "-"), 
 									new PrintStatement(new VariableExpression("v"))
 								);
 		
@@ -279,10 +258,7 @@ public class TestForStatement {
 											new VariableExpression("v"), 
 											new ValueExpression(new IntValue(0)), 
 											">"), 
-									new AssignmentStatement("v", new ArithmeticExpression(
-											new VariableExpression("v"), 
-											new ValueExpression(new IntValue(1)), 
-											"-")), 
+									new IncrementStatement("v", "-"), 
 									new PrintStatement(new VariableExpression("v"))
 								);
 		

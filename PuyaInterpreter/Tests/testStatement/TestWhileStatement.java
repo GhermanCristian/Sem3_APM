@@ -12,12 +12,12 @@ import model.ADT.MyHeap;
 import model.ADT.MyList;
 import model.ADT.MyStack;
 import model.ADT.StackInterface;
-import model.expression.ArithmeticExpression;
 import model.expression.RelationalExpression;
 import model.expression.ValueExpression;
 import model.expression.VariableExpression;
 import model.statement.AssignmentStatement;
 import model.statement.CompoundStatement;
+import model.statement.IncrementStatement;
 import model.statement.PrintStatement;
 import model.statement.StatementInterface;
 import model.statement.VariableDeclarationStatement;
@@ -106,10 +106,7 @@ public class TestWhileStatement {
 										">"), 
 									new CompoundStatement(
 											new VariableDeclarationStatement("new a", new IntType()), 
-											new AssignmentStatement("a", new ArithmeticExpression(
-																			new VariableExpression("a"), 
-																			new ValueExpression(new IntValue(1)), 
-																			"-"))));
+											new IncrementStatement("a", "-")));
 		try {
 			typeEnvironment = s3.getTypeEnvironment(s2.getTypeEnvironment(s1.getTypeEnvironment(typeEnvironment)));
 		}
@@ -193,10 +190,7 @@ public class TestWhileStatement {
 										">"), 
 									new CompoundStatement(
 											new PrintStatement(new VariableExpression("a")), 
-											new AssignmentStatement("a", new ArithmeticExpression(
-																			new VariableExpression("a"), 
-																			new ValueExpression(new IntValue(1)), 
-																			"-"))));
+											new IncrementStatement("a", "-")));
 		assertTrue(output.isEmpty());
 		try {
 			s1.execute(crtState);
@@ -223,10 +217,7 @@ public class TestWhileStatement {
 										">"), 
 									new CompoundStatement(
 											new PrintStatement(new VariableExpression("a")), 
-											new AssignmentStatement("a", new ArithmeticExpression(
-																			new VariableExpression("a"), 
-																			new ValueExpression(new IntValue(1)), 
-																			"-"))));
+											new IncrementStatement("a", "-")));
 		try {
 			s1.execute(crtState);
 			s2.execute(crtState);

@@ -12,12 +12,12 @@ import model.ADT.MyHeap;
 import model.ADT.MyList;
 import model.ADT.MyStack;
 import model.ADT.StackInterface;
-import model.expression.ArithmeticExpression;
 import model.expression.RelationalExpression;
 import model.expression.ValueExpression;
 import model.expression.VariableExpression;
 import model.statement.AssignmentStatement;
 import model.statement.CompoundStatement;
+import model.statement.IncrementStatement;
 import model.statement.PrintStatement;
 import model.statement.RepeatUntilStatement;
 import model.statement.StatementInterface;
@@ -104,10 +104,7 @@ public class TestRepeatUntilStatement {
 		StatementInterface s3 = new RepeatUntilStatement(
 									new CompoundStatement(
 											new VariableDeclarationStatement("new a", new IntType()), 
-											new AssignmentStatement("a", new ArithmeticExpression(
-																			new VariableExpression("a"), 
-																			new ValueExpression(new IntValue(1)), 
-																			"-"))),
+											new IncrementStatement("a", "-")),
 									new RelationalExpression(
 											new VariableExpression("a"), 
 											new ValueExpression(new IntValue()), 
@@ -159,10 +156,7 @@ public class TestRepeatUntilStatement {
 		StatementInterface s3 = new RepeatUntilStatement(
 									new CompoundStatement(
 										new PrintStatement(new VariableExpression("a")), 
-										new AssignmentStatement("a", new ArithmeticExpression(
-																		new VariableExpression("a"), 
-																		new ValueExpression(new IntValue(1)), 
-																		"-"))),
+										new IncrementStatement("a", "-")),
 									new RelationalExpression(
 											new VariableExpression("a"), 
 											new ValueExpression(new IntValue()), 
@@ -189,10 +183,7 @@ public class TestRepeatUntilStatement {
 		StatementInterface s3 = new RepeatUntilStatement(
 									new CompoundStatement(
 										new PrintStatement(new VariableExpression("a")), 
-										new AssignmentStatement("a", new ArithmeticExpression(
-																		new VariableExpression("a"), 
-																		new ValueExpression(new IntValue(1)), 
-																		"-"))),
+										new IncrementStatement("a", "-")),
 									new RelationalExpression(
 											new VariableExpression("a"), 
 											new ValueExpression(new IntValue()), 

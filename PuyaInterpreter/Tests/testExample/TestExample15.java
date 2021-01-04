@@ -86,7 +86,7 @@ public class TestExample15 {
 		crtState.setStatement(example.getStatement());
 		controller.addProgramState(crtState);
 	}
-	//"int v; v=2; (while (v>0) fork(print(v + 23);); v = v - 1;); print(v);"
+	//"int v; v=2; while (v>0) {fork(print(v + 23);); v--;} print(v);"
 	
 	@Test
 	public void FullProgramExecution_Example15_CorrectOutput() {

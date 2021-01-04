@@ -86,7 +86,7 @@ public class TestExample18 {
 		crtState.setStatement(example.getStatement());
 		controller.addProgramState(crtState);
 	}
-	//"int v; v = 0; repeat(fork(print(v); v = v - 1;); v = v + 1;) until (v == 3); int x; x = 1; print(v * 10);"
+	//"int v; v = 0; repeat {fork(print(v); v--;); v++;} until (v == 3); int x; x = 1; print(v * 10);"
 	
 	@Test
 	public void FullProgramExecution_Example18_CorrectOutput() {

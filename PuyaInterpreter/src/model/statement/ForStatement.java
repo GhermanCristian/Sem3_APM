@@ -26,8 +26,8 @@ public class ForStatement implements StatementInterface {
 		if (this.initialStatement instanceof AssignmentStatement == false) {
 			throw new InvalidTypeException("ForStatement: InitialStatement is not an AssignmentStatement");
 		}
-		if (this.finalStatement instanceof AssignmentStatement == false) {
-			throw new InvalidTypeException("ForStatement: FinalStatement is not an AssignmentStatement");
+		if (this.finalStatement instanceof AssignmentStatement == false && this.finalStatement instanceof IncrementStatement == false) {
+			throw new InvalidTypeException("ForStatement: FinalStatement is not an AssignmentStatement nor an IncrementStatement");
 		}
 		
 		StackInterface<StatementInterface> stack = crtState.getExecutionStack();

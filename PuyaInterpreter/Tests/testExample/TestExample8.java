@@ -85,7 +85,7 @@ public class TestExample8 {
 		crtState.setStatement(example.getStatement());
 		controller.addProgramState(crtState);
 	}
-	//"int v; v=4; (while (v>0) print(v); v = v - 1); print(v)"
+	//"int v; v=4; while (v>0) {print(v); v--;} print(v);"
 	
 	@Test
 	public void FullProgramExecution_Example8_CorrectOutput() {
