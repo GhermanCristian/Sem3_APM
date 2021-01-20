@@ -50,7 +50,7 @@ public class MyDictionary<TKey, TValue> implements DictionaryInterface<TKey, TVa
 
 	@Override
 	public void insert(TKey key, TValue newValue) {
-		this.dictionary.put(key, newValue);
+		this.dictionary.putIfAbsent(key, newValue);
 	}
 
 	@Override
