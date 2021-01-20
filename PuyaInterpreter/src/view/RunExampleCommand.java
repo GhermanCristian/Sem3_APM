@@ -1,8 +1,9 @@
 package view;
 
 import java.io.BufferedReader;
-
+import java.util.ArrayList;
 import controller.TextController;
+import javafx.util.Pair;
 import controller.Controller;
 import model.Example;
 import model.ProgramState;
@@ -11,6 +12,7 @@ import model.ADT.ListInterface;
 import model.ADT.MyDictionary;
 import model.ADT.MyHeap;
 import model.ADT.MyList;
+import model.ADT.MySemaphoreTable;
 import model.ADT.MyStack;
 import model.ADT.StackInterface;
 import model.statement.StatementInterface;
@@ -37,10 +39,11 @@ public class RunExampleCommand extends Command {
 		ListInterface<ValueInterface> output = new MyList<ValueInterface>();
 		DictionaryInterface<StringValue, BufferedReader> fileTable = new MyDictionary<StringValue, BufferedReader>();
 		DictionaryInterface<Integer, ValueInterface> heap = new MyHeap<Integer, ValueInterface>();
+		DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> semaphoreTable = new MySemaphoreTable<Integer, Pair<Integer,ArrayList<Integer>>>();
 		
 		DictionaryInterface<String, TypeInterface> typeEnvironment = new MyDictionary<String, TypeInterface>();
 		this.crtStatement.getTypeEnvironment(typeEnvironment);
-		ProgramState crtProgramState = new ProgramState(stack, symbolTable, output, fileTable, heap, this.crtStatement);
+		ProgramState crtProgramState = new ProgramState(stack, symbolTable, output, fileTable, heap, semaphoreTable, this.crtStatement);
 		
 		RepositoryInterface repo = new Repository(this.repositoryLocation);
 		Controller controller = new TextController(repo);

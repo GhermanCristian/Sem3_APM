@@ -15,7 +15,7 @@ public class MyHeap<TKey, TValue> extends MyDictionary<TKey, TValue>{
 	
 	public int getFirstAvailablePosition() {
 		int positionCopy = this.firstAvailablePosition;
-		this.firstAvailablePosition = setNextAvailablePosition();
+		this.firstAvailablePosition = this.setNextAvailablePosition();
 		return positionCopy;
 	}
 	

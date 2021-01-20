@@ -4,9 +4,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+
 import org.junit.*;
 import controller.Controller;
 import controller.TextController;
+import javafx.util.Pair;
 import model.Example;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
@@ -14,6 +17,7 @@ import model.ADT.ListInterface;
 import model.ADT.MyDictionary;
 import model.ADT.MyHeap;
 import model.ADT.MyList;
+import model.ADT.MySemaphoreTable;
 import model.ADT.MyStack;
 import model.ADT.StackInterface;
 import model.statement.StatementInterface;
@@ -31,6 +35,7 @@ public class TestExample8 {
 	static ListInterface<ValueInterface> output;
 	static DictionaryInterface<StringValue, BufferedReader> fileTable;
 	static DictionaryInterface<Integer, ValueInterface> heap;
+	static DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> semaphoreTable;
 	static DictionaryInterface<String, TypeInterface> typeEnvironment;
 	static Example example;
 	static ProgramState crtState;
@@ -46,10 +51,11 @@ public class TestExample8 {
 		output = new MyList<ValueInterface>();
 		fileTable = new MyDictionary<StringValue, BufferedReader>();
 		heap = new MyHeap<Integer, ValueInterface>();
+		semaphoreTable = new MySemaphoreTable<Integer, Pair<Integer, ArrayList<Integer>>>();
 		typeEnvironment = new MyDictionary<String, TypeInterface>();
 		AllExamples allExamples = new AllExamples();
 		example = allExamples.getExample8();
-		crtState = new ProgramState(stack, symbolTable, output, fileTable, heap, example.getStatement());
+		crtState = new ProgramState(stack, symbolTable, output, fileTable, heap, semaphoreTable, example.getStatement());
 		repo = new Repository(REPOSITORY_PATH);
 		controller = new TextController(repo);
 		controller.addProgramState(crtState);
@@ -71,6 +77,7 @@ public class TestExample8 {
 		}
 		fileTable.clear();
 		heap.clear();
+		semaphoreTable.clear();
 		typeEnvironment.clear();
 		
 		try {

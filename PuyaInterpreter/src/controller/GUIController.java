@@ -1,7 +1,10 @@
 package controller;
 
 import java.io.BufferedReader;
+import java.util.ArrayList;
 import java.util.List;
+
+import javafx.util.Pair;
 import model.Example;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
@@ -9,6 +12,7 @@ import model.ADT.ListInterface;
 import model.ADT.MyDictionary;
 import model.ADT.MyHeap;
 import model.ADT.MyList;
+import model.ADT.MySemaphoreTable;
 import model.ADT.MyStack;
 import model.ADT.StackInterface;
 import model.statement.StatementInterface;
@@ -34,10 +38,11 @@ public class GUIController extends Controller {
 		ListInterface<ValueInterface> output = new MyList<ValueInterface>();
 		DictionaryInterface<StringValue, BufferedReader> fileTable = new MyDictionary<StringValue, BufferedReader>();
 		DictionaryInterface<Integer, ValueInterface> heap = new MyHeap<Integer, ValueInterface>();
+		DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> semaphoreTable = new MySemaphoreTable<Integer, Pair<Integer,ArrayList<Integer>>>();
 		
 		DictionaryInterface<String, TypeInterface> typeEnvironment = new MyDictionary<String, TypeInterface>();
 		currentExample.getStatement().getTypeEnvironment(typeEnvironment);
-		ProgramState crtProgramState = new ProgramState(stack, symbolTable, output, fileTable, heap, currentExample.getStatement());
+		ProgramState crtProgramState = new ProgramState(stack, symbolTable, output, fileTable, heap, semaphoreTable, currentExample.getStatement());
 		return crtProgramState;
 	}
 	

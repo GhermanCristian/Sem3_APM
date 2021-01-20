@@ -3,13 +3,18 @@ package testStatement;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.BufferedReader;
+import java.util.ArrayList;
+
 import org.junit.*;
+
+import javafx.util.Pair;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
 import model.ADT.ListInterface;
 import model.ADT.MyDictionary;
 import model.ADT.MyHeap;
 import model.ADT.MyList;
+import model.ADT.MySemaphoreTable;
 import model.ADT.MyStack;
 import model.ADT.StackInterface;
 import model.expression.ValueExpression;
@@ -32,6 +37,7 @@ public class TestForkStatement {
 	static ListInterface<ValueInterface> output;
 	static DictionaryInterface<StringValue, BufferedReader> fileTable;
 	static DictionaryInterface<Integer, ValueInterface> heap;
+	static DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> semaphoreTable;
 	static DictionaryInterface<String, TypeInterface> typeEnvironment;
 	static ProgramState crtState;
 	
@@ -42,8 +48,9 @@ public class TestForkStatement {
 		output = new MyList<ValueInterface>();
 		fileTable = new MyDictionary<StringValue, BufferedReader>();
 		heap = new MyHeap<Integer, ValueInterface>();
+		semaphoreTable = new MySemaphoreTable<Integer, Pair<Integer, ArrayList<Integer>>>();
 		typeEnvironment = new MyDictionary<String, TypeInterface>();
-		crtState = new ProgramState(stack, symbolTable, output, fileTable, heap, null);
+		crtState = new ProgramState(stack, symbolTable, output, fileTable, heap, semaphoreTable, null);
 	}
 	
 	@After
@@ -62,6 +69,7 @@ public class TestForkStatement {
 		}
 		fileTable.clear();
 		heap.clear();
+		semaphoreTable.clear();
 		typeEnvironment.clear();
 	}
 	

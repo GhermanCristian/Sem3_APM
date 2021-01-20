@@ -13,7 +13,7 @@ public class MySemaphoreTable<TKey, TValue> extends MyDictionary<TKey, TValue> {
 	
 	public synchronized int getFirstAvailablePosition() {
 		int positionCopy = this.firstAvailablePosition;
-		this.firstAvailablePosition = setNextAvailablePosition();
+		this.firstAvailablePosition = this.setNextAvailablePosition();
 		return positionCopy;
 	}
 	

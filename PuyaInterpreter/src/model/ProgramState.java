@@ -1,8 +1,10 @@
 package model;
 
 import java.io.BufferedReader;
+import java.util.ArrayList;
 
 import exception.EmptyADTException;
+import javafx.util.Pair;
 import model.ADT.DictionaryInterface;
 import model.ADT.ListInterface;
 import model.ADT.StackInterface;
@@ -16,6 +18,7 @@ public class ProgramState {
 	private ListInterface<ValueInterface> output;
 	private DictionaryInterface<StringValue, BufferedReader> fileTable;
 	private DictionaryInterface<Integer, ValueInterface> heap;
+	private DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> semaphoreTable;
 	private StatementInterface originalProgram;
 	private static int globalThreadCount = 1;
 	private final int threadID;
@@ -26,6 +29,7 @@ public class ProgramState {
 			ListInterface<ValueInterface> output,
 			DictionaryInterface<StringValue, BufferedReader> fileTable,
 			DictionaryInterface<Integer, ValueInterface> heap,
+			DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> semaphoreTable,
 			StatementInterface program
 			) {
 		this.executionStack = stack;
@@ -33,6 +37,7 @@ public class ProgramState {
 		this.output = output;
 		this.fileTable = fileTable;
 		this.heap = heap;
+		this.semaphoreTable = semaphoreTable;
 		//this.originalProgram = program.deepCopy();
 		this.setStatement(program);
 		this.threadID = ProgramState.manageThreadID();
@@ -66,6 +71,10 @@ public class ProgramState {
 	
 	public DictionaryInterface<Integer, ValueInterface> getHeap() {
 		return this.heap;
+	}
+	
+	public DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> getSemaphoreTable() {
+		return this.semaphoreTable;
 	}
 	
 	public StatementInterface getOriginalProgram() {
@@ -104,6 +113,8 @@ public class ProgramState {
 		representation += "\nOutputTable:\n";
 		representation += this.output.toString();
 		representation += "\nHeap:\n";
+		representation += this.heap.toString();
+		representation += "\nSemaphoreTable:\n";
 		representation += this.heap.toString();
 		
 		return representation;
