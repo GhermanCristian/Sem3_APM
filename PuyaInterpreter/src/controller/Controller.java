@@ -1,14 +1,13 @@
 package controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
-
 import model.Example;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
@@ -39,7 +38,7 @@ public abstract class Controller {
 				.collect(Collectors.toList());
 	}
 	
-	protected HashMap<Integer, ValueInterface> getGarbageCollectedHeap(List<ProgramState> threadList) {
+	protected ConcurrentHashMap<Integer, ValueInterface> getGarbageCollectedHeap(List<ProgramState> threadList) {
 		// the heap is the same for all threads, so we just pick one from which to get the heap
 		DictionaryInterface<Integer, ValueInterface> heap = this.getFirstAvailableThread().getHeap();
 		
@@ -50,9 +49,10 @@ public abstract class Controller {
 											.filter(elem -> elem instanceof ReferenceValue)
 											.map(elem -> {ReferenceValue elem1 = (ReferenceValue)elem; return elem1.getHeapAddress();})
 											.collect(Collectors.toList());
-		return (HashMap<Integer, ValueInterface>)heap.getAllPairs().entrySet().stream()
+		
+		return (ConcurrentHashMap<Integer, ValueInterface>)heap.getAllPairs().entrySet().stream()
 											.filter(elem -> symbolTableAddresses.contains(elem.getKey()) || heapReferencedAddresses.contains(elem.getKey()))
-											.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+											.collect(Collectors.toConcurrentMap(Map.Entry::getKey, Map.Entry::getValue));
 	}
 	
 	protected void beforeProgramExecution() {

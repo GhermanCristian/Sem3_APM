@@ -1,14 +1,14 @@
 package model.ADT;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 public class MyDictionary<TKey, TValue> implements DictionaryInterface<TKey, TValue>{
-	protected HashMap<TKey, TValue> dictionary;
+	protected ConcurrentHashMap<TKey, TValue> dictionary;
 	
 	public MyDictionary() {
-		this.dictionary = new HashMap<TKey, TValue>();
+		this.dictionary = new ConcurrentHashMap<TKey, TValue>();
 	}
 
 	@Override
@@ -79,12 +79,12 @@ public class MyDictionary<TKey, TValue> implements DictionaryInterface<TKey, TVa
 	}
 
 	@Override
-	public HashMap<TKey, TValue> getAllPairs() {
+	public ConcurrentHashMap<TKey, TValue> getAllPairs() {
 		return this.dictionary;
 	}
 
 	@Override
-	public void setContent(HashMap<TKey, TValue> newContent) {
+	public void setContent(ConcurrentHashMap<TKey, TValue> newContent) {
 		this.dictionary = newContent;
 	}
 
