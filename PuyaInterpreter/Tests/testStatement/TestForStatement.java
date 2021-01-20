@@ -15,7 +15,6 @@ import model.ADT.StackInterface;
 import model.expression.RelationalExpression;
 import model.expression.ValueExpression;
 import model.expression.VariableExpression;
-import model.statement.AssignmentStatement;
 import model.statement.ForStatement;
 import model.statement.IncrementStatement;
 import model.statement.PrintStatement;
@@ -69,15 +68,15 @@ public class TestForStatement {
 
 	@Test
 	public void GetTypeEnvironment_NonBooleanCondition_ThrowsException() {
-		StatementInterface s0 = new VariableDeclarationStatement("v", new IntType());
 		StatementInterface s1 = new ForStatement(
-									new AssignmentStatement("v", new ValueExpression(new IntValue(4))), 
+									"v",
+									new ValueExpression(new IntValue(4)), 
 									new ValueExpression(new IntValue(12)), 
 									new IncrementStatement("v", "-"), 
 									new PrintStatement(new VariableExpression("v"))
 								);
 		try {
-			s1.getTypeEnvironment(s0.getTypeEnvironment(typeEnvironment));
+			s1.getTypeEnvironment(s1.getTypeEnvironment(typeEnvironment));
 			fail("Conditional expression is not boolean");
 		}
 		catch (Exception e) {
@@ -86,10 +85,51 @@ public class TestForStatement {
 	}
 	
 	@Test
-	public void GetTypeEnvironment_BooleanCondition_TypeEnvironmentUnchanged() {
-		StatementInterface s0 = new VariableDeclarationStatement("v", new IntType());
+	public void GetTypeEnvironment_InitialExpressionIsNotInteger_ThrowsException() {
 		StatementInterface s1 = new ForStatement(
-									new AssignmentStatement("v", new ValueExpression(new IntValue(4))), 
+									"v",
+									new ValueExpression(new BoolValue(true)), 
+									new ValueExpression(new BoolValue(false)), 
+									new IncrementStatement("v", "-"), 
+									new PrintStatement(new VariableExpression("v"))
+								);
+		try {
+			s1.getTypeEnvironment(typeEnvironment);
+			fail("Initial expression should be an integer");
+		}
+		catch (Exception e) {
+			assertTrue(true);
+		}
+	}
+	
+	// technically this exception will be thrown by getTypeEnv from RelationalExpression
+	// but it still is one of the possible behaviours of the for statement, so we test it here
+	@Test
+	public void GetTypeEnvironment_RelationalExpressionRightOperandNotInteger_ThrowsException() {
+		StatementInterface s1 = new ForStatement(
+									"v",
+									new ValueExpression(new IntValue(4)),
+									new RelationalExpression(
+											new VariableExpression("v"), 
+											new ValueExpression(new BoolValue(true)), 
+											">"),  
+									new IncrementStatement("v", "-"), 
+									new PrintStatement(new VariableExpression("v"))
+								);
+		try {
+			s1.getTypeEnvironment(typeEnvironment);
+			fail("Right operand of the relational expression should be an integer");
+		}
+		catch (Exception e) {
+			assertTrue(true);
+		}
+	}
+	
+	@Test
+	public void GetTypeEnvironment_BooleanCondition_VariableAddedToTypeEnvironment() {
+		StatementInterface s1 = new ForStatement(
+									"v",
+									new ValueExpression(new IntValue(4)), 
 									new RelationalExpression(
 											new VariableExpression("v"), 
 											new ValueExpression(new IntValue(0)), 
@@ -97,15 +137,8 @@ public class TestForStatement {
 									new IncrementStatement("v", "-"), 
 									new PrintStatement(new VariableExpression("v"))
 								);
-		try {
-			typeEnvironment = s0.getTypeEnvironment(typeEnvironment);
-		} 
-		catch (Exception e) {
-			fail(e.getMessage());
-		}
 		
-		assertEquals(1, typeEnvironment.size());
-		assertEquals(new IntType(), typeEnvironment.getValue("v"));
+		assertTrue(typeEnvironment.isEmpty());
 		try {
 			typeEnvironment = s1.getTypeEnvironment(typeEnvironment);
 		}
@@ -118,9 +151,9 @@ public class TestForStatement {
 	
 	@Test
 	public void GetTypeEnvironment_1Iteration_VariableNotDefinedInTheOuterTypeEnvironment() {
-		StatementInterface s0 = new VariableDeclarationStatement("v", new IntType());
 		StatementInterface s1 = new ForStatement(
-									new AssignmentStatement("v", new ValueExpression(new IntValue(1))), 
+									"v",
+									new ValueExpression(new IntValue(1)), 
 									new RelationalExpression(
 											new VariableExpression("v"), 
 											new ValueExpression(new IntValue(0)), 
@@ -128,10 +161,10 @@ public class TestForStatement {
 									new IncrementStatement("v", "-"), 
 									new VariableDeclarationStatement("new v", new IntType())
 								);
+		
 		assertFalse(typeEnvironment.isDefined("new v"));
 		try {
-			typeEnvironment = s1.getTypeEnvironment(s0.getTypeEnvironment(typeEnvironment));
-			s0.execute(crtState);
+			typeEnvironment = s1.getTypeEnvironment(typeEnvironment);
 			s1.execute(crtState);
 			while (crtState.getExecutionStack().size() > 0) {
 				crtState.getExecutionStack().pop().execute(crtState);
@@ -144,17 +177,17 @@ public class TestForStatement {
 	}
 	
 	@Test
-	public void Execute_InitialStatementIsNotAssignment_ThrowsException() {
+	public void Execute_ConditionalExpressionIsNotRelationalExpression_ThrowsException() {
 		StatementInterface s1 = new ForStatement(
+									"v",
+									new ValueExpression(new IntValue(1)), 
+									new ValueExpression(new IntValue(1)),  
 									new PrintStatement(new VariableExpression("v")), 
-									new ValueExpression(new BoolValue(false)), 
-									new IncrementStatement("v", "-"), 
 									new PrintStatement(new VariableExpression("v"))
 								);
-		
 		try {
 			s1.execute(crtState);
-			fail("InitialStatement is not an AssignmentStatement");
+			fail("Conditional expression should be a relational expression");
 		}
 		catch (Exception e) {
 			assertTrue(true);
@@ -162,17 +195,21 @@ public class TestForStatement {
 	}
 	
 	@Test
-	public void Execute_FinalStatementIsNotAssignmentNorIncrement_ThrowsException() {
+	public void Execute_FinalStatementIsNotIncrement_ThrowsException() {
 		StatementInterface s1 = new ForStatement(
-									new AssignmentStatement("v", new ValueExpression(new IntValue(1))), 
-									new ValueExpression(new BoolValue(false)), 
+									"v",
+									new ValueExpression(new IntValue(1)), 
+									new RelationalExpression(
+											new VariableExpression("v"), 
+											new ValueExpression(new IntValue(0)), 
+											">"),  
 									new PrintStatement(new VariableExpression("v")), 
 									new PrintStatement(new VariableExpression("v"))
 								);
 		
 		try {
 			s1.execute(crtState);
-			fail("FinalStatement is not an AssignmentStatement");
+			fail("FinalStatement is not an IncrementStatement");
 		}
 		catch (Exception e) {
 			assertTrue(true);
@@ -181,18 +218,23 @@ public class TestForStatement {
 	
 	@Test
 	public void Execute_FalseCondition_ExecutesOnlyInitialStatement() {
-		StatementInterface s0 = new VariableDeclarationStatement("v", new IntType());
 		StatementInterface s1 = new ForStatement(
-									new AssignmentStatement("v", new ValueExpression(new IntValue(4))), 
-									new ValueExpression(new BoolValue(false)), 
+									"v",
+									new ValueExpression(new IntValue(4)), 
+									new RelationalExpression(
+										new VariableExpression("v"), 
+										new ValueExpression(new IntValue(0)), 
+										"<"),
 									new IncrementStatement("v", "-"), 
 									new PrintStatement(new VariableExpression("v"))
 								);
 		
 		assertNotEquals(new IntValue(4), symbolTable.getValue("v"));
 		try {
-			s0.execute(crtState);
 			s1.execute(crtState);
+			while (crtState.getExecutionStack().size() > 0) {
+				crtState.getExecutionStack().pop().execute(crtState);
+			}
 		} 
 		catch (Exception e) {
 			fail(e.getMessage());
@@ -203,17 +245,19 @@ public class TestForStatement {
 	
 	@Test
 	public void Execute_FalseCondition_ReturnsNull() {
-		StatementInterface s0 = new VariableDeclarationStatement("v", new IntType());
 		StatementInterface s1 = new ForStatement(
-									new AssignmentStatement("v", new ValueExpression(new IntValue(4))), 
-									new ValueExpression(new BoolValue(false)), 
+									"v",
+									new ValueExpression(new IntValue(4)), 
+									new RelationalExpression(
+										new VariableExpression("v"), 
+										new ValueExpression(new IntValue(0)), 
+										"<"),
 									new IncrementStatement("v", "-"), 
 									new PrintStatement(new VariableExpression("v"))
 								);
 		
 		ProgramState result = null;
 		try {
-			s0.execute(crtState);
 			result = s1.execute(crtState);
 		}
 		catch (Exception e) {
@@ -224,9 +268,9 @@ public class TestForStatement {
 	
 	@Test
 	public void Execute_5Iterations_CorrectOutputSize() {
-		StatementInterface s0 = new VariableDeclarationStatement("v", new IntType());
 		StatementInterface s1 = new ForStatement(
-									new AssignmentStatement("v", new ValueExpression(new IntValue(5))), 
+									"v",
+									new ValueExpression(new IntValue(5)), 
 									new RelationalExpression(
 											new VariableExpression("v"), 
 											new ValueExpression(new IntValue(0)), 
@@ -237,7 +281,6 @@ public class TestForStatement {
 		
 		assertTrue(output.isEmpty());
 		try {
-			s0.execute(crtState);
 			s1.execute(crtState);
 			while (crtState.getExecutionStack().size() > 0) {
 				crtState.getExecutionStack().pop().execute(crtState);
@@ -251,9 +294,9 @@ public class TestForStatement {
 	
 	@Test
 	public void Execute_5Iterations_CorrectOutputContent() {
-		StatementInterface s0 = new VariableDeclarationStatement("v", new IntType());
 		StatementInterface s1 = new ForStatement(
-									new AssignmentStatement("v", new ValueExpression(new IntValue(5))), 
+									"v",
+									new ValueExpression(new IntValue(5)), 
 									new RelationalExpression(
 											new VariableExpression("v"), 
 											new ValueExpression(new IntValue(0)), 
@@ -263,7 +306,6 @@ public class TestForStatement {
 								);
 		
 		try {
-			s0.execute(crtState);
 			s1.execute(crtState);
 			while (crtState.getExecutionStack().size() > 0) {
 				crtState.getExecutionStack().pop().execute(crtState);
