@@ -2,7 +2,6 @@ package model;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;
-
 import exception.EmptyADTException;
 import javafx.util.Pair;
 import model.ADT.DictionaryInterface;
@@ -20,6 +19,7 @@ public class ProgramState {
 	private DictionaryInterface<Integer, ValueInterface> heap;
 	private DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> semaphoreTable;
 	private DictionaryInterface<Integer, Integer> latchTable;
+	private DictionaryInterface<String, Procedure> procedureTable;
 	private StatementInterface originalProgram;
 	private static int globalThreadCount = 1;
 	private final int threadID;
@@ -32,6 +32,7 @@ public class ProgramState {
 			DictionaryInterface<Integer, ValueInterface> heap,
 			DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> semaphoreTable,
 			DictionaryInterface<Integer, Integer> latchTable,
+			DictionaryInterface<String, Procedure> procedureTable,
 			StatementInterface program
 			) {
 		this.executionStack = stack;
@@ -41,6 +42,7 @@ public class ProgramState {
 		this.heap = heap;
 		this.semaphoreTable = semaphoreTable;
 		this.latchTable = latchTable;
+		this.procedureTable = procedureTable;
 		//this.originalProgram = program.deepCopy();
 		this.setStatement(program);
 		this.threadID = ProgramState.manageThreadID();
@@ -84,6 +86,10 @@ public class ProgramState {
 		return this.latchTable;
 	}
 	
+	public DictionaryInterface<String, Procedure> getProcedureTable() {
+		return this.procedureTable;
+	}
+	
 	public StatementInterface getOriginalProgram() {
 		return this.originalProgram;
 	}
@@ -125,6 +131,8 @@ public class ProgramState {
 		representation += this.semaphoreTable.toString();
 		representation += "\nLatchTable:\n";
 		representation += this.latchTable.toString();
+		representation += "\nProcedureTable:\n";
+		representation += this.procedureTable.toString();
 		
 		return representation;
 	}
