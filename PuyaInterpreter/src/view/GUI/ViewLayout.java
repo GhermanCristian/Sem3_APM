@@ -37,7 +37,7 @@ class ViewLayout {
 	private ListView<String> stackListView;
 	private TableView<Integer> heapTableView; // here I need it to store Integers because that's the key of the Heap structure
 	private TableView<String> symbolTableTableView;
-	private TableView<Integer> semaphoreTableTableView; // here I need it to store Integers because that's the key of the Heap structure
+	private TableView<Integer> semaphoreTableTableView; // here I need it to store Integers because that's the key of the semaphore structure
 	private TextField programStateCountTextField;
 	
 	public ViewLayout(GUIController controller) {
@@ -79,7 +79,7 @@ class ViewLayout {
 		firstAvailableThread.getHeap().forEachKey(variableAddress -> this.heapTableView.getItems().add(variableAddress));
 	}
 	
-	private void updateLockMechanismView() {
+	private void updateSemaphoreTableTableView() {
 		this.semaphoreTableTableView.getItems().clear();
 		ProgramState firstAvailableThread = this.controller.getFirstAvailableThread();
 		if (firstAvailableThread == null) {
@@ -87,6 +87,10 @@ class ViewLayout {
 		}
 		
 		firstAvailableThread.getSemaphoreTable().forEachKey(variableAddress -> this.semaphoreTableTableView.getItems().add(variableAddress));
+	}
+	
+	private void updateLockMechanismView() {
+		this.updateSemaphoreTableTableView();
 	}
 	
 	private void updateOutputListView() {
@@ -215,7 +219,7 @@ class ViewLayout {
 		this.heapTableView.setMaxWidth(Double.MAX_VALUE);
 	}
 	
-	private void initialiseLockMechanismView() {
+	private void initialiseSemaphoreTableTableView() {
 		this.semaphoreTableTableView = new TableView<Integer>();
 		this.semaphoreTableTableView.setEditable(false);
 		
@@ -250,6 +254,10 @@ class ViewLayout {
 		this.semaphoreTableTableView.getColumns().add(semaphoreCapacityColumn);
 		this.semaphoreTableTableView.getColumns().add(semaphoreThreadListColumn);
 		this.semaphoreTableTableView.setMaxWidth(Double.MAX_VALUE);
+	}
+	
+	private void initialiseLockMechanismView() {
+		this.initialiseSemaphoreTableTableView();
 	}
 	
 	private void initialiseFileTableListView() {
