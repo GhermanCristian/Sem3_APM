@@ -38,6 +38,7 @@ class ViewLayout {
 	private TableView<Integer> heapTableView; // here I need it to store Integers because that's the key of the Heap structure
 	private TableView<String> symbolTableTableView;
 	private TableView<Integer> semaphoreTableTableView; // here I need it to store Integers because that's the key of the semaphore structure
+	private TableView<Integer> latchTableTableView;
 	private TextField programStateCountTextField;
 	
 	public ViewLayout(GUIController controller) {
@@ -86,11 +87,22 @@ class ViewLayout {
 			return ;
 		}
 		
-		firstAvailableThread.getSemaphoreTable().forEachKey(variableAddress -> this.semaphoreTableTableView.getItems().add(variableAddress));
+		firstAvailableThread.getSemaphoreTable().forEachKey(semaphoreAddress -> this.semaphoreTableTableView.getItems().add(semaphoreAddress));
+	}
+	
+	private void updateLatchTableTableView() {
+		this.latchTableTableView.getItems().clear();
+		ProgramState firstAvailableThread = this.controller.getFirstAvailableThread();
+		if (firstAvailableThread == null) {
+			return ;
+		}
+		
+		firstAvailableThread.getLatchTable().forEachKey(latchAddress -> this.latchTableTableView.getItems().add(latchAddress));
 	}
 	
 	private void updateLockMechanismView() {
-		this.updateSemaphoreTableTableView();
+		//this.updateSemaphoreTableTableView();
+		this.updateLatchTableTableView();
 	}
 	
 	private void updateOutputListView() {
@@ -256,8 +268,33 @@ class ViewLayout {
 		this.semaphoreTableTableView.setMaxWidth(Double.MAX_VALUE);
 	}
 	
+	private void initialiseLatchTableTableView() {
+		this.latchTableTableView = new TableView<Integer>();
+		this.latchTableTableView.setEditable(false);
+		
+		TableColumn<Integer, String> latchAddressColumn = new TableColumn<Integer, String>("Latch address");
+		latchAddressColumn.prefWidthProperty().bind(this.latchTableTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH_2_COLUMN_TABLE_VIEW));
+		// this approach should only be used as long as the table is non-editable (which it is in this app)
+		latchAddressColumn.setCellValueFactory(currentLatchKey -> new ReadOnlyStringWrapper(currentLatchKey.getValue().toString()));
+		
+		TableColumn<Integer, String> latchCountColumn = new TableColumn<Integer, String>("Count");
+		latchCountColumn.prefWidthProperty().bind(this.latchTableTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH_2_COLUMN_TABLE_VIEW));
+		latchCountColumn.setCellValueFactory(currentLatchKey -> {
+			if (this.selectedThread == null) {
+				return null;
+			}
+			
+			return new ReadOnlyStringWrapper(this.selectedThread.getLatchTable().getValue(currentLatchKey.getValue()).toString());
+		});
+		
+		this.latchTableTableView.getColumns().add(latchAddressColumn);
+		this.latchTableTableView.getColumns().add(latchCountColumn);
+		this.latchTableTableView.setMaxWidth(Double.MAX_VALUE);
+	}
+	
 	private void initialiseLockMechanismView() {
-		this.initialiseSemaphoreTableTableView();
+		//this.initialiseSemaphoreTableTableView();
+		this.initialiseLatchTableTableView();
 	}
 	
 	private void initialiseFileTableListView() {
@@ -302,7 +339,8 @@ class ViewLayout {
 		VBox.setVgrow(this.threadListView, Priority.ALWAYS);
 		HBox.setHgrow(this.symbolTableTableView, Priority.ALWAYS);
 		HBox.setHgrow(this.heapTableView, Priority.ALWAYS);
-		HBox.setHgrow(this.semaphoreTableTableView, Priority.ALWAYS);
+		//HBox.setHgrow(this.semaphoreTableTableView, Priority.ALWAYS);
+		HBox.setHgrow(this.latchTableTableView, Priority.ALWAYS);
 		HBox.setHgrow(this.outputListView, Priority.ALWAYS);
 		HBox.setHgrow(this.stackListView, Priority.ALWAYS);
 		HBox.setHgrow(this.fileTableListView, Priority.ALWAYS);
@@ -312,7 +350,9 @@ class ViewLayout {
 		HBox.setHgrow(rightLayout, Priority.ALWAYS);
 		
 		leftLayout.getChildren().addAll(this.programStateCountTextField, this.threadListView);
-		upperRightLayout.getChildren().addAll(this.symbolTableTableView, this.heapTableView, this.semaphoreTableTableView);
+		upperRightLayout.getChildren().addAll(this.symbolTableTableView, this.heapTableView);
+		//upperRightLayout.getChildren().add(this.semaphoreTableTableView);
+		upperRightLayout.getChildren().add(this.latchTableTableView);
 		lowerRightLayout.getChildren().addAll(this.stackListView, this.fileTableListView, this.outputListView);
 		rightLayout.getChildren().addAll(upperRightLayout, lowerRightLayout);
 		mainStructuresLayout.getChildren().addAll(leftLayout, rightLayout);
