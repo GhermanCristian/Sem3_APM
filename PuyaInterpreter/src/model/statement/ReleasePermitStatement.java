@@ -34,13 +34,16 @@ public class ReleasePermitStatement implements StatementInterface {
 		}
 		
 		Pair<Integer, ArrayList<Integer>> semaphoreValue = semaphoreTable.getValue(semaphoreIndexAsInteger);
+		Integer totalPermitCount = semaphoreValue.getKey();
 		ArrayList<Integer> currentThreadsWithPermit = semaphoreValue.getValue();
 		
 		if (currentThreadsWithPermit.contains(crtState.getThreadID()) == false) {
 			throw new LockNotAcquiredException("ReleasePermitStatement: Thread " + crtState.getThreadID() + " doesn't have a permit from semaphore " + this.indexVariableName);
 		}
-		currentThreadsWithPermit.remove(crtState.getThreadID());
-		semaphoreTable.update(semaphoreIndexAsInteger, new Pair<Integer, ArrayList<Integer>>(semaphoreIndexAsInteger, currentThreadsWithPermit));
+		// I need Integer.valueOf bc otherwise the threadID would've been considered an index in the list, and not a value
+		// this way, we "enforce" it to be a value
+		currentThreadsWithPermit.remove(Integer.valueOf(crtState.getThreadID()));
+		semaphoreTable.update(semaphoreIndexAsInteger, new Pair<Integer, ArrayList<Integer>>(totalPermitCount, currentThreadsWithPermit));
 		
 		return null;
 	}

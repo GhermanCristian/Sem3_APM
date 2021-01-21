@@ -7,9 +7,11 @@ import model.expression.HeapReadingExpression;
 import model.expression.RelationalExpression;
 import model.expression.ValueExpression;
 import model.expression.VariableExpression;
+import model.statement.AcquirePermitStatement;
 import model.statement.AssignmentStatement;
 import model.statement.CloseReadFileStatement;
 import model.statement.CompoundStatement;
+import model.statement.CreateSemaphoreStatement;
 import model.statement.EmptyStatement;
 import model.statement.ForStatement;
 import model.statement.ForkStatement;
@@ -20,6 +22,7 @@ import model.statement.IncrementStatement;
 import model.statement.OpenReadFileStatement;
 import model.statement.PrintStatement;
 import model.statement.ReadFileStatement;
+import model.statement.ReleasePermitStatement;
 import model.statement.RepeatUntilStatement;
 import model.statement.StatementInterface;
 import model.statement.VariableDeclarationStatement;
@@ -435,6 +438,39 @@ public class AllExamples {
 		return new Example(this.composeStatement(statementList), "int v; v = 0; repeat {fork(print(v); v--;); v++;} until (v == 3); int x; x = 1; print(v * 10);", this.SRC_FOLDER_PATH + "\\log18.in");
 	}
 	
+	public Example getExample19() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+	
+		statementList.addLast(new VariableDeclarationStatement("v1", new ReferenceType(new IntType())));
+		statementList.addLast(new VariableDeclarationStatement("cnt", new IntType()));
+		statementList.addLast(new HeapAllocationStatement("v1", new ValueExpression(new IntValue(1))));
+		statementList.addLast(new CreateSemaphoreStatement("cnt", new HeapReadingExpression(new VariableExpression("v1"))));
+		
+		MyList<StatementInterface> thread2StatementList = new MyList<StatementInterface>();
+		thread2StatementList.addLast(new AcquirePermitStatement("cnt"));
+		thread2StatementList.addLast(new HeapWritingStatement("v1", new ArithmeticExpression(new HeapReadingExpression(new VariableExpression("v1")), new ValueExpression(new IntValue(10)), "*")));
+		thread2StatementList.addLast(new PrintStatement(new HeapReadingExpression(new VariableExpression("v1"))));
+		thread2StatementList.addLast(new ReleasePermitStatement("cnt"));
+		statementList.addLast(new ForkStatement(this.composeStatement(thread2StatementList)));
+		
+		MyList<StatementInterface> thread3StatementList = new MyList<StatementInterface>();
+		thread3StatementList.addLast(new AcquirePermitStatement("cnt"));
+		thread3StatementList.addLast(new HeapWritingStatement("v1", new ArithmeticExpression(new HeapReadingExpression(new VariableExpression("v1")), new ValueExpression(new IntValue(10)), "*")));
+		thread3StatementList.addLast(new HeapWritingStatement("v1", new ArithmeticExpression(new HeapReadingExpression(new VariableExpression("v1")), new ValueExpression(new IntValue(2)), "*")));
+		thread3StatementList.addLast(new PrintStatement(new HeapReadingExpression(new VariableExpression("v1"))));
+		thread3StatementList.addLast(new ReleasePermitStatement("cnt"));
+		statementList.addLast(new ForkStatement(this.composeStatement(thread3StatementList)));
+		
+		statementList.addLast(new AcquirePermitStatement("cnt"));
+		statementList.addLast(new PrintStatement(new ArithmeticExpression(new HeapReadingExpression(new VariableExpression("v1")), new ValueExpression(new IntValue(1)), "-")));
+		statementList.addLast(new ReleasePermitStatement("cnt"));
+		
+		return new Example(this.composeStatement(statementList), "Ref int v1; int cnt; new(v1,1); createSemaphore(cnt,rH(v1)); " + 
+				"fork(acquire(cnt); wh(v1,rh(v1)*10)); print(rh(v1)); release(cnt)); " + 
+				"fork(acquire(cnt); wh(v1,rh(v1)*10)); wh(v1,rh(v1)*2)); print(rh(v1)); release(cnt)); " + 
+				"acquire(cnt); print(rh(v1)-1); release(cnt);", this.SRC_FOLDER_PATH + "\\log19.in");
+	}
+	
 	public MyList<Example> getAllExamples() {
 		MyList<Example> exampleList = new MyList<Example>();
 		
@@ -452,10 +488,11 @@ public class AllExamples {
 		exampleList.addLast(this.getExample12());
 		exampleList.addLast(this.getExample13());
 		exampleList.addLast(this.getExample14());
-		exampleList.addLast(this.getExample15());*/
+		exampleList.addLast(this.getExample15());
 		exampleList.addLast(this.getExample16());
 		exampleList.addLast(this.getExample17());
-		exampleList.addLast(this.getExample18());
+		exampleList.addLast(this.getExample18());*/
+		exampleList.addLast(this.getExample19());
 
 		return exampleList;
 	}

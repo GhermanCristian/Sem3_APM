@@ -43,7 +43,7 @@ public class AcquirePermitStatement implements StatementInterface {
 				throw new LockAlreadyAcquiredException("AcquirePermitStatement: Thread " + crtState.getThreadID() + " already has a permit from semaphore " + this.indexVariableName);
 			}
 			currentThreadsWithPermit.add(crtState.getThreadID());
-			semaphoreTable.update(semaphoreIndexAsInteger, new Pair<Integer, ArrayList<Integer>>(semaphoreIndexAsInteger, currentThreadsWithPermit));
+			semaphoreTable.update(semaphoreIndexAsInteger, new Pair<Integer, ArrayList<Integer>>(totalPermitCount, currentThreadsWithPermit));
 		}
 		else {
 			stack.push(this);
