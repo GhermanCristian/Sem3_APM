@@ -6,6 +6,7 @@ import controller.TextController;
 import javafx.util.Pair;
 import controller.Controller;
 import model.Example;
+import model.Procedure;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
 import model.ADT.ListInterface;
@@ -35,16 +36,19 @@ public class RunExampleCommand extends Command {
 	@Override
 	public void execute() throws Exception {
 		StackInterface<StatementInterface> stack = new MyStack<StatementInterface>();
+		StackInterface<DictionaryInterface<String, ValueInterface>> symbolTableStack = new MyStack<DictionaryInterface<String,ValueInterface>>();
 		DictionaryInterface<String, ValueInterface> symbolTable = new MyDictionary<String, ValueInterface>();
+		symbolTableStack.push(symbolTable);
 		ListInterface<ValueInterface> output = new MyList<ValueInterface>();
 		DictionaryInterface<StringValue, BufferedReader> fileTable = new MyDictionary<StringValue, BufferedReader>();
 		DictionaryInterface<Integer, ValueInterface> heap = new MyHeap<Integer, ValueInterface>();
 		DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> semaphoreTable = new MyLockTable<Integer, Pair<Integer,ArrayList<Integer>>>();
 		DictionaryInterface<Integer, Integer> latchTable = new MyLockTable<Integer, Integer>();
+		DictionaryInterface<String, Procedure> procedureTable = new MyDictionary<String, Procedure>();
 		
 		DictionaryInterface<String, TypeInterface> typeEnvironment = new MyDictionary<String, TypeInterface>();
 		this.crtStatement.getTypeEnvironment(typeEnvironment);
-		ProgramState crtProgramState = new ProgramState(stack, symbolTable, output, fileTable, heap, semaphoreTable, latchTable, this.crtStatement);
+		ProgramState crtProgramState = new ProgramState(stack, symbolTableStack, output, fileTable, heap, semaphoreTable, latchTable, procedureTable, this.crtStatement);
 		
 		RepositoryInterface repo = new Repository(this.repositoryLocation);
 		Controller controller = new TextController(repo);

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.util.Pair;
 import model.Example;
+import model.Procedure;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
 import model.ADT.ListInterface;
@@ -33,16 +34,19 @@ public class GUIController extends Controller {
 
 	private ProgramState getProgramState(Example currentExample) throws Exception {
 		StackInterface<StatementInterface> stack = new MyStack<StatementInterface>();
+		StackInterface<DictionaryInterface<String, ValueInterface>> symbolTableStack = new MyStack<DictionaryInterface<String,ValueInterface>>();
 		DictionaryInterface<String, ValueInterface> symbolTable = new MyDictionary<String, ValueInterface>();
+		symbolTableStack.push(symbolTable);
 		ListInterface<ValueInterface> output = new MyList<ValueInterface>();
 		DictionaryInterface<StringValue, BufferedReader> fileTable = new MyDictionary<StringValue, BufferedReader>();
 		DictionaryInterface<Integer, ValueInterface> heap = new MyHeap<Integer, ValueInterface>();
 		DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> semaphoreTable = new MyLockTable<Integer, Pair<Integer,ArrayList<Integer>>>();
 		DictionaryInterface<Integer, Integer> latchTable = new MyLockTable<Integer, Integer>();
+		DictionaryInterface<String, Procedure> procedureTable = new MyDictionary<String, Procedure>();
 		
 		DictionaryInterface<String, TypeInterface> typeEnvironment = new MyDictionary<String, TypeInterface>();
 		currentExample.getStatement().getTypeEnvironment(typeEnvironment);
-		ProgramState crtProgramState = new ProgramState(stack, symbolTable, output, fileTable, heap, semaphoreTable, latchTable, currentExample.getStatement());
+		ProgramState crtProgramState = new ProgramState(stack, symbolTableStack, output, fileTable, heap, semaphoreTable, latchTable, procedureTable, currentExample.getStatement());
 		return crtProgramState;
 	}
 	

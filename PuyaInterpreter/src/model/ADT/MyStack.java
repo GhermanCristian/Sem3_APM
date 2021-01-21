@@ -51,4 +51,9 @@ public class MyStack<TElem> implements StackInterface<TElem>{
 			action.accept(crtElem);
 		}
 	}
+
+	@Override
+	public void pushBack(TElem newElem) {
+		this.stack.addLast(newElem);
+	}
 }

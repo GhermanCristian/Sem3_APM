@@ -13,7 +13,7 @@ import model.value.ValueInterface;
 
 public class ProgramState {
 	private StackInterface<StatementInterface> executionStack;
-	private DictionaryInterface<String, ValueInterface> symbolTable;
+	private StackInterface<DictionaryInterface<String, ValueInterface>> symbolTable;
 	private ListInterface<ValueInterface> output;
 	private DictionaryInterface<StringValue, BufferedReader> fileTable;
 	private DictionaryInterface<Integer, ValueInterface> heap;
@@ -26,7 +26,7 @@ public class ProgramState {
 	
 	public ProgramState(
 			StackInterface<StatementInterface> stack, 
-			DictionaryInterface<String, ValueInterface> symbolTable, 
+			StackInterface<DictionaryInterface<String, ValueInterface>> symbolTable, 
 			ListInterface<ValueInterface> output,
 			DictionaryInterface<StringValue, BufferedReader> fileTable,
 			DictionaryInterface<Integer, ValueInterface> heap,
@@ -62,8 +62,12 @@ public class ProgramState {
 		return this.executionStack;
 	}
 	
-	public DictionaryInterface<String, ValueInterface> getSymbolTable() {
+	public StackInterface<DictionaryInterface<String, ValueInterface>> getSymbolTableStack() {
 		return this.symbolTable;
+	}
+	
+	public DictionaryInterface<String, ValueInterface> getSymbolTable() {
+		return this.symbolTable.top();
 	}
 	
 	public ListInterface<ValueInterface> getOutput() {

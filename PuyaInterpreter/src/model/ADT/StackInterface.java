@@ -6,6 +6,7 @@ public interface StackInterface<TElem> {
 	public int size();
 	public void clear();
 	public void push(TElem newElem);
+	public void pushBack(TElem newElem);
 	public void forEach(Consumer<? super TElem> action);
 	public TElem pop();
 	public TElem top();
