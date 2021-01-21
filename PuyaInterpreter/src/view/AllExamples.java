@@ -9,8 +9,11 @@ import model.expression.ValueExpression;
 import model.expression.VariableExpression;
 import model.statement.AcquirePermitStatement;
 import model.statement.AssignmentStatement;
+import model.statement.AwaitStatement;
 import model.statement.CloseReadFileStatement;
 import model.statement.CompoundStatement;
+import model.statement.CountDownLatchStatement;
+import model.statement.CreateLatchStatement;
 import model.statement.CreateSemaphoreStatement;
 import model.statement.EmptyStatement;
 import model.statement.ForStatement;
@@ -471,6 +474,47 @@ public class AllExamples {
 				"acquire(cnt); print(rh(v1)-1); release(cnt);", this.SRC_FOLDER_PATH + "\\log19.in");
 	}
 	
+	public Example getExample20() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+	
+		statementList.addLast(new VariableDeclarationStatement("v1", new ReferenceType(new IntType())));
+		statementList.addLast(new VariableDeclarationStatement("v2", new ReferenceType(new IntType())));
+		statementList.addLast(new VariableDeclarationStatement("v3", new ReferenceType(new IntType())));
+		statementList.addLast(new VariableDeclarationStatement("cnt", new IntType()));
+		statementList.addLast(new HeapAllocationStatement("v1", new ValueExpression(new IntValue(2))));
+		statementList.addLast(new HeapAllocationStatement("v2", new ValueExpression(new IntValue(3))));
+		statementList.addLast(new HeapAllocationStatement("v3", new ValueExpression(new IntValue(4))));
+		statementList.addLast(new CreateLatchStatement("cnt", new HeapReadingExpression(new VariableExpression("v2"))));
+		
+		MyList<StatementInterface> thread2StatementList = new MyList<StatementInterface>();
+		thread2StatementList.addLast(new HeapWritingStatement("v1", new ArithmeticExpression(new HeapReadingExpression(new VariableExpression("v1")), new ValueExpression(new IntValue(10)), "*")));
+		thread2StatementList.addLast(new PrintStatement(new HeapReadingExpression(new VariableExpression("v1"))));
+		thread2StatementList.addLast(new CountDownLatchStatement("cnt"));
+		statementList.addLast(new ForkStatement(this.composeStatement(thread2StatementList)));
+		
+		MyList<StatementInterface> thread3StatementList = new MyList<StatementInterface>();
+		thread3StatementList.addLast(new HeapWritingStatement("v2", new ArithmeticExpression(new HeapReadingExpression(new VariableExpression("v2")), new ValueExpression(new IntValue(10)), "*")));
+		thread3StatementList.addLast(new PrintStatement(new HeapReadingExpression(new VariableExpression("v2"))));
+		thread3StatementList.addLast(new CountDownLatchStatement("cnt"));
+		statementList.addLast(new ForkStatement(this.composeStatement(thread3StatementList)));
+		
+		MyList<StatementInterface> thread4StatementList = new MyList<StatementInterface>();
+		thread4StatementList.addLast(new HeapWritingStatement("v3", new ArithmeticExpression(new HeapReadingExpression(new VariableExpression("v3")), new ValueExpression(new IntValue(10)), "*")));
+		thread4StatementList.addLast(new PrintStatement(new HeapReadingExpression(new VariableExpression("v3"))));
+		thread4StatementList.addLast(new CountDownLatchStatement("cnt"));
+		statementList.addLast(new ForkStatement(this.composeStatement(thread4StatementList)));
+		
+		statementList.addLast(new AwaitStatement("cnt"));
+		statementList.addLast(new PrintStatement(new ValueExpression(new IntValue(100))));
+		statementList.addLast(new CountDownLatchStatement("cnt"));
+		statementList.addLast(new PrintStatement(new ValueExpression(new IntValue(100))));
+		
+		return new Example(this.composeStatement(statementList), "Ref int v1; Ref int v2; Ref int v3; int cnt; " + 
+				"new(v1,2); new(v2,3); new(v3,4); newLatch(cnt,rH(v2)); fork(wh(v1,rh(v1)*10); print(rh(v1)); countDown(cnt);); " + 
+				"fork(wh(v2,rh(v2)*10); print(rh(v2)); countDown(cnt);); fork(wh(v3,rh(v3)*10); print(rh(v3)); countDown(cnt);); " + 
+				"await(cnt); print(100); countDown(cnt); print(100);", this.SRC_FOLDER_PATH + "\\log20.in");
+	}
+	
 	public MyList<Example> getAllExamples() {
 		MyList<Example> exampleList = new MyList<Example>();
 		
@@ -491,9 +535,10 @@ public class AllExamples {
 		exampleList.addLast(this.getExample15());
 		exampleList.addLast(this.getExample16());
 		exampleList.addLast(this.getExample17());
-		exampleList.addLast(this.getExample18());*/
-		exampleList.addLast(this.getExample19());
-
+		exampleList.addLast(this.getExample18());
+		exampleList.addLast(this.getExample19());*/
+		exampleList.addLast(this.getExample20());
+		
 		return exampleList;
 	}
 }

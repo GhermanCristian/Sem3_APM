@@ -41,7 +41,7 @@ public class CreateLatchStatement implements StatementInterface {
 	@Override
 	public String toString() {
 		String representation = "";
-		representation += ("createSemaphore(" + this.indexVariableName + ", " + this.countExpression.toString() + ");\n");
+		representation += ("createLatch(" + this.indexVariableName + ", " + this.countExpression.toString() + ");\n");
 		return representation;
 	}
 

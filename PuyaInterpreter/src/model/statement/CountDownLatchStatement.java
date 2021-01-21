@@ -38,6 +38,13 @@ public class CountDownLatchStatement implements StatementInterface {
 		
 		return null;
 	}
+	
+	@Override
+	public String toString() {
+		String representation = "";
+		representation += ("countDownLatch(" + this.indexVariableName + ");\n");
+		return representation;
+	}
 
 	@Override
 	public DictionaryInterface<String, TypeInterface> getTypeEnvironment(
