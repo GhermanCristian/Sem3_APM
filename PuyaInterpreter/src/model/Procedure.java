@@ -11,9 +11,9 @@ public class Procedure {
 	// the lengths of these 2 lists are assumed to be equal
 	private final StatementInterface procedureStatement;
 	
-	public Procedure(ArrayList<TypeInterface> argumentTypes, ArrayList<String> argumentValues, StatementInterface procedureStatement) {
+	public Procedure(ArrayList<TypeInterface> argumentTypes, ArrayList<String> argumentNames, StatementInterface procedureStatement) {
 		this.argumentTypes = argumentTypes;
-		this.argumentNames = argumentValues;
+		this.argumentNames = argumentNames;
 		this.procedureStatement = procedureStatement;
 	}
 	
