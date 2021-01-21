@@ -7,7 +7,7 @@ import exception.UndefinedVariableException;
 import javafx.util.Pair;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
-import model.ADT.MySemaphoreTable;
+import model.ADT.MyLockTable;
 import model.expression.ExpressionInterface;
 import model.type.IntType;
 import model.type.TypeInterface;
@@ -34,7 +34,7 @@ public class CreateSemaphoreStatement implements StatementInterface {
 		}
 		
 		ValueInterface totalPermitCount = this.totalPermitCountExpression.evaluate(symbolTable, heap);
-		int newPositionInSemaphoreTable = ((MySemaphoreTable<Integer, Pair<Integer, ArrayList<Integer>>>)(semaphoreTable)).getFirstAvailablePosition();
+		int newPositionInSemaphoreTable = ((MyLockTable<Integer, Pair<Integer, ArrayList<Integer>>>)(semaphoreTable)).getFirstAvailablePosition();
 		semaphoreTable.insert(newPositionInSemaphoreTable, new Pair<Integer, ArrayList<Integer>>(((IntValue)totalPermitCount).getValue(), new ArrayList<Integer>()));
 		symbolTable.update(this.indexVariableName, new IntValue(newPositionInSemaphoreTable));
 		

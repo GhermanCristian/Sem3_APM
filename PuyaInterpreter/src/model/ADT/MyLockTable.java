@@ -1,9 +1,9 @@
 package model.ADT;
 
-public class MySemaphoreTable<TKey, TValue> extends MyDictionary<TKey, TValue> {
+public class MyLockTable<TKey, TValue> extends MyDictionary<TKey, TValue> {
 	private int firstAvailablePosition = 1;
 	
-	public MySemaphoreTable() {
+	public MyLockTable() {
 		super();
 	}
 	

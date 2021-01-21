@@ -13,7 +13,7 @@ import model.ADT.ListInterface;
 import model.ADT.MyDictionary;
 import model.ADT.MyHeap;
 import model.ADT.MyList;
-import model.ADT.MySemaphoreTable;
+import model.ADT.MyLockTable;
 import model.ADT.MyStack;
 import model.ADT.StackInterface;
 import model.expression.ValueExpression;
@@ -44,7 +44,7 @@ public class TestCompoundStatement {
 		output = new MyList<ValueInterface>();
 		fileTable = new MyDictionary<StringValue, BufferedReader>();
 		heap = new MyHeap<Integer, ValueInterface>();
-		semaphoreTable = new MySemaphoreTable<Integer, Pair<Integer, ArrayList<Integer>>>();
+		semaphoreTable = new MyLockTable<Integer, Pair<Integer, ArrayList<Integer>>>();
 		typeEnvironment = new MyDictionary<String, TypeInterface>();
 		crtState = new ProgramState(stack, symbolTable, output, fileTable, heap, semaphoreTable, null);
 	}

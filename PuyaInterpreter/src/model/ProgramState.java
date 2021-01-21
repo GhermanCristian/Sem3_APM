@@ -19,6 +19,7 @@ public class ProgramState {
 	private DictionaryInterface<StringValue, BufferedReader> fileTable;
 	private DictionaryInterface<Integer, ValueInterface> heap;
 	private DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> semaphoreTable;
+	private DictionaryInterface<Integer, Integer> latchTable;
 	private StatementInterface originalProgram;
 	private static int globalThreadCount = 1;
 	private final int threadID;
@@ -30,6 +31,7 @@ public class ProgramState {
 			DictionaryInterface<StringValue, BufferedReader> fileTable,
 			DictionaryInterface<Integer, ValueInterface> heap,
 			DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> semaphoreTable,
+			DictionaryInterface<Integer, Integer> latchTable,
 			StatementInterface program
 			) {
 		this.executionStack = stack;
@@ -38,6 +40,7 @@ public class ProgramState {
 		this.fileTable = fileTable;
 		this.heap = heap;
 		this.semaphoreTable = semaphoreTable;
+		this.latchTable = latchTable;
 		//this.originalProgram = program.deepCopy();
 		this.setStatement(program);
 		this.threadID = ProgramState.manageThreadID();
@@ -75,6 +78,10 @@ public class ProgramState {
 	
 	public DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> getSemaphoreTable() {
 		return this.semaphoreTable;
+	}
+	
+	public DictionaryInterface<Integer, Integer> getLatchTable() {
+		return this.latchTable;
 	}
 	
 	public StatementInterface getOriginalProgram() {
@@ -115,7 +122,9 @@ public class ProgramState {
 		representation += "\nHeap:\n";
 		representation += this.heap.toString();
 		representation += "\nSemaphoreTable:\n";
-		representation += this.heap.toString();
+		representation += this.semaphoreTable.toString();
+		representation += "\nLatchTable:\n";
+		representation += this.latchTable.toString();
 		
 		return representation;
 	}
