@@ -72,7 +72,7 @@ public abstract class Controller {
 														}
 														catch (Exception e) {
 															// I have to throw a runtime exception because fuck you functional programming
-															throw new RuntimeException("wtf" + e.getMessage());
+															throw new RuntimeException(e.getMessage());
 														}
 													})
 													.filter(thread -> thread != null)

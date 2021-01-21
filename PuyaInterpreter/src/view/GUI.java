@@ -1,5 +1,6 @@
 package view;
 
+import java.util.ArrayList;
 import controller.GUIController;
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -21,6 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import model.Example;
 import model.ProgramState;
 
@@ -40,6 +42,7 @@ public class GUI extends Application {
 	private ListView<String> stackListView;
 	private TableView<Integer> heapTableView; // here I need it to store Integers because that's the key of the Heap structure
 	private TableView<String> symbolTableTableView;
+	private TableView<Integer> semaphoreTableTableView; // here I need it to store Integers because that's the key of the Heap structure
 	private TextField programStateCountTextField;
 	
 	private Button advanceOneStepButton;
@@ -54,7 +57,8 @@ public class GUI extends Application {
 	private final int MAXIMUM_THREAD_LIST_VIEW_WIDTH = MAXIMUM_PROGRAM_STATE_COUNT_FIELD_WIDTH;
 	private final int MINIMUM_SELECT_EXAMPlE_BUTTON_WIDTH = 150;
 	private final int MAXIMUM_MAIN_STRUCTURES_LAYOUT_HEIGHT = 650;
-	private final double COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH = 0.5;
+	private final double COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH_2_COLUMN_TABLE_VIEW = 0.5;
+	private final double COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH_3_COLUMN_TABLE_VIEW = 0.33;
 	
 	/*
 	observer -> GUI
@@ -109,6 +113,16 @@ public class GUI extends Application {
 		firstAvailableThread.getHeap().forEachKey(variableAddress -> this.heapTableView.getItems().add(variableAddress));
 	}
 	
+	private void updateSemaphoreTableTableView() {
+		this.semaphoreTableTableView.getItems().clear();
+		ProgramState firstAvailableThread = this.controller.getFirstAvailableThread();
+		if (firstAvailableThread == null) {
+			return ;
+		}
+		
+		firstAvailableThread.getSemaphoreTable().forEachKey(variableAddress -> this.semaphoreTableTableView.getItems().add(variableAddress));
+	}
+	
 	private void updateOutputListView() {
 		this.outputListView.getItems().clear();
 		ProgramState firstAvailableThread = this.controller.getFirstAvailableThread();
@@ -133,13 +147,14 @@ public class GUI extends Application {
 	private void updateGlobalStructures() {
 		this.updateThreadListView();
 		this.updateHeapTableView();
+		this.updateSemaphoreTableTableView();
 		this.updateOutputListView();
 		this.updateFileTableListView();
 	}
 	
 	public void updateAllStructures() {
 		// normally I wouldn't need to call this from the controller, I could just call it here after each button press for next step
-		// however, what if there are some internal modifications that are done even when I don't press the button - then I need this
+		// however, if there are some internal modifications that are done even when I don't press the button - then I need this
 		this.updateGlobalStructures();
 		this.updateThreadDependantStructures();
 		
@@ -202,12 +217,12 @@ public class GUI extends Application {
 		this.symbolTableTableView.setMaxWidth(Double.MAX_VALUE);
 		
 		TableColumn<String, String> variableNameColumn = new TableColumn<String, String>("Variable name");
-		variableNameColumn.prefWidthProperty().bind(this.symbolTableTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH));
+		variableNameColumn.prefWidthProperty().bind(this.symbolTableTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH_2_COLUMN_TABLE_VIEW));
 		// this approach (with the readOnlyStringWrapper) should only be used as long as the table is non-editable (which it is in this app)
 		variableNameColumn.setCellValueFactory(currentValue -> new ReadOnlyStringWrapper(currentValue.getValue()));
 		
 		TableColumn<String, String> variableValueColumn = new TableColumn<String, String>("Value");
-		variableValueColumn.prefWidthProperty().bind(this.symbolTableTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH));
+		variableValueColumn.prefWidthProperty().bind(this.symbolTableTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH_2_COLUMN_TABLE_VIEW));
 		variableValueColumn.setCellValueFactory(currentValue -> {
 			if (this.selectedThread == null) {
 				return null;
@@ -229,12 +244,12 @@ public class GUI extends Application {
 		this.heapTableView.setEditable(false);
 		
 		TableColumn<Integer, String> variableAddressColumn = new TableColumn<Integer, String>("Variable address");
-		variableAddressColumn.prefWidthProperty().bind(this.heapTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH));
+		variableAddressColumn.prefWidthProperty().bind(this.heapTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH_2_COLUMN_TABLE_VIEW));
 		// this approach should only be used as long as the table is non-editable (which it is in this app)
 		variableAddressColumn.setCellValueFactory(currentReference -> new ReadOnlyStringWrapper("0x" + Integer.toHexString(currentReference.getValue())));
 		
 		TableColumn<Integer, String> variableValueColumn = new TableColumn<Integer, String>("Value");
-		variableValueColumn.prefWidthProperty().bind(this.heapTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH));
+		variableValueColumn.prefWidthProperty().bind(this.heapTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH_2_COLUMN_TABLE_VIEW));
 		variableValueColumn.setCellValueFactory(currentReference -> {
 			if (this.selectedThread == null) {
 				return null;
@@ -245,6 +260,43 @@ public class GUI extends Application {
 		this.heapTableView.getColumns().add(variableAddressColumn);
 		this.heapTableView.getColumns().add(variableValueColumn);
 		this.heapTableView.setMaxWidth(Double.MAX_VALUE);
+	}
+	
+	private void initialiseSemaphoreTableTableView() {
+		this.semaphoreTableTableView = new TableView<Integer>();
+		this.semaphoreTableTableView.setEditable(false);
+		
+		TableColumn<Integer, String> semaphoreAddressColumn = new TableColumn<Integer, String>("Semaphore address");
+		semaphoreAddressColumn.prefWidthProperty().bind(this.semaphoreTableTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH_3_COLUMN_TABLE_VIEW));
+		// this approach should only be used as long as the table is non-editable (which it is in this app)
+		semaphoreAddressColumn.setCellValueFactory(currentSemaphoreKey -> new ReadOnlyStringWrapper(currentSemaphoreKey.getValue().toString()));
+		
+		TableColumn<Integer, String> semaphoreCapacityColumn = new TableColumn<Integer, String>("Capacity");
+		semaphoreCapacityColumn.prefWidthProperty().bind(this.semaphoreTableTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH_3_COLUMN_TABLE_VIEW));
+		semaphoreCapacityColumn.setCellValueFactory(currentSemaphoreKey -> {
+			if (this.selectedThread == null) {
+				return null;
+			}
+			
+			Pair<Integer, ArrayList<Integer>> currentSemaphoreValue = this.selectedThread.getSemaphoreTable().getValue(currentSemaphoreKey.getValue());
+			return new ReadOnlyStringWrapper(currentSemaphoreValue.getKey().toString());
+		});
+		
+		TableColumn<Integer, String> semaphoreThreadListColumn = new TableColumn<Integer, String>("ThreadList");
+		semaphoreThreadListColumn.prefWidthProperty().bind(this.semaphoreTableTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH_3_COLUMN_TABLE_VIEW));
+		semaphoreThreadListColumn.setCellValueFactory(currentSemaphoreKey -> {
+			if (this.selectedThread == null) {
+				return null;
+			}
+			
+			Pair<Integer, ArrayList<Integer>> currentSemaphoreValue = this.selectedThread.getSemaphoreTable().getValue(currentSemaphoreKey.getValue());
+			return new ReadOnlyStringWrapper(currentSemaphoreValue.getValue().toString());
+		});
+		
+		this.semaphoreTableTableView.getColumns().add(semaphoreAddressColumn);
+		this.semaphoreTableTableView.getColumns().add(semaphoreCapacityColumn);
+		this.semaphoreTableTableView.getColumns().add(semaphoreThreadListColumn);
+		this.semaphoreTableTableView.setMaxWidth(Double.MAX_VALUE);
 	}
 	
 	private void initialiseFileTableListView() {
@@ -262,6 +314,7 @@ public class GUI extends Application {
 		this.initialiseSymbolTableTableView();
 		this.initialiseOutputListView();
 		this.initialiseHeapTableTableView();
+		this.initialiseSemaphoreTableTableView();
 		this.initialiseFileTableListView();
 		this.initialiseStackListView();
 	}
@@ -278,6 +331,7 @@ public class GUI extends Application {
 		// in case I might want to change from a HBox to sth else
 		HBox.setHgrow(this.symbolTableTableView, Priority.ALWAYS);
 		HBox.setHgrow(this.heapTableView, Priority.ALWAYS);
+		HBox.setHgrow(this.semaphoreTableTableView, Priority.ALWAYS);
 		HBox.setHgrow(this.outputListView, Priority.ALWAYS);
 		HBox.setHgrow(this.stackListView, Priority.ALWAYS);
 		HBox.setHgrow(this.fileTableListView, Priority.ALWAYS);
@@ -285,8 +339,8 @@ public class GUI extends Application {
 		HBox.setHgrow(lowerRightLayout, Priority.ALWAYS);
 		HBox.setHgrow(rightLayout, Priority.ALWAYS);
 		
-		upperRightLayout.getChildren().addAll(this.symbolTableTableView, this.heapTableView, this.outputListView);
-		lowerRightLayout.getChildren().addAll(this.stackListView, this.fileTableListView);
+		upperRightLayout.getChildren().addAll(this.symbolTableTableView, this.heapTableView, this.semaphoreTableTableView);
+		lowerRightLayout.getChildren().addAll(this.stackListView, this.fileTableListView, this.outputListView);
 		rightLayout.getChildren().addAll(upperRightLayout, lowerRightLayout);
 		mainStructuresLayout.getChildren().addAll(this.threadListView, rightLayout);
 		mainStructuresLayout.setMaxHeight(this.MAXIMUM_MAIN_STRUCTURES_LAYOUT_HEIGHT);
@@ -395,12 +449,12 @@ public class GUI extends Application {
 		return upperLayout;
 	}
 	
-	private Scene createSelectExampleScene() {
+	/*private Scene createSelectExampleScene() {
 		Scene createExampleScene;
 		createExampleScene = new Scene(this.createUpperLayout());
 		createExampleScene.getStylesheets().add(getClass().getResource("applicationStyle.css").toExternalForm());
 		return createExampleScene;
-	}
+	}*/
 	
 	private Scene createMainScene() throws Exception {
 		Scene mainScene;
@@ -408,7 +462,6 @@ public class GUI extends Application {
 		
 		mainScene = new Scene(mainLayout);
 		mainScene.getStylesheets().add(getClass().getResource("applicationStyle.css").toExternalForm());
-		//mainLayout.getChildren().addAll(this.createExecuteAreaLayout(), this.createStructuresLayout());
 		mainLayout.getChildren().addAll(this.createUpperLayout(), this.createExecuteAreaLayout(), this.createStructuresLayout());
 		
 		return mainScene;
