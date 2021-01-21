@@ -66,5 +66,4 @@ public class ReleasePermitStatement implements StatementInterface {
 		}
 		return initialTypeEnvironment;
 	}
-
 }
