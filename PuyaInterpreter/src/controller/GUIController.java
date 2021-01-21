@@ -3,7 +3,6 @@ package controller;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
-
 import javafx.util.Pair;
 import model.Example;
 import model.ProgramState;
@@ -21,7 +20,7 @@ import model.value.StringValue;
 import model.value.ValueInterface;
 import repository.Repository;
 import view.AllExamples;
-import view.GUI;
+import view.GUI.GUI;
 
 public class GUIController extends Controller {
 	private GUI currentGUI;

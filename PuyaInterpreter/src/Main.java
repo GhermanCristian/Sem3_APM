@@ -1,5 +1,5 @@
 import javafx.application.Application;
-import view.GUI;
+import view.GUI.GUI;
 import view.TextMenu;
 
 public class Main {
