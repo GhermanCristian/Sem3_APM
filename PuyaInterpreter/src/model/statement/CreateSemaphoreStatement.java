@@ -40,6 +40,13 @@ public class CreateSemaphoreStatement implements StatementInterface {
 		
 		return null;
 	}
+	
+	@Override
+	public String toString() {
+		String representation = "";
+		representation += ("createSemaphore(" + this.indexVariableName + ", " + this.totalPermitCountExpression.toString() + ");\n");
+		return representation;
+	}
 
 	@Override
 	public DictionaryInterface<String, TypeInterface> getTypeEnvironment(
