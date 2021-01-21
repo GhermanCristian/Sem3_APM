@@ -79,7 +79,7 @@ class ViewLayout {
 		firstAvailableThread.getHeap().forEachKey(variableAddress -> this.heapTableView.getItems().add(variableAddress));
 	}
 	
-	private void updateSemaphoreTableTableView() {
+	private void updateLockMechanismView() {
 		this.semaphoreTableTableView.getItems().clear();
 		ProgramState firstAvailableThread = this.controller.getFirstAvailableThread();
 		if (firstAvailableThread == null) {
@@ -113,9 +113,12 @@ class ViewLayout {
 	private void updateGlobalStructures() {
 		this.updateThreadListView();
 		this.updateHeapTableView();
-		this.updateSemaphoreTableTableView();
+		this.updateLockMechanismView();
 		this.updateOutputListView();
 		this.updateFileTableListView();
+		
+		// update the textfield for the thread count; only after the threadListView is updated in updateGlobalStructures()
+		this.programStateCountTextField.setText("Threads: " + Integer.toString(this.threadListView.getItems().size()));
 	}
 	
 	public void updateAllStructures() {
@@ -123,9 +126,6 @@ class ViewLayout {
 		// however, if there are some internal modifications that are done even when I don't press the button - then I need this
 		this.updateGlobalStructures();
 		this.updateThreadDependantStructures();
-		
-		// update the textfield for the thread count; only after the threadListView is updated in updateGlobalStructures()
-		this.programStateCountTextField.setText("Threads: " + Integer.toString(this.threadListView.getItems().size()));
 	}
 	
 	public void afterProgramExecution() {
@@ -215,7 +215,7 @@ class ViewLayout {
 		this.heapTableView.setMaxWidth(Double.MAX_VALUE);
 	}
 	
-	private void initialiseSemaphoreTableTableView() {
+	private void initialiseLockMechanismView() {
 		this.semaphoreTableTableView = new TableView<Integer>();
 		this.semaphoreTableTableView.setEditable(false);
 		
@@ -262,14 +262,22 @@ class ViewLayout {
 		this.stackListView.setMaxWidth(Double.MAX_VALUE);
 	}
 	
+	private void initialiseThreadCountTextField() {
+		this.programStateCountTextField = new TextField("Threads: 0");
+		this.programStateCountTextField.setEditable(false);
+		this.programStateCountTextField.setMaxWidth(this.MAXIMUM_PROGRAM_STATE_COUNT_FIELD_WIDTH);
+		this.programStateCountTextField.setId("threadCountTextField");
+	}
+	
 	private void initialiseAllStructures() {
 		this.initialiseThreadListView();
 		this.initialiseSymbolTableTableView();
 		this.initialiseOutputListView();
 		this.initialiseHeapTableTableView();
-		this.initialiseSemaphoreTableTableView();
+		this.initialiseLockMechanismView();
 		this.initialiseFileTableListView();
 		this.initialiseStackListView();
+		this.initialiseThreadCountTextField();
 	}
 	
 	public HBox createViewLayout() {
@@ -280,10 +288,6 @@ class ViewLayout {
 		HBox lowerRightLayout = new HBox(5);
 		
 		this.initialiseAllStructures();
-		this.programStateCountTextField = new TextField("Threads: 0");
-		this.programStateCountTextField.setEditable(false);
-		this.programStateCountTextField.setMaxWidth(this.MAXIMUM_PROGRAM_STATE_COUNT_FIELD_WIDTH);
-		this.programStateCountTextField.setId("threadCountTextField");
 		
 		// for now I don't know whether I should move these setHgrows to their corresponding item's initialise method, 
 		// in case I might want to change from a HBox to sth else
