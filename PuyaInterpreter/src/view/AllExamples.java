@@ -41,6 +41,7 @@ import model.statement.SleepStatement;
 import model.statement.StatementInterface;
 import model.statement.UnlockStatement;
 import model.statement.VariableDeclarationStatement;
+import model.statement.WaitStatement;
 import model.statement.WhileStatement;
 import model.type.BoolType;
 import model.type.IntType;
@@ -671,6 +672,17 @@ public class AllExamples {
 		return new Example(this.composeStatement(statementList), "sleep", this.SRC_FOLDER_PATH + "\\log24.in");
 	}
 	
+	public Example getExample25() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+	
+		statementList.addLast(new VariableDeclarationStatement("v", new IntType()));
+		statementList.addLast(new AssignmentStatement("v", new ValueExpression(new IntValue(20))));
+		statementList.addLast(new WaitStatement(new ValueExpression(new IntValue(10))));
+		statementList.addLast(new PrintStatement(new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(10)), "*")));
+		
+		return new Example(this.composeStatement(statementList), "wait", this.SRC_FOLDER_PATH + "\\log25.in");
+	}
+	
 	public MyList<Example> getAllExamples() {
 		MyList<Example> exampleList = new MyList<Example>();
 		
@@ -696,8 +708,9 @@ public class AllExamples {
 		exampleList.addLast(this.getExample20());
 		exampleList.addLast(this.getExample21());
 		exampleList.addLast(this.getExample22());
-		exampleList.addLast(this.getExample23());*/
-		exampleList.addLast(this.getExample24());
+		exampleList.addLast(this.getExample23());
+		exampleList.addLast(this.getExample24());*/
+		exampleList.addLast(this.getExample25());
 		
 		return exampleList;
 	}
