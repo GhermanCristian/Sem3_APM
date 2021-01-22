@@ -153,8 +153,8 @@ public class ProgramState {
 		this.procedureTable.clear();
 	}
 	
-	public static synchronized void resetThreadID() {
-		ProgramState.globalThreadCount = 1;
+	public synchronized void resetThreadID() {
+		//ProgramState.globalThreadCount = 2;
 	}
 	
 	public String toString() {

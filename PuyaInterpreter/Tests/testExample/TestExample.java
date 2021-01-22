@@ -89,12 +89,12 @@ public class TestExample {
 	@After
 	public void clearAndCloseData() {
 		crtState.clear();
+		crtState.resetThreadID();
 		symbolTable = new MyDictionary<String, ValueInterface>();
 		symbolTableStack.push(symbolTable);
 		typeEnvironment.clear();
 		repo.getThreadList().clear();
 		crtState.setStatement(example.getStatement());
 		controller.addProgramState(crtState);
-		ProgramState.resetThreadID();
 	}
 }
