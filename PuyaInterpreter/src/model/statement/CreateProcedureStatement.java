@@ -20,6 +20,7 @@ public class CreateProcedureStatement implements StatementInterface {
 	@Override
 	public ProgramState execute(ProgramState crtState) throws Exception {
 		DictionaryInterface<String, Procedure> procedureTable = crtState.getProcedureTable();
+		// we can't overload procedures
 		if (procedureTable.isDefined(this.procedureName) == true) {
 			throw new AlreadyDefinedVariableException("CreateProcedureStatement: Procedure " + this.procedureName + " is already defined in the procedure table");
 		}
