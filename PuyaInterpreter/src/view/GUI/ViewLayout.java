@@ -39,6 +39,7 @@ class ViewLayout {
 	private TableView<String> symbolTableTableView;
 	private TableView<Integer> semaphoreTableTableView; // here I need it to store Integers because that's the key of the semaphore structure
 	private TableView<Integer> latchTableTableView;
+	private TableView<Integer> barrierTableTableView;
 	private TableView<String> procedureTableTableView;
 	private TextField programStateCountTextField;
 	
@@ -101,9 +102,20 @@ class ViewLayout {
 		firstAvailableThread.getLatchTable().forEachKey(latchAddress -> this.latchTableTableView.getItems().add(latchAddress));
 	}
 	
+	private void updateBarrierTableTableView() {
+		this.barrierTableTableView.getItems().clear();
+		ProgramState firstAvailableThread = this.controller.getFirstAvailableThread();
+		if (firstAvailableThread == null) {
+			return ;
+		}
+		
+		firstAvailableThread.getBarrierTable().forEachKey(barrierAddress -> this.barrierTableTableView.getItems().add(barrierAddress));
+	}
+	
 	private void updateLockMechanismView() {
 		//this.updateSemaphoreTableTableView();
-		this.updateLatchTableTableView();
+		//this.updateLatchTableTableView();
+		this.updateBarrierTableTableView();
 	}
 	
 	private void updateOutputListView() {
@@ -304,9 +316,47 @@ class ViewLayout {
 		this.latchTableTableView.setMaxWidth(Double.MAX_VALUE);
 	}
 	
+	private void initialiseBarrierTableTableView() {
+		this.barrierTableTableView = new TableView<Integer>();
+		this.barrierTableTableView.setEditable(false);
+		
+		TableColumn<Integer, String> barrierAddressColumn = new TableColumn<Integer, String>("Barrier address");
+		barrierAddressColumn.prefWidthProperty().bind(this.barrierTableTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH_3_COLUMN_TABLE_VIEW));
+		// this approach should only be used as long as the table is non-editable (which it is in this app)
+		barrierAddressColumn.setCellValueFactory(currentBarrierKey -> new ReadOnlyStringWrapper(currentBarrierKey.getValue().toString()));
+		
+		TableColumn<Integer, String> barrierCapacityColumn = new TableColumn<Integer, String>("Capacity");
+		barrierCapacityColumn.prefWidthProperty().bind(this.barrierTableTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH_3_COLUMN_TABLE_VIEW));
+		barrierCapacityColumn.setCellValueFactory(currentBarrierKey -> {
+			if (this.selectedThread == null) {
+				return null;
+			}
+			
+			Pair<Integer, ArrayList<Integer>> currentBarrierValue = this.selectedThread.getBarrierTable().getValue(currentBarrierKey.getValue());
+			return new ReadOnlyStringWrapper(currentBarrierValue.getKey().toString());
+		});
+		
+		TableColumn<Integer, String> barrierThreadListColumn = new TableColumn<Integer, String>("ThreadList");
+		barrierThreadListColumn.prefWidthProperty().bind(this.barrierTableTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH_3_COLUMN_TABLE_VIEW));
+		barrierThreadListColumn.setCellValueFactory(currentBarrierKey -> {
+			if (this.selectedThread == null) {
+				return null;
+			}
+			
+			Pair<Integer, ArrayList<Integer>> currentBarrierValue = this.selectedThread.getBarrierTable().getValue(currentBarrierKey.getValue());
+			return new ReadOnlyStringWrapper(currentBarrierValue.getValue().toString());
+		});
+		
+		this.barrierTableTableView.getColumns().add(barrierAddressColumn);
+		this.barrierTableTableView.getColumns().add(barrierCapacityColumn);
+		this.barrierTableTableView.getColumns().add(barrierThreadListColumn);
+		this.barrierTableTableView.setMaxWidth(Double.MAX_VALUE);
+	}
+	
 	private void initialiseLockMechanismView() {
 		//this.initialiseSemaphoreTableTableView();
-		this.initialiseLatchTableTableView();
+		//this.initialiseLatchTableTableView();
+		this.initialiseBarrierTableTableView();
 	}
 	
 	private void initialiseFileTableListView() {
@@ -379,7 +429,8 @@ class ViewLayout {
 		
 		HBox.setHgrow(this.heapTableView, Priority.ALWAYS);
 		//HBox.setHgrow(this.semaphoreTableTableView, Priority.ALWAYS);
-		HBox.setHgrow(this.latchTableTableView, Priority.ALWAYS);
+		//HBox.setHgrow(this.latchTableTableView, Priority.ALWAYS);
+		HBox.setHgrow(this.barrierTableTableView, Priority.ALWAYS);
 		HBox.setHgrow(this.symbolTableTableView, Priority.ALWAYS);
 		HBox.setHgrow(upperMidLayout, Priority.ALWAYS);
 		
@@ -396,7 +447,8 @@ class ViewLayout {
 		
 		upperMidLayout.getChildren().addAll(this.symbolTableTableView, this.heapTableView);
 		//upperRightLayout.getChildren().add(this.semaphoreTableTableView);
-		upperMidLayout.getChildren().add(this.latchTableTableView);
+		//upperMidLayout.getChildren().add(this.latchTableTableView);
+		upperMidLayout.getChildren().add(this.barrierTableTableView);
 		lowerMidLayout.getChildren().addAll(this.stackListView, this.fileTableListView, this.outputListView);
 		midLayout.getChildren().addAll(upperMidLayout, lowerMidLayout);
 		
