@@ -17,7 +17,7 @@ public class StringValue implements ValueInterface{
 	
 	@Override
 	public boolean equals(Object another) {
-		return (another instanceof StringValue && ((StringValue)another).getValue() == this.value);
+		return (another instanceof StringValue && ((StringValue)another).getValue().equals(this.value));
 	}
 	
 	public String getValue() {

@@ -153,6 +153,10 @@ public class ProgramState {
 		this.procedureTable.clear();
 	}
 	
+	public static synchronized void resetThreadID() {
+		ProgramState.globalThreadCount = 1;
+	}
+	
 	public String toString() {
 		String representation = "";
 		

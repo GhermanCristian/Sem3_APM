@@ -95,5 +95,6 @@ public class TestExample {
 		repo.getThreadList().clear();
 		crtState.setStatement(example.getStatement());
 		controller.addProgramState(crtState);
+		ProgramState.resetThreadID();
 	}
 }

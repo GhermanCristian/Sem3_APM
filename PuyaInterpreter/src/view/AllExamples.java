@@ -673,10 +673,10 @@ public class AllExamples {
 		exampleList.addLast(this.getExample16());
 		exampleList.addLast(this.getExample17());
 		exampleList.addLast(this.getExample18());
-		exampleList.addLast(this.getExample19());
+		exampleList.addLast(this.getExample19());*/
 		exampleList.addLast(this.getExample20());
 		exampleList.addLast(this.getExample21());
-		exampleList.addLast(this.getExample22());*/
+		exampleList.addLast(this.getExample22());
 		exampleList.addLast(this.getExample23());
 		
 		return exampleList;
