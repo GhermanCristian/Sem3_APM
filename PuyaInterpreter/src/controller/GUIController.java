@@ -43,11 +43,12 @@ public class GUIController extends Controller {
 		DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> semaphoreTable = new MyLockTable<Integer, Pair<Integer,ArrayList<Integer>>>();
 		DictionaryInterface<Integer, Integer> latchTable = new MyLockTable<Integer, Integer>();
 		DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> barrierTable = new MyLockTable<Integer, Pair<Integer,ArrayList<Integer>>>();
+		DictionaryInterface<Integer, Integer> lockTable = new MyLockTable<Integer, Integer>();
 		DictionaryInterface<String, Procedure> procedureTable = new MyDictionary<String, Procedure>();
 		
 		DictionaryInterface<String, TypeInterface> typeEnvironment = new MyDictionary<String, TypeInterface>();
 		currentExample.getStatement().getTypeEnvironment(typeEnvironment);
-		ProgramState crtProgramState = new ProgramState(stack, symbolTableStack, output, fileTable, heap, semaphoreTable, latchTable, barrierTable, procedureTable, currentExample.getStatement());
+		ProgramState crtProgramState = new ProgramState(stack, symbolTableStack, output, fileTable, heap, semaphoreTable, latchTable, barrierTable, lockTable, procedureTable, currentExample.getStatement());
 		return crtProgramState;
 	}
 	
