@@ -54,6 +54,20 @@ public class CallProcedureStatement implements StatementInterface {
 		
 		return null;
 	}
+	
+	@Override
+	public String toString() {
+		String representation = "";
+		
+		representation += (this.procedureName + "(");
+		int pos;
+		for (pos = 0; pos < this.argumentValuesExpression.size() - 1; pos++) {
+			representation += this.argumentValuesExpression.get(pos).toString() + ", ";
+		}
+		representation += this.argumentValuesExpression.get(pos).toString() + ");\n";
+		
+		return representation;
+	}
 
 	@Override
 	public DictionaryInterface<String, TypeInterface> getTypeEnvironment(

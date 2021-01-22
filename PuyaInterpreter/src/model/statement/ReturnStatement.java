@@ -18,6 +18,13 @@ public class ReturnStatement implements StatementInterface {
 		
 		return null;
 	}
+	
+	@Override
+	public String toString() {
+		String representation = "";
+		representation += ("return;\n");
+		return representation;
+	}
 
 	@Override
 	public DictionaryInterface<String, TypeInterface> getTypeEnvironment(

@@ -1,8 +1,13 @@
 package view;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import model.Example;
+import model.Procedure;
 import model.ADT.MyList;
 import model.expression.ArithmeticExpression;
+import model.expression.ExpressionInterface;
 import model.expression.HeapReadingExpression;
 import model.expression.RelationalExpression;
 import model.expression.ValueExpression;
@@ -10,10 +15,12 @@ import model.expression.VariableExpression;
 import model.statement.AcquirePermitStatement;
 import model.statement.AssignmentStatement;
 import model.statement.AwaitStatement;
+import model.statement.CallProcedureStatement;
 import model.statement.CloseReadFileStatement;
 import model.statement.CompoundStatement;
 import model.statement.CountDownLatchStatement;
 import model.statement.CreateLatchStatement;
+import model.statement.CreateProcedureStatement;
 import model.statement.CreateSemaphoreStatement;
 import model.statement.EmptyStatement;
 import model.statement.ForStatement;
@@ -33,6 +40,7 @@ import model.statement.WhileStatement;
 import model.type.BoolType;
 import model.type.IntType;
 import model.type.ReferenceType;
+import model.type.TypeInterface;
 import model.value.BoolValue;
 import model.value.IntValue;
 import model.value.StringValue;
@@ -515,6 +523,52 @@ public class AllExamples {
 				"await(cnt); print(100); countDown(cnt); print(100);", this.SRC_FOLDER_PATH + "\\log20.in");
 	}
 	
+	public Example getExample21() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+		
+		MyList<StatementInterface> procedure1StatementList = new MyList<StatementInterface>();
+		procedure1StatementList.addLast(new VariableDeclarationStatement("v", new IntType()));
+		procedure1StatementList.addLast(new AssignmentStatement("v", new ArithmeticExpression(new VariableExpression("a"), new VariableExpression("b"), "+")));
+		procedure1StatementList.addLast(new PrintStatement(new VariableExpression("v")));
+		ArrayList<TypeInterface> procedure1Types = new ArrayList<TypeInterface>(Arrays.asList(new IntType(), new IntType()));
+		ArrayList<String> procedure1Names = new ArrayList<String>(Arrays.asList("a", "b"));
+		statementList.addLast(new CreateProcedureStatement("sum", new Procedure(procedure1Types, procedure1Names, this.composeStatement(procedure1StatementList))));
+	
+		MyList<StatementInterface> procedure2StatementList = new MyList<StatementInterface>();
+		procedure2StatementList.addLast(new VariableDeclarationStatement("v", new IntType()));
+		procedure2StatementList.addLast(new AssignmentStatement("v", new ArithmeticExpression(new VariableExpression("a"), new VariableExpression("b"), "*")));
+		procedure2StatementList.addLast(new PrintStatement(new VariableExpression("v")));
+		ArrayList<TypeInterface> procedure2Types = new ArrayList<TypeInterface>(Arrays.asList(new IntType(), new IntType()));
+		ArrayList<String> procedure2Names = new ArrayList<String>(Arrays.asList("a", "b"));
+		statementList.addLast(new CreateProcedureStatement("product", new Procedure(procedure2Types, procedure2Names, this.composeStatement(procedure2StatementList))));
+		
+		statementList.addLast(new VariableDeclarationStatement("v", new IntType()));
+		statementList.addLast(new AssignmentStatement("v", new ValueExpression(new IntValue(2))));
+		statementList.addLast(new VariableDeclarationStatement("w", new IntType()));
+		statementList.addLast(new AssignmentStatement("w", new ValueExpression(new IntValue(5))));
+		ArrayList<ExpressionInterface> procedure1Call1Values = new ArrayList<ExpressionInterface>(Arrays.asList(
+				new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(10)), "*"),
+				new VariableExpression("w")
+		));
+		statementList.addLast(new CallProcedureStatement("sum", procedure1Call1Values));
+		statementList.addLast(new PrintStatement(new VariableExpression("v")));
+		
+		MyList<StatementInterface> thread2StatementList = new MyList<StatementInterface>();
+		ArrayList<ExpressionInterface> procedure2Call1Values = new ArrayList<ExpressionInterface>(Arrays.asList(
+			new VariableExpression("v"), new VariableExpression("w")));
+		thread2StatementList.addLast(new CallProcedureStatement("product", procedure2Call1Values));
+		
+		MyList<StatementInterface> thread3StatementList = new MyList<StatementInterface>();
+		ArrayList<ExpressionInterface> procedure1Call2Values = new ArrayList<ExpressionInterface>(Arrays.asList(
+			new VariableExpression("v"), new VariableExpression("w")));
+		thread3StatementList.addLast(new CallProcedureStatement("sum", procedure1Call2Values));
+		thread2StatementList.addLast(new ForkStatement(this.composeStatement(thread3StatementList)));
+		
+		statementList.addLast(new ForkStatement(this.composeStatement(thread2StatementList)));
+		
+		return new Example(this.composeStatement(statementList), "procedure sum(int a, int b) {int v = a + b; print(v);} procedure product(int a, int b) {int v = a * b; print(v);} int v = 2; int w = 5; sum(v * 10, w); print(v);", this.SRC_FOLDER_PATH + "\\log21.in");
+	}
+	
 	public MyList<Example> getAllExamples() {
 		MyList<Example> exampleList = new MyList<Example>();
 		
@@ -536,8 +590,9 @@ public class AllExamples {
 		exampleList.addLast(this.getExample16());
 		exampleList.addLast(this.getExample17());
 		exampleList.addLast(this.getExample18());
-		exampleList.addLast(this.getExample19());*/
-		exampleList.addLast(this.getExample20());
+		exampleList.addLast(this.getExample19());
+		exampleList.addLast(this.getExample20());*/
+		exampleList.addLast(this.getExample21());
 		
 		return exampleList;
 	}
