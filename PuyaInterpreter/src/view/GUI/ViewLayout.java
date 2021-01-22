@@ -39,6 +39,7 @@ class ViewLayout {
 	private TableView<String> symbolTableTableView;
 	private TableView<Integer> semaphoreTableTableView; // here I need it to store Integers because that's the key of the semaphore structure
 	private TableView<Integer> latchTableTableView;
+	private TableView<String> procedureTableTableView;
 	private TextField programStateCountTextField;
 	
 	public ViewLayout(GUIController controller) {
@@ -125,13 +126,24 @@ class ViewLayout {
 		firstAvailableThread.getFileTable().forEachKey(fileName -> this.fileTableListView.getItems().add(fileName.toString()));
 	}
 	
-	// threadList, heap, output, filetable - they don't depend on the current thread
+	private void updateProcedureTableTableView() {
+		this.procedureTableTableView.getItems().clear();
+		ProgramState firstAvailableThread = this.controller.getFirstAvailableThread();
+		if (firstAvailableThread == null) {
+			return ;
+		}
+		
+		firstAvailableThread.getProcedureTable().forEachKey(procedureName -> this.procedureTableTableView.getItems().add(procedureName));
+	}
+	
+	// threadList, heap, output, filetable, lock tables, procedure table - they don't depend on the current thread
 	private void updateGlobalStructures() {
 		this.updateThreadListView();
 		this.updateHeapTableView();
 		this.updateLockMechanismView();
 		this.updateOutputListView();
 		this.updateFileTableListView();
+		this.updateProcedureTableTableView();
 		
 		// update the textfield for the thread count; only after the threadListView is updated in updateGlobalStructures()
 		this.programStateCountTextField.setText("Threads: " + Integer.toString(this.threadListView.getItems().size()));
@@ -307,6 +319,30 @@ class ViewLayout {
 		this.stackListView.setMaxWidth(Double.MAX_VALUE);
 	}
 	
+	private void initialiseProcedureTableTableView() {
+		this.procedureTableTableView = new TableView<String>();
+		this.procedureTableTableView.setEditable(false);
+		
+		this.procedureTableTableView.setMaxWidth(Double.MAX_VALUE);
+		
+		TableColumn<String, String> procedureNameColumn = new TableColumn<String, String>("Procedure name");
+		procedureNameColumn.prefWidthProperty().bind(this.procedureTableTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH_2_COLUMN_TABLE_VIEW));
+		// this approach (with the readOnlyStringWrapper) should only be used as long as the table is non-editable (which it is in this app)
+		procedureNameColumn.setCellValueFactory(currentProcedure -> new ReadOnlyStringWrapper(currentProcedure.getValue()));
+		
+		TableColumn<String, String> procedureArgumentAndBodyColumn = new TableColumn<String, String>("Args / body");
+		procedureArgumentAndBodyColumn.prefWidthProperty().bind(this.procedureTableTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH_2_COLUMN_TABLE_VIEW));
+		procedureArgumentAndBodyColumn.setCellValueFactory(currentProcedure -> {
+			if (this.selectedThread == null) {
+				return null;
+			} 
+			return new ReadOnlyStringWrapper(this.selectedThread.getProcedureTable().getValue(currentProcedure.getValue()).toString());
+		});
+		
+		this.procedureTableTableView.getColumns().add(procedureNameColumn);
+		this.procedureTableTableView.getColumns().add(procedureArgumentAndBodyColumn);
+	}
+	
 	private void initialiseThreadCountTextField() {
 		this.programStateCountTextField = new TextField("Threads: 0");
 		this.programStateCountTextField.setEditable(false);
@@ -322,15 +358,17 @@ class ViewLayout {
 		this.initialiseLockMechanismView();
 		this.initialiseFileTableListView();
 		this.initialiseStackListView();
+		this.initialiseProcedureTableTableView();
 		this.initialiseThreadCountTextField();
 	}
 	
 	public HBox createViewLayout() {
 		HBox mainStructuresLayout = new HBox(5);
 		VBox leftLayout = new VBox(5);
+		VBox midLayout = new VBox(5);
+		HBox upperMidLayout = new HBox(5);
+		HBox lowerMidLayout = new HBox(5);
 		VBox rightLayout = new VBox(5);
-		HBox upperRightLayout = new HBox(5);
-		HBox lowerRightLayout = new HBox(5);
 		
 		this.initialiseAllStructures();
 		
@@ -345,17 +383,23 @@ class ViewLayout {
 		HBox.setHgrow(this.stackListView, Priority.ALWAYS);
 		HBox.setHgrow(this.fileTableListView, Priority.ALWAYS);
 		VBox.setVgrow(leftLayout, Priority.ALWAYS);
-		HBox.setHgrow(upperRightLayout, Priority.ALWAYS);
-		HBox.setHgrow(lowerRightLayout, Priority.ALWAYS);
-		HBox.setHgrow(rightLayout, Priority.ALWAYS);
+		HBox.setHgrow(upperMidLayout, Priority.ALWAYS);
+		HBox.setHgrow(lowerMidLayout, Priority.ALWAYS);
+		HBox.setHgrow(midLayout, Priority.ALWAYS);
+		VBox.setVgrow(this.procedureTableTableView, Priority.ALWAYS);
+		VBox.setVgrow(rightLayout, Priority.ALWAYS);
 		
 		leftLayout.getChildren().addAll(this.programStateCountTextField, this.threadListView);
-		upperRightLayout.getChildren().addAll(this.symbolTableTableView, this.heapTableView);
+		
+		upperMidLayout.getChildren().addAll(this.symbolTableTableView, this.heapTableView);
 		//upperRightLayout.getChildren().add(this.semaphoreTableTableView);
-		upperRightLayout.getChildren().add(this.latchTableTableView);
-		lowerRightLayout.getChildren().addAll(this.stackListView, this.fileTableListView, this.outputListView);
-		rightLayout.getChildren().addAll(upperRightLayout, lowerRightLayout);
-		mainStructuresLayout.getChildren().addAll(leftLayout, rightLayout);
+		upperMidLayout.getChildren().add(this.latchTableTableView);
+		lowerMidLayout.getChildren().addAll(this.stackListView, this.fileTableListView, this.outputListView);
+		midLayout.getChildren().addAll(upperMidLayout, lowerMidLayout);
+		
+		rightLayout.getChildren().addAll(this.procedureTableTableView);
+		
+		mainStructuresLayout.getChildren().addAll(leftLayout, midLayout, rightLayout);
 		mainStructuresLayout.setMaxHeight(this.MAXIMUM_MAIN_STRUCTURES_LAYOUT_HEIGHT);
 		mainStructuresLayout.setId("mainStructuresLayout");
 		return mainStructuresLayout;

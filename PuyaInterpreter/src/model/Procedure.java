@@ -38,7 +38,7 @@ public class Procedure {
 		for (pos = 0; pos < argumentTypes.size() - 1; pos++) {
 			representation += this.argumentTypes.get(pos).toString() + " " + this.argumentNames.get(pos) + ", ";
 		}
-		representation += this.argumentTypes.get(pos).toString() + " " + this.argumentNames.get(pos) + ")\n{";
+		representation += this.argumentTypes.get(pos).toString() + " " + this.argumentNames.get(pos) + ")\n{\n";
 		representation += this.procedureStatement.toString() + "}\n";
 		
 		return representation;
