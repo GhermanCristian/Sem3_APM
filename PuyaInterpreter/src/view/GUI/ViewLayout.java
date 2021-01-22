@@ -40,6 +40,7 @@ class ViewLayout {
 	private TableView<Integer> semaphoreTableTableView; // here I need it to store Integers because that's the key of the semaphore structure
 	private TableView<Integer> latchTableTableView;
 	private TableView<Integer> barrierTableTableView;
+	private TableView<Integer> lockTableTableView;
 	private TableView<String> procedureTableTableView;
 	private TextField programStateCountTextField;
 	
@@ -112,10 +113,21 @@ class ViewLayout {
 		firstAvailableThread.getBarrierTable().forEachKey(barrierAddress -> this.barrierTableTableView.getItems().add(barrierAddress));
 	}
 	
+	private void updateLockTableTableView() {
+		this.lockTableTableView.getItems().clear();
+		ProgramState firstAvailableThread = this.controller.getFirstAvailableThread();
+		if (firstAvailableThread == null) {
+			return ;
+		}
+		
+		firstAvailableThread.getLockTable().forEachKey(lockAddress -> this.lockTableTableView.getItems().add(lockAddress));
+	}
+	
 	private void updateLockMechanismView() {
 		//this.updateSemaphoreTableTableView();
 		//this.updateLatchTableTableView();
-		this.updateBarrierTableTableView();
+		//this.updateBarrierTableTableView();
+		this.updateLockTableTableView();
 	}
 	
 	private void updateOutputListView() {
@@ -353,10 +365,35 @@ class ViewLayout {
 		this.barrierTableTableView.setMaxWidth(Double.MAX_VALUE);
 	}
 	
+	private void initialiseLockTableTableView() {
+		this.lockTableTableView = new TableView<Integer>();
+		this.lockTableTableView.setEditable(false);
+		
+		TableColumn<Integer, String> lockAddressColumn = new TableColumn<Integer, String>("Lock address");
+		lockAddressColumn.prefWidthProperty().bind(this.lockTableTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH_2_COLUMN_TABLE_VIEW));
+		// this approach should only be used as long as the table is non-editable (which it is in this app)
+		lockAddressColumn.setCellValueFactory(currentLockKey -> new ReadOnlyStringWrapper(currentLockKey.getValue().toString()));
+		
+		TableColumn<Integer, String> lockOwnerColumn = new TableColumn<Integer, String>("Owner");
+		lockOwnerColumn.prefWidthProperty().bind(this.lockTableTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH_2_COLUMN_TABLE_VIEW));
+		lockOwnerColumn.setCellValueFactory(currentLockKey -> {
+			if (this.selectedThread == null) {
+				return null;
+			}
+			
+			return new ReadOnlyStringWrapper(this.selectedThread.getLockTable().getValue(currentLockKey.getValue()).toString());
+		});
+		
+		this.lockTableTableView.getColumns().add(lockAddressColumn);
+		this.lockTableTableView.getColumns().add(lockOwnerColumn);
+		this.lockTableTableView.setMaxWidth(Double.MAX_VALUE);
+	}
+	
 	private void initialiseLockMechanismView() {
 		//this.initialiseSemaphoreTableTableView();
 		//this.initialiseLatchTableTableView();
-		this.initialiseBarrierTableTableView();
+		//this.initialiseBarrierTableTableView();
+		this.initialiseLockTableTableView();
 	}
 	
 	private void initialiseFileTableListView() {
@@ -430,7 +467,8 @@ class ViewLayout {
 		HBox.setHgrow(this.heapTableView, Priority.ALWAYS);
 		//HBox.setHgrow(this.semaphoreTableTableView, Priority.ALWAYS);
 		//HBox.setHgrow(this.latchTableTableView, Priority.ALWAYS);
-		HBox.setHgrow(this.barrierTableTableView, Priority.ALWAYS);
+		//HBox.setHgrow(this.barrierTableTableView, Priority.ALWAYS);
+		HBox.setHgrow(this.lockTableTableView, Priority.ALWAYS);
 		HBox.setHgrow(this.symbolTableTableView, Priority.ALWAYS);
 		HBox.setHgrow(upperMidLayout, Priority.ALWAYS);
 		
@@ -448,7 +486,8 @@ class ViewLayout {
 		upperMidLayout.getChildren().addAll(this.symbolTableTableView, this.heapTableView);
 		//upperRightLayout.getChildren().add(this.semaphoreTableTableView);
 		//upperMidLayout.getChildren().add(this.latchTableTableView);
-		upperMidLayout.getChildren().add(this.barrierTableTableView);
+		//upperMidLayout.getChildren().add(this.barrierTableTableView);
+		upperMidLayout.getChildren().add(this.lockTableTableView);
 		lowerMidLayout.getChildren().addAll(this.stackListView, this.fileTableListView, this.outputListView);
 		midLayout.getChildren().addAll(upperMidLayout, lowerMidLayout);
 		
