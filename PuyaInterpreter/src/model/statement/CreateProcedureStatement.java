@@ -45,8 +45,12 @@ public class CreateProcedureStatement implements StatementInterface {
 		if(argumentTypes.size() != argumentNames.size()) {
 			throw new InvalidProcedureArgumentException("CreateProcedureStatement: The argument list is invalid");
 		}
+		
 		DictionaryInterface<String, TypeInterface> procedureTypeEnvironment = initialTypeEnvironment.clone();
 		for (int pos = 0; pos < argumentTypes.size(); pos++) {
+			if (procedureTypeEnvironment.isDefined(argumentNames.get(pos)) == true) {
+				throw new InvalidProcedureArgumentException("CreateProcedureStatement: argument name " + argumentNames.get(pos) + " is used more than once");
+			}
 			procedureTypeEnvironment.insert(argumentNames.get(pos), argumentTypes.get(pos));
 		}
 		this.procedureFrame.getProcedureStatement().getTypeEnvironment(procedureTypeEnvironment);
