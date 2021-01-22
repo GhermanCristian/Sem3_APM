@@ -1,9 +1,7 @@
 package model.statement;
 
 import java.util.ArrayList;
-
 import exception.InvalidTypeException;
-import exception.LockAlreadyAcquiredException;
 import exception.UndefinedVariableException;
 import javafx.util.Pair;
 import model.ProgramState;
@@ -40,12 +38,11 @@ public class AwaitBarrierStatement implements StatementInterface {
 		Integer capacity = barrierValue.getKey();
 		ArrayList<Integer> currentWaitingThreads = barrierValue.getValue();
 		if (currentWaitingThreads.size() < capacity) {
-			if (currentWaitingThreads.contains(crtState.getThreadID()) == true) {
-				throw new LockAlreadyAcquiredException("AwaitBarrierStatement: Thread " + crtState.getThreadID() + " is already waiting at the barrier " + this.indexVariableName);
+			if (currentWaitingThreads.contains(crtState.getThreadID()) == false) {
+				currentWaitingThreads.add(crtState.getThreadID());
+				barrierTable.update(barrierIndexAsInteger, new Pair<Integer, ArrayList<Integer>>(capacity, currentWaitingThreads));
 			}
 			
-			currentWaitingThreads.add(crtState.getThreadID());
-			barrierTable.update(barrierIndexAsInteger, new Pair<Integer, ArrayList<Integer>>(capacity, currentWaitingThreads));
 			stack.push(this);
 		}
 		

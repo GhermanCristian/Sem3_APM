@@ -14,11 +14,11 @@ import model.value.ValueInterface;
 
 public class CreateBarrierStatement implements StatementInterface {
 	private final String indexVariableName;
-	private final ExpressionInterface totalPermitCountExpression;
+	private final ExpressionInterface capacityExpression;
 
-	public CreateBarrierStatement(String indexVariableName, ExpressionInterface totalPermitCountExpression) {
+	public CreateBarrierStatement(String indexVariableName, ExpressionInterface capacityExpression) {
 		this.indexVariableName = indexVariableName;
-		this.totalPermitCountExpression = totalPermitCountExpression;
+		this.capacityExpression = capacityExpression;
 	}
 	
 	@Override
@@ -27,7 +27,7 @@ public class CreateBarrierStatement implements StatementInterface {
 		DictionaryInterface<Integer, ValueInterface> heap = crtState.getHeap();
 		DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> barrierTable = crtState.getBarrierTable();
 		
-		ValueInterface capacity = this.totalPermitCountExpression.evaluate(symbolTable, heap);
+		ValueInterface capacity = this.capacityExpression.evaluate(symbolTable, heap);
 		int newPositionInBarrierTable = ((MyLockTable<Integer, Pair<Integer, ArrayList<Integer>>>)(barrierTable)).getFirstAvailablePosition();
 		barrierTable.insert(newPositionInBarrierTable, new Pair<Integer, ArrayList<Integer>>(((IntValue)capacity).getValue(), new ArrayList<Integer>()));
 		
@@ -44,7 +44,7 @@ public class CreateBarrierStatement implements StatementInterface {
 	@Override
 	public String toString() {
 		String representation = "";
-		representation += ("createBarrier(" + this.indexVariableName + ", " + this.totalPermitCountExpression.toString() + ");\n");
+		representation += ("createBarrier(" + this.indexVariableName + ", " + this.capacityExpression.toString() + ");\n");
 		return representation;
 	}
 
@@ -57,7 +57,7 @@ public class CreateBarrierStatement implements StatementInterface {
 		if (initialTypeEnvironment.getValue(this.indexVariableName).equals(new IntType()) == false) {
 			throw new InvalidTypeException("CreateBarrierStatement: Variable " + this.indexVariableName + " is not an integer");
 		}
-		if (this.totalPermitCountExpression.typeCheck(initialTypeEnvironment).equals(new IntType()) == false) {
+		if (this.capacityExpression.typeCheck(initialTypeEnvironment).equals(new IntType()) == false) {
 			throw new InvalidTypeException("CreateBarrierStatement: Capacity expression is not integer");
 		}
 		return initialTypeEnvironment;

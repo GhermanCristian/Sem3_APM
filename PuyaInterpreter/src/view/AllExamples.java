@@ -13,11 +13,13 @@ import model.expression.ValueExpression;
 import model.expression.VariableExpression;
 import model.statement.AcquirePermitStatement;
 import model.statement.AssignmentStatement;
+import model.statement.AwaitBarrierStatement;
 import model.statement.AwaitLatchStatement;
 import model.statement.CallProcedureStatement;
 import model.statement.CloseReadFileStatement;
 import model.statement.CompoundStatement;
 import model.statement.CountDownLatchStatement;
+import model.statement.CreateBarrierStatement;
 import model.statement.CreateLatchStatement;
 import model.statement.CreateProcedureStatement;
 import model.statement.CreateSemaphoreStatement;
@@ -568,6 +570,36 @@ public class AllExamples {
 		return new Example(this.composeStatement(statementList), "procedure sum(int a, int b) {int v = a + b; print(v);} procedure product(int a, int b) {int v = a * b; print(v);} int v = 2; int w = 5; sum(v * 10, w); print(v);", this.SRC_FOLDER_PATH + "\\log21.in");
 	}
 	
+	public Example getExample22() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+		
+		statementList.addLast(new VariableDeclarationStatement("v1", new ReferenceType(new IntType())));
+		statementList.addLast(new VariableDeclarationStatement("v2", new ReferenceType(new IntType())));
+		statementList.addLast(new VariableDeclarationStatement("v3", new ReferenceType(new IntType())));
+		statementList.addLast(new HeapAllocationStatement("v1", new ValueExpression(new IntValue(2))));
+		statementList.addLast(new HeapAllocationStatement("v2", new ValueExpression(new IntValue(3))));
+		statementList.addLast(new HeapAllocationStatement("v3", new ValueExpression(new IntValue(4))));
+		statementList.addLast(new CreateBarrierStatement("cnt", new HeapReadingExpression(new VariableExpression("v2"))));
+		
+		MyList<StatementInterface> thread2StatementList = new MyList<StatementInterface>();
+		thread2StatementList.addLast(new AwaitBarrierStatement("cnt"));
+		thread2StatementList.addLast(new HeapWritingStatement("v1", new ArithmeticExpression(new HeapReadingExpression(new VariableExpression("v1")), new ValueExpression(new IntValue(10)), "*")));
+		thread2StatementList.addLast(new PrintStatement(new HeapReadingExpression(new VariableExpression("v1"))));
+		statementList.addLast(new ForkStatement(this.composeStatement(thread2StatementList)));
+		
+		MyList<StatementInterface> thread3StatementList = new MyList<StatementInterface>();
+		thread3StatementList.addLast(new AwaitBarrierStatement("cnt"));
+		thread3StatementList.addLast(new HeapWritingStatement("v2", new ArithmeticExpression(new HeapReadingExpression(new VariableExpression("v2")), new ValueExpression(new IntValue(10)), "*")));
+		thread3StatementList.addLast(new HeapWritingStatement("v2", new ArithmeticExpression(new HeapReadingExpression(new VariableExpression("v2")), new ValueExpression(new IntValue(10)), "*")));
+		thread3StatementList.addLast(new PrintStatement(new HeapReadingExpression(new VariableExpression("v2"))));
+		statementList.addLast(new ForkStatement(this.composeStatement(thread3StatementList)));
+		
+		statementList.addLast(new AwaitBarrierStatement("cnt"));
+		statementList.addLast(new PrintStatement(new HeapReadingExpression(new VariableExpression("v3"))));
+		
+		return new Example(this.composeStatement(statementList), "", this.SRC_FOLDER_PATH + "\\log22.in");
+	}
+	
 	public MyList<Example> getAllExamples() {
 		MyList<Example> exampleList = new MyList<Example>();
 		
@@ -590,8 +622,9 @@ public class AllExamples {
 		exampleList.addLast(this.getExample17());
 		exampleList.addLast(this.getExample18());
 		exampleList.addLast(this.getExample19());
-		exampleList.addLast(this.getExample20());*/
-		exampleList.addLast(this.getExample21());
+		exampleList.addLast(this.getExample20());
+		exampleList.addLast(this.getExample21());*/
+		exampleList.addLast(this.getExample22());
 		
 		return exampleList;
 	}
