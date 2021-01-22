@@ -1,6 +1,8 @@
 package model.statement;
 
 import java.util.ArrayList;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import exception.InvalidTypeException;
 import exception.LockNotAcquiredException;
 import exception.UndefinedVariableException;
@@ -14,6 +16,7 @@ import model.value.ValueInterface;
 
 public class ReleasePermitStatement implements StatementInterface {
 	private final String indexVariableName;
+	private static Lock lock = new ReentrantLock(); 
 	
 	public ReleasePermitStatement(String indexVariableName) {
 		this.indexVariableName = indexVariableName;
@@ -37,6 +40,7 @@ public class ReleasePermitStatement implements StatementInterface {
 		Integer totalPermitCount = semaphoreValue.getKey();
 		ArrayList<Integer> currentThreadsWithPermit = semaphoreValue.getValue();
 		
+		lock.lock();
 		if (currentThreadsWithPermit.contains(crtState.getThreadID()) == false) {
 			throw new LockNotAcquiredException("ReleasePermitStatement: Thread " + crtState.getThreadID() + " doesn't have a permit from semaphore " + this.indexVariableName);
 		}
@@ -44,6 +48,7 @@ public class ReleasePermitStatement implements StatementInterface {
 		// this way, we "enforce" it to be a value
 		currentThreadsWithPermit.remove(Integer.valueOf(crtState.getThreadID()));
 		semaphoreTable.update(semaphoreIndexAsInteger, new Pair<Integer, ArrayList<Integer>>(totalPermitCount, currentThreadsWithPermit));
+		lock.unlock();
 		
 		return null;
 	}

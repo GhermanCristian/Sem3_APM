@@ -36,8 +36,8 @@ public class TestExample20 extends TestExample {
 			assertEquals(output.get(0), new IntValue(20));
 			assertEquals(output.get(1), new IntValue(30));
 			assertEquals(output.get(2), new StringValue("(latch) 2"));
-			assertEquals(output.get(3), new IntValue(40));
-			assertEquals(output.get(4), new StringValue("(latch) 3"));
+			assertEquals(output.get(3), new StringValue("(latch) 3"));
+			assertEquals(output.get(4), new IntValue(40));
 			assertEquals(output.get(5), new StringValue("(latch) 4"));
 			assertEquals(output.get(6), new IntValue(100));
 			assertEquals(output.get(7), new StringValue("(latch) 1"));

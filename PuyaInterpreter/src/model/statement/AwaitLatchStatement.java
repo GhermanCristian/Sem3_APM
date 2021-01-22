@@ -1,5 +1,7 @@
 package model.statement;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import exception.InvalidTypeException;
 import exception.UndefinedVariableException;
 import model.ProgramState;
@@ -12,6 +14,7 @@ import model.value.ValueInterface;
 
 public class AwaitLatchStatement implements StatementInterface{
 	private final String indexVariableName;
+	private static Lock lock = new ReentrantLock(); 
 	
 	public AwaitLatchStatement(String indexVariableName) {
 		this.indexVariableName = indexVariableName;
@@ -31,10 +34,12 @@ public class AwaitLatchStatement implements StatementInterface{
 			throw new UndefinedVariableException("AwaitStatement: Variable " + this.indexVariableName + " is not a valid index in the latch table");
 		}
 		
+		lock.lock();
 		Integer latchValue = latchTable.getValue(latchIndexAsInteger);
 		if (latchValue != 0) {
 			stack.push(this);
 		}
+		lock.unlock();
 		
 		return null;
 	}

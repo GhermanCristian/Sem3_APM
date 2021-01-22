@@ -1,5 +1,7 @@
 package model.statement;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import exception.InvalidTypeException;
 import exception.UndefinedVariableException;
 import model.ProgramState;
@@ -14,6 +16,7 @@ import model.value.ValueInterface;
 public class CreateLatchStatement implements StatementInterface {
 	private final String indexVariableName;
 	private final ExpressionInterface countExpression;
+	private static Lock lock = new ReentrantLock(); 
 	
 	public CreateLatchStatement(String indexVariableName, ExpressionInterface countExpression) {
 		this.indexVariableName = indexVariableName;
@@ -31,9 +34,11 @@ public class CreateLatchStatement implements StatementInterface {
 		}
 		
 		ValueInterface count = this.countExpression.evaluate(symbolTable, heap);
+		lock.lock();
 		int newPositionInLatchTable = ((MyLockTable<Integer, Integer>)(latchTable)).getFirstAvailablePosition();
 		latchTable.insert(newPositionInLatchTable, ((IntValue)(count)).getValue());
 		symbolTable.update(this.indexVariableName, new IntValue(newPositionInLatchTable));
+		lock.unlock();
 		
 		return null;
 	}

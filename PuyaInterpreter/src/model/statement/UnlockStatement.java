@@ -1,5 +1,7 @@
 package model.statement;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import exception.InvalidTypeException;
 import exception.LockNotAcquiredException;
 import exception.UndefinedVariableException;
@@ -12,6 +14,7 @@ import model.value.ValueInterface;
 
 public class UnlockStatement implements StatementInterface {
 	private final String indexVariableName;
+	private static Lock lock = new ReentrantLock(); 
 	
 	public UnlockStatement(String indexVariableName) {
 		this.indexVariableName = indexVariableName;
@@ -31,11 +34,13 @@ public class UnlockStatement implements StatementInterface {
 			throw new UndefinedVariableException("UnlockStatement: Variable " + this.indexVariableName + " is not a valid index in the lock table");
 		}
 		
+		lock.lock();
 		Integer lockThread = lockTable.getValue(lockIndexAsInteger);
 		if (lockThread != crtState.getThreadID()) {
 			throw new LockNotAcquiredException("UnlockStatement: thread " + Integer.toString(crtState.getThreadID()) + " is not the owner of the lock " + this.indexVariableName);
 		}
 		lockTable.update(lockIndexAsInteger, -1);
+		lock.unlock();
 		
 		return null;
 	}

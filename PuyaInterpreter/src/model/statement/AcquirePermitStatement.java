@@ -1,6 +1,8 @@
 package model.statement;
 
 import java.util.ArrayList;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import exception.InvalidTypeException;
 import exception.LockAlreadyAcquiredException;
 import exception.UndefinedVariableException;
@@ -15,6 +17,7 @@ import model.value.ValueInterface;
 
 public class AcquirePermitStatement implements StatementInterface {
 	private final String indexVariableName;
+	private static Lock lock = new ReentrantLock(); 
 	
 	public AcquirePermitStatement(String indexVariableName) {
 		this.indexVariableName = indexVariableName;
@@ -38,6 +41,7 @@ public class AcquirePermitStatement implements StatementInterface {
 		Pair<Integer, ArrayList<Integer>> semaphoreValue = semaphoreTable.getValue(semaphoreIndexAsInteger);
 		Integer totalPermitCount = semaphoreValue.getKey();
 		ArrayList<Integer> currentThreadsWithPermit = semaphoreValue.getValue();
+		lock.lock();
 		if (currentThreadsWithPermit.size() < totalPermitCount) {
 			if (currentThreadsWithPermit.contains(crtState.getThreadID()) == true) {
 				throw new LockAlreadyAcquiredException("AcquirePermitStatement: Thread " + crtState.getThreadID() + " already has a permit from semaphore " + this.indexVariableName);
@@ -48,6 +52,7 @@ public class AcquirePermitStatement implements StatementInterface {
 		else {
 			stack.push(this);
 		}
+		lock.unlock();
 		
 		return null;
 	}

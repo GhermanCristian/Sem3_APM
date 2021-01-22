@@ -1,7 +1,8 @@
 package model.statement;
 
 import java.util.ArrayList;
-
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import exception.InvalidTypeException;
 import exception.UndefinedVariableException;
 import javafx.util.Pair;
@@ -17,6 +18,7 @@ import model.value.ValueInterface;
 public class CreateSemaphoreStatement implements StatementInterface {
 	private final String indexVariableName;
 	private final ExpressionInterface totalPermitCountExpression;
+	private static Lock lock = new ReentrantLock(); 
 
 	public CreateSemaphoreStatement(String indexVariableName, ExpressionInterface totalPermitCountExpression) {
 		this.indexVariableName = indexVariableName;
@@ -34,9 +36,11 @@ public class CreateSemaphoreStatement implements StatementInterface {
 		}
 		
 		ValueInterface totalPermitCount = this.totalPermitCountExpression.evaluate(symbolTable, heap);
+		lock.lock();
 		int newPositionInSemaphoreTable = ((MyLockTable<Integer, Pair<Integer, ArrayList<Integer>>>)(semaphoreTable)).getFirstAvailablePosition();
 		semaphoreTable.insert(newPositionInSemaphoreTable, new Pair<Integer, ArrayList<Integer>>(((IntValue)totalPermitCount).getValue(), new ArrayList<Integer>()));
 		symbolTable.update(this.indexVariableName, new IntValue(newPositionInSemaphoreTable));
+		lock.unlock();
 		
 		return null;
 	}

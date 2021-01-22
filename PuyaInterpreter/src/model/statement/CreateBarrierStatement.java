@@ -1,6 +1,8 @@
 package model.statement;
 
 import java.util.ArrayList;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import exception.InvalidTypeException;
 import javafx.util.Pair;
 import model.ProgramState;
@@ -15,6 +17,7 @@ import model.value.ValueInterface;
 public class CreateBarrierStatement implements StatementInterface {
 	private final String indexVariableName;
 	private final ExpressionInterface capacityExpression;
+	private static Lock lock = new ReentrantLock(); 
 
 	public CreateBarrierStatement(String indexVariableName, ExpressionInterface capacityExpression) {
 		this.indexVariableName = indexVariableName;
@@ -28,6 +31,7 @@ public class CreateBarrierStatement implements StatementInterface {
 		DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> barrierTable = crtState.getBarrierTable();
 		
 		ValueInterface capacity = this.capacityExpression.evaluate(symbolTable, heap);
+		lock.lock();
 		int newPositionInBarrierTable = ((MyLockTable<Integer, Pair<Integer, ArrayList<Integer>>>)(barrierTable)).getFirstAvailablePosition();
 		barrierTable.insert(newPositionInBarrierTable, new Pair<Integer, ArrayList<Integer>>(((IntValue)capacity).getValue(), new ArrayList<Integer>()));
 		
@@ -37,6 +41,7 @@ public class CreateBarrierStatement implements StatementInterface {
 		else {
 			symbolTable.update(this.indexVariableName, new IntValue(newPositionInBarrierTable));
 		}
+		lock.unlock();
 		
 		return null;
 	}

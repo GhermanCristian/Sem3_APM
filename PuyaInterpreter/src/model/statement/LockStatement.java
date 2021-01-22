@@ -22,7 +22,6 @@ public class LockStatement implements StatementInterface {
 	
 	@Override
 	public ProgramState execute(ProgramState crtState) throws Exception {
-		
 		DictionaryInterface<String, ValueInterface> symbolTable = crtState.getSymbolTable();
 		DictionaryInterface<Integer, Integer> lockTable = crtState.getLockTable();
 		StackInterface<StatementInterface> stack = crtState.getExecutionStack();

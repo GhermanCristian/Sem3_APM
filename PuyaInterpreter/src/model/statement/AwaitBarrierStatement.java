@@ -1,6 +1,8 @@
 package model.statement;
 
 import java.util.ArrayList;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import exception.InvalidTypeException;
 import exception.UndefinedVariableException;
 import javafx.util.Pair;
@@ -14,6 +16,7 @@ import model.value.ValueInterface;
 
 public class AwaitBarrierStatement implements StatementInterface {
 	private final String indexVariableName;
+	private static Lock lock = new ReentrantLock(); 
 	
 	public AwaitBarrierStatement(String indexVariableName) {
 		this.indexVariableName = indexVariableName;
@@ -37,6 +40,7 @@ public class AwaitBarrierStatement implements StatementInterface {
 		Pair<Integer, ArrayList<Integer>> barrierValue = barrierTable.getValue(barrierIndexAsInteger);
 		Integer capacity = barrierValue.getKey();
 		ArrayList<Integer> currentWaitingThreads = barrierValue.getValue();
+		lock.lock();
 		if (currentWaitingThreads.size() < capacity) {
 			if (currentWaitingThreads.contains(crtState.getThreadID()) == false) {
 				currentWaitingThreads.add(crtState.getThreadID());
@@ -45,6 +49,7 @@ public class AwaitBarrierStatement implements StatementInterface {
 			
 			stack.push(this);
 		}
+		lock.unlock();
 		
 		return null;
 	}

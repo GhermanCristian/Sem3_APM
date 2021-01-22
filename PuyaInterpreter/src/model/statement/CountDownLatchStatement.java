@@ -1,5 +1,7 @@
 package model.statement;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import exception.InvalidTypeException;
 import exception.UndefinedVariableException;
 import model.ProgramState;
@@ -12,6 +14,7 @@ import model.value.ValueInterface;
 
 public class CountDownLatchStatement implements StatementInterface {
 	private final String indexVariableName;
+	private static Lock lock = new ReentrantLock(); 
 	
 	public CountDownLatchStatement(String indexVariableName) {
 		this.indexVariableName = indexVariableName;
@@ -30,11 +33,13 @@ public class CountDownLatchStatement implements StatementInterface {
 			throw new UndefinedVariableException("CountDownLatchStatement: Variable " + this.indexVariableName + " is not a valid index in the latch table");
 		}
 		
+		lock.lock();
 		Integer latchValue = latchTable.getValue(latchIndexAsInteger);
 		if (latchValue > 0) {
 			latchTable.update(latchIndexAsInteger, latchValue - 1);
 		}
 		crtState.getOutput().addLast(new StringValue("(latch) " + Integer.toString(crtState.getThreadID())));
+		lock.unlock();
 		
 		return null;
 	}
