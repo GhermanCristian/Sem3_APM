@@ -40,6 +40,7 @@ import model.statement.ReleasePermitStatement;
 import model.statement.RepeatUntilStatement;
 import model.statement.SleepStatement;
 import model.statement.StatementInterface;
+import model.statement.SwitchStatement;
 import model.statement.UnlockStatement;
 import model.statement.VariableDeclarationStatement;
 import model.statement.WaitStatement;
@@ -717,6 +718,31 @@ public class AllExamples {
 		return new Example(this.composeStatement(statementList), "conditional assignment", this.SRC_FOLDER_PATH + "\\log26.in");
 	}
 	
+	public Example getExample27() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+	
+		statementList.addLast(new VariableDeclarationStatement("a", new IntType()));
+		statementList.addLast(new VariableDeclarationStatement("b", new IntType()));
+		statementList.addLast(new VariableDeclarationStatement("c", new IntType()));
+		statementList.addLast(new AssignmentStatement("a", new ValueExpression(new IntValue(1))));
+		statementList.addLast(new AssignmentStatement("b", new ValueExpression(new IntValue(2))));
+		statementList.addLast(new AssignmentStatement("c", new ValueExpression(new IntValue(5))));
+		
+		ArrayList<ExpressionInterface> caseExpressionList = new ArrayList<ExpressionInterface>(Arrays.asList(
+				new ArithmeticExpression(new VariableExpression("b"), new VariableExpression("c"), "*"),
+				new ValueExpression(new IntValue(10))));
+		ArrayList<StatementInterface> caseStatementList = new ArrayList<StatementInterface>(Arrays.asList(
+				new CompoundStatement(new PrintStatement(new VariableExpression("a")), new PrintStatement(new VariableExpression("b"))),
+				new CompoundStatement(new PrintStatement(new ValueExpression(new IntValue(100))), new PrintStatement(new ValueExpression(new IntValue(200)))),
+				new PrintStatement(new ValueExpression(new IntValue(300)))));
+		statementList.addLast(new SwitchStatement(new ArithmeticExpression(new VariableExpression("a"), new ValueExpression(new IntValue(10)), "*"), 
+								caseExpressionList, 
+								caseStatementList));
+		statementList.addLast(new PrintStatement(new ValueExpression(new IntValue(300))));
+		
+		return new Example(this.composeStatement(statementList), "switch", this.SRC_FOLDER_PATH + "\\log27.in");
+	}
+	
 	public MyList<Example> getAllExamples() {
 		MyList<Example> exampleList = new MyList<Example>();
 		
@@ -744,8 +770,9 @@ public class AllExamples {
 		exampleList.addLast(this.getExample22());
 		exampleList.addLast(this.getExample23());
 		exampleList.addLast(this.getExample24());
-		exampleList.addLast(this.getExample25());*/
-		exampleList.addLast(this.getExample26());
+		exampleList.addLast(this.getExample25());
+		exampleList.addLast(this.getExample26());*/
+		exampleList.addLast(this.getExample27());
 		
 		return exampleList;
 	}
