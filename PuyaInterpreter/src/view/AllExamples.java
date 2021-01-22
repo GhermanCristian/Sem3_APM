@@ -37,6 +37,7 @@ import model.statement.PrintStatement;
 import model.statement.ReadFileStatement;
 import model.statement.ReleasePermitStatement;
 import model.statement.RepeatUntilStatement;
+import model.statement.SleepStatement;
 import model.statement.StatementInterface;
 import model.statement.UnlockStatement;
 import model.statement.VariableDeclarationStatement;
@@ -649,7 +650,25 @@ public class AllExamples {
 		statementList.addLast(new PrintStatement(new HeapReadingExpression(new VariableExpression("v2"))));
 		statementList.addLast(new UnlockStatement("q"));
 		
-		return new Example(this.composeStatement(statementList), "", this.SRC_FOLDER_PATH + "\\log23.in");
+		return new Example(this.composeStatement(statementList), "normal lock", this.SRC_FOLDER_PATH + "\\log23.in");
+	}
+	
+	public Example getExample24() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+	
+		statementList.addLast(new VariableDeclarationStatement("v", new IntType()));
+		statementList.addLast(new AssignmentStatement("v", new ValueExpression(new IntValue(10))));
+		
+		MyList<StatementInterface> thread2StatementList = new MyList<StatementInterface>();
+		thread2StatementList.addLast(new IncrementStatement("v", "-"));
+		thread2StatementList.addLast(new IncrementStatement("v", "-"));
+		thread2StatementList.addLast(new PrintStatement(new VariableExpression("v")));
+		statementList.addLast(new ForkStatement(this.composeStatement(thread2StatementList)));
+		
+		statementList.addLast(new SleepStatement(new ValueExpression(new IntValue(10))));
+		statementList.addLast(new PrintStatement(new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(10)), "*")));
+		
+		return new Example(this.composeStatement(statementList), "sleep", this.SRC_FOLDER_PATH + "\\log24.in");
 	}
 	
 	public MyList<Example> getAllExamples() {
@@ -673,11 +692,12 @@ public class AllExamples {
 		exampleList.addLast(this.getExample16());
 		exampleList.addLast(this.getExample17());
 		exampleList.addLast(this.getExample18());
-		exampleList.addLast(this.getExample19());*/
+		exampleList.addLast(this.getExample19());
 		exampleList.addLast(this.getExample20());
 		exampleList.addLast(this.getExample21());
 		exampleList.addLast(this.getExample22());
-		exampleList.addLast(this.getExample23());
+		exampleList.addLast(this.getExample23());*/
+		exampleList.addLast(this.getExample24());
 		
 		return exampleList;
 	}
