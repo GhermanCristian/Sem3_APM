@@ -10,10 +10,10 @@ import model.type.TypeInterface;
 import model.value.IntValue;
 import model.value.ValueInterface;
 
-public class AwaitStatement implements StatementInterface{
+public class AwaitLatchStatement implements StatementInterface{
 	private final String indexVariableName;
 	
-	public AwaitStatement(String indexVariableName) {
+	public AwaitLatchStatement(String indexVariableName) {
 		this.indexVariableName = indexVariableName;
 	}
 	

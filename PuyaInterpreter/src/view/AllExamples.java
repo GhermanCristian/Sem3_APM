@@ -2,7 +2,6 @@ package view;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import model.Example;
 import model.Procedure;
 import model.ADT.MyList;
@@ -14,7 +13,7 @@ import model.expression.ValueExpression;
 import model.expression.VariableExpression;
 import model.statement.AcquirePermitStatement;
 import model.statement.AssignmentStatement;
-import model.statement.AwaitStatement;
+import model.statement.AwaitLatchStatement;
 import model.statement.CallProcedureStatement;
 import model.statement.CloseReadFileStatement;
 import model.statement.CompoundStatement;
@@ -512,7 +511,7 @@ public class AllExamples {
 		thread4StatementList.addLast(new CountDownLatchStatement("cnt"));
 		statementList.addLast(new ForkStatement(this.composeStatement(thread4StatementList)));
 		
-		statementList.addLast(new AwaitStatement("cnt"));
+		statementList.addLast(new AwaitLatchStatement("cnt"));
 		statementList.addLast(new PrintStatement(new ValueExpression(new IntValue(100))));
 		statementList.addLast(new CountDownLatchStatement("cnt"));
 		statementList.addLast(new PrintStatement(new ValueExpression(new IntValue(100))));

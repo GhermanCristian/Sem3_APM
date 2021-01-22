@@ -30,6 +30,7 @@ public class ForkStatement implements StatementInterface {
 								parentThread.getHeap(), 
 								parentThread.getSemaphoreTable(),
 								parentThread.getLatchTable(),
+								parentThread.getBarrierTable(),
 								parentThread.getProcedureTable(), this.threadStatements);
 	}
 	

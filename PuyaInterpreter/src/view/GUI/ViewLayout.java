@@ -375,17 +375,20 @@ class ViewLayout {
 		// for now I don't know whether I should move these setHgrows to their corresponding item's initialise method, 
 		// in case I might want to change from a HBox to sth else
 		VBox.setVgrow(this.threadListView, Priority.ALWAYS);
-		HBox.setHgrow(this.symbolTableTableView, Priority.ALWAYS);
+		VBox.setVgrow(leftLayout, Priority.ALWAYS);
+		
 		HBox.setHgrow(this.heapTableView, Priority.ALWAYS);
 		//HBox.setHgrow(this.semaphoreTableTableView, Priority.ALWAYS);
 		HBox.setHgrow(this.latchTableTableView, Priority.ALWAYS);
+		HBox.setHgrow(this.symbolTableTableView, Priority.ALWAYS);
+		HBox.setHgrow(upperMidLayout, Priority.ALWAYS);
+		
 		HBox.setHgrow(this.outputListView, Priority.ALWAYS);
 		HBox.setHgrow(this.stackListView, Priority.ALWAYS);
 		HBox.setHgrow(this.fileTableListView, Priority.ALWAYS);
-		VBox.setVgrow(leftLayout, Priority.ALWAYS);
-		HBox.setHgrow(upperMidLayout, Priority.ALWAYS);
 		HBox.setHgrow(lowerMidLayout, Priority.ALWAYS);
 		HBox.setHgrow(midLayout, Priority.ALWAYS);
+		
 		VBox.setVgrow(this.procedureTableTableView, Priority.ALWAYS);
 		VBox.setVgrow(rightLayout, Priority.ALWAYS);
 		
