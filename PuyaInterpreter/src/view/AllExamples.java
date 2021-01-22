@@ -18,6 +18,7 @@ import model.statement.AwaitLatchStatement;
 import model.statement.CallProcedureStatement;
 import model.statement.CloseReadFileStatement;
 import model.statement.CompoundStatement;
+import model.statement.ConditionalAssignmentStatement;
 import model.statement.CountDownLatchStatement;
 import model.statement.CreateBarrierStatement;
 import model.statement.CreateLatchStatement;
@@ -683,6 +684,39 @@ public class AllExamples {
 		return new Example(this.composeStatement(statementList), "wait", this.SRC_FOLDER_PATH + "\\log25.in");
 	}
 	
+	public Example getExample26() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+	
+		statementList.addLast(new VariableDeclarationStatement("a", new ReferenceType(new IntType())));
+		statementList.addLast(new VariableDeclarationStatement("b", new ReferenceType(new IntType())));
+		statementList.addLast(new VariableDeclarationStatement("v", new IntType()));
+		statementList.addLast(new HeapAllocationStatement("a", new ValueExpression(new IntValue(0))));
+		statementList.addLast(new HeapAllocationStatement("b", new ValueExpression(new IntValue(0))));
+		statementList.addLast(new HeapWritingStatement("a", new ValueExpression(new IntValue(1))));
+		statementList.addLast(new HeapWritingStatement("b", new ValueExpression(new IntValue(2))));
+		statementList.addLast(new ConditionalAssignmentStatement("v", 
+								new RelationalExpression(
+									new HeapReadingExpression(new VariableExpression("a")), 
+									new HeapReadingExpression(new VariableExpression("b")), 
+									"<"), 
+								new ValueExpression(new IntValue(100)), 
+								new ValueExpression(new IntValue(200))));
+		statementList.addLast(new PrintStatement(new VariableExpression("v")));
+		statementList.addLast(new ConditionalAssignmentStatement("v", 
+								new RelationalExpression(
+									new ArithmeticExpression(
+										new HeapReadingExpression(new VariableExpression("b")), 
+										new ValueExpression(new IntValue(2)), 
+										"-"), 
+									new HeapReadingExpression(new VariableExpression("a")), 
+									">"), 
+								new ValueExpression(new IntValue(100)), 
+								new ValueExpression(new IntValue(200))));
+		statementList.addLast(new PrintStatement(new VariableExpression("v")));
+		
+		return new Example(this.composeStatement(statementList), "conditional assignment", this.SRC_FOLDER_PATH + "\\log26.in");
+	}
+	
 	public MyList<Example> getAllExamples() {
 		MyList<Example> exampleList = new MyList<Example>();
 		
@@ -709,8 +743,9 @@ public class AllExamples {
 		exampleList.addLast(this.getExample21());
 		exampleList.addLast(this.getExample22());
 		exampleList.addLast(this.getExample23());
-		exampleList.addLast(this.getExample24());*/
-		exampleList.addLast(this.getExample25());
+		exampleList.addLast(this.getExample24());
+		exampleList.addLast(this.getExample25());*/
+		exampleList.addLast(this.getExample26());
 		
 		return exampleList;
 	}
