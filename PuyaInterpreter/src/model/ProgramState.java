@@ -151,6 +151,8 @@ public class ProgramState {
 		representation += this.latchTable.toString();
 		representation += "\nBarrierTable:\n";
 		representation += this.barrierTable.toString();
+		representation += "\nLockTable:\n";
+		representation += this.lockTable.toString();
 		representation += "\nProcedureTable:\n";
 		representation += this.procedureTable.toString();
 		

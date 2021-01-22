@@ -21,6 +21,7 @@ import model.statement.CompoundStatement;
 import model.statement.CountDownLatchStatement;
 import model.statement.CreateBarrierStatement;
 import model.statement.CreateLatchStatement;
+import model.statement.CreateLockStatement;
 import model.statement.CreateProcedureStatement;
 import model.statement.CreateSemaphoreStatement;
 import model.statement.EmptyStatement;
@@ -30,12 +31,14 @@ import model.statement.HeapAllocationStatement;
 import model.statement.HeapWritingStatement;
 import model.statement.IfStatement;
 import model.statement.IncrementStatement;
+import model.statement.LockStatement;
 import model.statement.OpenReadFileStatement;
 import model.statement.PrintStatement;
 import model.statement.ReadFileStatement;
 import model.statement.ReleasePermitStatement;
 import model.statement.RepeatUntilStatement;
 import model.statement.StatementInterface;
+import model.statement.UnlockStatement;
 import model.statement.VariableDeclarationStatement;
 import model.statement.WhileStatement;
 import model.type.BoolType;
@@ -597,7 +600,56 @@ public class AllExamples {
 		statementList.addLast(new AwaitBarrierStatement("cnt"));
 		statementList.addLast(new PrintStatement(new HeapReadingExpression(new VariableExpression("v3"))));
 		
-		return new Example(this.composeStatement(statementList), "", this.SRC_FOLDER_PATH + "\\log22.in");
+		return new Example(this.composeStatement(statementList), "the one with the barrier", this.SRC_FOLDER_PATH + "\\log22.in");
+	}
+	
+	public Example getExample23() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+	
+		statementList.addLast(new VariableDeclarationStatement("v1", new ReferenceType(new IntType())));
+		statementList.addLast(new VariableDeclarationStatement("v2", new ReferenceType(new IntType())));
+		statementList.addLast(new VariableDeclarationStatement("x", new IntType()));
+		statementList.addLast(new VariableDeclarationStatement("q", new IntType()));
+		statementList.addLast(new HeapAllocationStatement("v1", new ValueExpression(new IntValue(20))));
+		statementList.addLast(new HeapAllocationStatement("v2", new ValueExpression(new IntValue(30))));
+		statementList.addLast(new CreateLockStatement("x"));
+		
+		MyList<StatementInterface> thread2StatementList = new MyList<StatementInterface>();
+		MyList<StatementInterface> thread3StatementList = new MyList<StatementInterface>();
+		thread3StatementList.addLast(new LockStatement("x"));
+		thread3StatementList.addLast(new HeapWritingStatement("v1", new ArithmeticExpression(new HeapReadingExpression(new VariableExpression("v1")), new ValueExpression(new IntValue(1)), "-")));
+		thread3StatementList.addLast(new UnlockStatement("x"));
+		thread2StatementList.addLast(new ForkStatement(this.composeStatement(thread3StatementList)));
+		thread2StatementList.addLast(new LockStatement("x"));
+		thread2StatementList.addLast(new HeapWritingStatement("v1", new ArithmeticExpression(new HeapReadingExpression(new VariableExpression("v1")), new ValueExpression(new IntValue(10)), "*")));
+		thread2StatementList.addLast(new UnlockStatement("x"));
+		statementList.addLast(new ForkStatement(this.composeStatement(thread2StatementList)));
+		
+		statementList.addLast(new CreateLockStatement("q"));
+		
+		MyList<StatementInterface> thread4StatementList = new MyList<StatementInterface>();
+		MyList<StatementInterface> thread5StatementList = new MyList<StatementInterface>();
+		thread5StatementList.addLast(new LockStatement("q"));
+		thread5StatementList.addLast(new HeapWritingStatement("v2", new ArithmeticExpression(new HeapReadingExpression(new VariableExpression("v2")), new ValueExpression(new IntValue(5)), "+")));
+		thread5StatementList.addLast(new UnlockStatement("q"));
+		thread4StatementList.addLast(new ForkStatement(this.composeStatement(thread5StatementList)));
+		thread4StatementList.addLast(new LockStatement("q"));
+		thread4StatementList.addLast(new HeapWritingStatement("v2", new ArithmeticExpression(new HeapReadingExpression(new VariableExpression("v2")), new ValueExpression(new IntValue(10)), "*")));
+		thread4StatementList.addLast(new UnlockStatement("q"));
+		statementList.addLast(new ForkStatement(this.composeStatement(thread4StatementList)));
+		
+		statementList.addLast(new EmptyStatement());
+		statementList.addLast(new EmptyStatement());
+		statementList.addLast(new EmptyStatement());
+		statementList.addLast(new EmptyStatement());
+		statementList.addLast(new LockStatement("x"));
+		statementList.addLast(new PrintStatement(new HeapReadingExpression(new VariableExpression("v1"))));
+		statementList.addLast(new UnlockStatement("x"));
+		statementList.addLast(new LockStatement("q"));
+		statementList.addLast(new PrintStatement(new HeapReadingExpression(new VariableExpression("v2"))));
+		statementList.addLast(new UnlockStatement("q"));
+		
+		return new Example(this.composeStatement(statementList), "", this.SRC_FOLDER_PATH + "\\log23.in");
 	}
 	
 	public MyList<Example> getAllExamples() {
@@ -623,8 +675,9 @@ public class AllExamples {
 		exampleList.addLast(this.getExample18());
 		exampleList.addLast(this.getExample19());
 		exampleList.addLast(this.getExample20());
-		exampleList.addLast(this.getExample21());*/
-		exampleList.addLast(this.getExample22());
+		exampleList.addLast(this.getExample21());
+		exampleList.addLast(this.getExample22());*/
+		exampleList.addLast(this.getExample23());
 		
 		return exampleList;
 	}
