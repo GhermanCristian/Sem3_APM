@@ -2,7 +2,6 @@ package model.statement;
 
 import java.util.ArrayList;
 import exception.InvalidTypeException;
-import exception.UndefinedVariableException;
 import javafx.util.Pair;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
@@ -28,14 +27,16 @@ public class CreateBarrierStatement implements StatementInterface {
 		DictionaryInterface<Integer, ValueInterface> heap = crtState.getHeap();
 		DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> barrierTable = crtState.getBarrierTable();
 		
-		if (symbolTable.isDefined(this.indexVariableName) == false) {
-			throw new UndefinedVariableException("CreateBarrierStatement: Variable " + this.indexVariableName + " is not defined in the symbolTable");
-		}
-		
 		ValueInterface capacity = this.totalPermitCountExpression.evaluate(symbolTable, heap);
 		int newPositionInBarrierTable = ((MyLockTable<Integer, Pair<Integer, ArrayList<Integer>>>)(barrierTable)).getFirstAvailablePosition();
 		barrierTable.insert(newPositionInBarrierTable, new Pair<Integer, ArrayList<Integer>>(((IntValue)capacity).getValue(), new ArrayList<Integer>()));
-		symbolTable.update(this.indexVariableName, new IntValue(newPositionInBarrierTable));
+		
+		if (symbolTable.isDefined(this.indexVariableName) == false) {
+			symbolTable.insert(this.indexVariableName, new IntValue(newPositionInBarrierTable));
+		}
+		else {
+			symbolTable.update(this.indexVariableName, new IntValue(newPositionInBarrierTable));
+		}
 		
 		return null;
 	}
@@ -51,7 +52,7 @@ public class CreateBarrierStatement implements StatementInterface {
 	public DictionaryInterface<String, TypeInterface> getTypeEnvironment(
 			DictionaryInterface<String, TypeInterface> initialTypeEnvironment) throws Exception {
 		if (initialTypeEnvironment.isDefined(this.indexVariableName) == false) {
-			throw new UndefinedVariableException("CreateBarrierStatement: Variable " + this.indexVariableName + " is not defined in the typeEnvironment");
+			initialTypeEnvironment.insert(this.indexVariableName, new IntType());
 		}
 		if (initialTypeEnvironment.getValue(this.indexVariableName).equals(new IntType()) == false) {
 			throw new InvalidTypeException("CreateBarrierStatement: Variable " + this.indexVariableName + " is not an integer");

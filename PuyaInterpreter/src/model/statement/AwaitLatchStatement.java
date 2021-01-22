@@ -42,7 +42,7 @@ public class AwaitLatchStatement implements StatementInterface{
 	@Override
 	public String toString() {
 		String representation = "";
-		representation += ("await(" + this.indexVariableName + ");\n");
+		representation += ("awaitLatch(" + this.indexVariableName + ");\n");
 		return representation;
 	}
 
