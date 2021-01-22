@@ -131,6 +131,28 @@ public class ProgramState {
 		return currentStatement.execute(this);
 	}
 	
+	public void clear() {
+		this.executionStack.clear();
+		this.symbolTable.forEach(symbolTable -> symbolTable.clear());
+		this.symbolTable.clear();
+		this.output.clear();
+		for (BufferedReader crtBuffer : this.fileTable.getAllValues()) {
+			try {
+				crtBuffer.close();
+			}
+			catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+		this.fileTable.clear();
+		this.heap.clear();
+		this.semaphoreTable.clear();
+		this.latchTable.clear();
+		this.barrierTable.clear();
+		this.lockTable.clear();
+		this.procedureTable.clear();
+	}
+	
 	public String toString() {
 		String representation = "";
 		

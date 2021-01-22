@@ -1,107 +1,33 @@
 package testExample;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.BufferedReader;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-
 import org.junit.*;
-import controller.Controller;
-import controller.TextController;
-import javafx.util.Pair;
-import model.Example;
 import model.ProgramState;
-import model.ADT.DictionaryInterface;
-import model.ADT.ListInterface;
-import model.ADT.MyDictionary;
-import model.ADT.MyHeap;
-import model.ADT.MyList;
-import model.ADT.MyLockTable;
-import model.ADT.MyStack;
-import model.ADT.StackInterface;
-import model.statement.StatementInterface;
-import model.type.TypeInterface;
 import model.value.IntValue;
-import model.value.StringValue;
-import model.value.ValueInterface;
-import repository.Repository;
-import repository.RepositoryInterface;
 import view.AllExamples;
 
-public class TestExample17 {
-	static StackInterface<StatementInterface> stack;
-	static DictionaryInterface<String, ValueInterface> symbolTable;
-	static ListInterface<ValueInterface> output;
-	static DictionaryInterface<StringValue, BufferedReader> fileTable;
-	static DictionaryInterface<Integer, ValueInterface> heap;
-	static DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> semaphoreTable;
-	static DictionaryInterface<String, TypeInterface> typeEnvironment;
-	static Example example;
-	static ProgramState crtState;
-	static RepositoryInterface repo;
-	static Controller controller;
-	
+public class TestExample17 extends TestExample {
 	private static final String REPOSITORY_PATH = "C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter\\logs\\log17.in";
 	
 	@BeforeClass
 	public static void initialiseData() {
-		stack = new MyStack<StatementInterface>();
-		symbolTable = new MyDictionary<String, ValueInterface>();
-		output = new MyList<ValueInterface>();
-		fileTable = new MyDictionary<StringValue, BufferedReader>();
-		heap = new MyHeap<Integer, ValueInterface>();
-		semaphoreTable = new MyLockTable<Integer, Pair<Integer, ArrayList<Integer>>>();
-		typeEnvironment = new MyDictionary<String, TypeInterface>();
+		TestExample.initialiseData();
 		AllExamples allExamples = new AllExamples();
 		example = allExamples.getExample17();
-		crtState = new ProgramState(stack, symbolTable, output, fileTable, heap, semaphoreTable, example.getStatement());
-		repo = new Repository(REPOSITORY_PATH);
-		controller = new TextController(repo);
-		controller.addProgramState(crtState);
+		crtState = new ProgramState(stack, symbolTableStack, output, fileTable, heap, semaphoreTable, latchTable, barrierTable, lockTable, procedureTable, example.getStatement());
+		TestExample.initialiseExampleSpecificData(REPOSITORY_PATH);
 	}
 	
 	@After
 	public void clearAndCloseData() {
-		stack.clear();
-		symbolTable.clear();
-		output.clear();
-		
-		for (BufferedReader crtBuffer : fileTable.getAllValues()) {
-			try {
-				crtBuffer.close();
-			}
-			catch (Exception e) {
-				System.out.println(e.getMessage());
-			}
-		}
-		fileTable.clear();
-		heap.clear();
-		semaphoreTable.clear();
-		typeEnvironment.clear();
-		
-		try {
-			PrintWriter currentFileWriter = new PrintWriter(REPOSITORY_PATH);
-			currentFileWriter.close(); // I do this to erase the content of the file
-		}
-		catch (Exception e) {
-			System.out.println(e);
-		}
-		
-		repo.getThreadList().clear();
-		crtState.setStatement(example.getStatement());
-		controller.addProgramState(crtState);
+		super.clearAndCloseData();
+		super.clearRepositoryFile(REPOSITORY_PATH);
 	}
 	//"int v; for(v = 2; v > 0; v--) {fork(print(v + 23);} print(v);"
 	
 	@Test
 	public void FullProgramExecution_Example17_CorrectOutput() {
-		try {
-			controller.fullProgramExecution();
-		}
-		catch (Exception e) {
-			fail(e.getMessage());
-		}
+		super.executeProgram();
 		
 		assertEquals(output.size(), 3);
 		try {
@@ -116,24 +42,14 @@ public class TestExample17 {
 	
 	@Test
 	public void FullProgramExecution_Example17_CorrectHeapTable() {
-		try {
-			controller.fullProgramExecution();
-		}
-		catch (Exception e) {
-			fail(e.getMessage());
-		}
+		super.executeProgram();
 		
 		assertTrue(heap.isEmpty());
 	}
 	
 	@Test
 	public void FullProgramExecution_Example17_CorrectFileTable() {
-		try {
-			controller.fullProgramExecution();
-		}
-		catch (Exception e) {
-			fail(e.getMessage());
-		}
+		super.executeProgram();
 		
 		assertTrue(fileTable.isEmpty());
 	}
@@ -142,36 +58,22 @@ public class TestExample17 {
 	// crtState will always represent thread1, so we can at least check that
 	@Test
 	public void FullProgramExecution_Example17Thread1_EmptyStack() {
-		try {
-			controller.fullProgramExecution();
-		}
-		catch (Exception e) {
-			fail(e.getMessage());
-		}
+		super.executeProgram();
 		
 		assertEquals(0, crtState.getExecutionStack().size());
 	}
 	
 	@Test
 	public void FullProgramExecution_Example17Thread1_CorrectSymbolTable() {
-		try {
-			controller.fullProgramExecution();
-		}
-		catch (Exception e) {
-			fail(e.getMessage());
-		}
+		super.executeProgram();
+		
 		assertEquals(1, symbolTable.size());
 		assertEquals(symbolTable.getValue("v"), new IntValue(0));
 	}
 	
 	@Test
 	public void FullProgramExecution_Example17_EmptyThreadList() {
-		try {
-			controller.fullProgramExecution();
-		}
-		catch (Exception e) {
-			fail(e.getMessage());
-		}
+		super.executeProgram();
 		
 		assertTrue(repo.getThreadList().isEmpty());
 	}
