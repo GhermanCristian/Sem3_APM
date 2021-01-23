@@ -2,6 +2,7 @@ package model.statement;
 
 import java.util.ArrayList;
 import exception.InvalidProcedureArgumentException;
+import exception.StackOverflowException;
 import exception.UndefinedVariableException;
 import model.Procedure;
 import model.ProgramState;
@@ -14,6 +15,7 @@ import model.value.ValueInterface;
 public class CallProcedureStatement implements StatementInterface {
 	private final String procedureName;
 	private final ArrayList<ExpressionInterface> argumentValuesExpression;
+	public final static int STACK_PROCEDURE_LIMIT = 256;
 	
 	public CallProcedureStatement(String procedureName, ArrayList<ExpressionInterface> argumentValuesExpression) {
 		this.procedureName = procedureName;
@@ -45,6 +47,10 @@ public class CallProcedureStatement implements StatementInterface {
 			}
 			// here we don't have to check for the validity of the names inside the procedure, that is done when creating it
 			procedureSymbolTable.insert(argumentNames.get(pos), argumentValue);
+		}
+		
+		if (crtState.getSymbolTableStack().size() >= CallProcedureStatement.STACK_PROCEDURE_LIMIT) {
+			throw new StackOverflowException("CallProcedureStatement: maximum number of function calls exceeded");
 		}
 		
 		crtState.getSymbolTableStack().push(procedureSymbolTable);
