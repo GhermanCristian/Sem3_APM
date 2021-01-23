@@ -12,6 +12,7 @@ import model.Example;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
 import model.ADT.MyList;
+import model.ADT.StackInterface;
 import model.value.ReferenceValue;
 import model.value.ValueInterface;
 import repository.RepositoryInterface;
@@ -30,12 +31,16 @@ public abstract class Controller {
 		return this.repository.getThreadList().get(this.FIRST_THREAD_POSITION_IN_THREAD_LIST);
 	}
 	
-	private List<Integer> getHeapAddressesFromSymbolTable(DictionaryInterface<String, ValueInterface> symbolTable) {
-		return symbolTable.getAllValues()
-				.stream()
-				.filter(elem -> elem instanceof ReferenceValue)
-				.map(elem -> {ReferenceValue elem1 = (ReferenceValue)elem; return elem1.getHeapAddress();})
-				.collect(Collectors.toList());
+	private List<Integer> getHeapAddressesFromSymbolTableStack(StackInterface<DictionaryInterface<String, ValueInterface>> symbolTableStack) {
+		List<Integer> heapAddresses = new ArrayList<Integer>();
+		symbolTableStack.forEach(symbolTable -> heapAddresses.addAll(
+			symbolTable.getAllValues()
+			.stream()
+			.filter(elem -> elem instanceof ReferenceValue)
+			.map(elem -> {ReferenceValue elem1 = (ReferenceValue)elem; return elem1.getHeapAddress();})
+			.collect(Collectors.toList())
+		));
+		return heapAddresses;
 	}
 	
 	protected HashMap<Integer, ValueInterface> getGarbageCollectedHeap(List<ProgramState> threadList) {
@@ -43,7 +48,7 @@ public abstract class Controller {
 		DictionaryInterface<Integer, ValueInterface> heap = this.getFirstAvailableThread().getHeap();
 		
 		List<Integer> symbolTableAddresses = new ArrayList<Integer>();
-		threadList.forEach(thread -> symbolTableAddresses.addAll(this.getHeapAddressesFromSymbolTable(thread.getSymbolTable())));
+		threadList.forEach(thread -> symbolTableAddresses.addAll(this.getHeapAddressesFromSymbolTableStack(thread.getSymbolTableStack())));
 		List<Integer> heapReferencedAddresses = heap.getAllValues()
 											.stream()
 											.filter(elem -> elem instanceof ReferenceValue)

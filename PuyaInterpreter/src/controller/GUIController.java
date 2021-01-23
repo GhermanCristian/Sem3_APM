@@ -67,7 +67,9 @@ public class GUIController extends Controller {
 	}
 	
 	public void advanceOneStepAllThreads() throws Exception {
-		super.oneStepExecutionAllThreads(this.removeCompletedThreads(this.repository.getThreadList()));
+		List<ProgramState> threadsStillInExecution = this.removeCompletedThreads(this.repository.getThreadList());
+		threadsStillInExecution.get(0).getHeap().setContent(this.getGarbageCollectedHeap(threadsStillInExecution));
+		super.oneStepExecutionAllThreads(threadsStillInExecution);
 		this.currentGUI.updateAllStructures();
 		
 		this.repository.setThreadList(this.removeCompletedThreads(this.repository.getThreadList()));
