@@ -835,6 +835,25 @@ public class AllExamples {
 		return new Example(this.composeStatement(statementList), "procedure sum(int a, int b) {int v = a + b; print(v);} procedure myProc(int a, int b) {int v = a * b; print(v); Ref int x; new(x, 23); sum(v, rh(x));} int v = 2; int w = 5; sum(v * 10, w); print(v);", this.SRC_FOLDER_PATH + "\\log29.in");
 	}
 	
+	public Example getExample30() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+		
+		MyList<StatementInterface> procedure1StatementList = new MyList<StatementInterface>();
+		procedure1StatementList.addLast(new IfStatement(
+										new RelationalExpression(new VariableExpression("a"), new ValueExpression(new IntValue(0)), ">"), 
+										new CompoundStatement(
+												new PrintStatement(new VariableExpression("a")), 
+												new CallProcedureStatement("rec", new ArrayList<ExpressionInterface>(Arrays.asList(new ArithmeticExpression(new VariableExpression("a"), new ValueExpression(new IntValue(1)), "-"))))), 
+										new EmptyStatement()));
+		ArrayList<TypeInterface> procedure1Types = new ArrayList<TypeInterface>(Arrays.asList(new IntType()));
+		ArrayList<String> procedure1Names = new ArrayList<String>(Arrays.asList("a"));
+		statementList.addLast(new CreateProcedureStatement("rec", new Procedure(procedure1Types, procedure1Names, this.composeStatement(procedure1StatementList))));
+	
+		statementList.addLast(new CallProcedureStatement("rec", new ArrayList<ExpressionInterface>(Arrays.asList(new ValueExpression(new IntValue(5))))));
+		
+		return new Example(this.composeStatement(statementList), "procedure rec(int a) {if(a > 0) {print(a); rec(a - 1);}} rec(5);", this.SRC_FOLDER_PATH + "\\log30.in");
+	}
+	
 	public MyList<Example> getAllExamples() {
 		MyList<Example> exampleList = new MyList<Example>();
 		
@@ -865,8 +884,9 @@ public class AllExamples {
 		exampleList.addLast(this.getExample25());
 		exampleList.addLast(this.getExample26());
 		exampleList.addLast(this.getExample27());
-		exampleList.addLast(this.getExample28());*/
-		exampleList.addLast(this.getExample29());
+		exampleList.addLast(this.getExample28());
+		exampleList.addLast(this.getExample29());*/
+		exampleList.addLast(this.getExample30());
 		
 		return exampleList;
 	}
