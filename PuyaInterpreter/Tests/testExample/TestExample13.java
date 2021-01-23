@@ -36,8 +36,8 @@ public class TestExample13 extends TestExample {
 			assertEquals(output.get(0), new IntValue(10));
 			assertEquals(output.get(1), new IntValue(30));
 			assertEquals(output.get(2), new IntValue(30));
-			assertEquals(output.get(3), new IntValue(30));
-			assertEquals(output.get(4), new IntValue(33));
+			assertTrue((output.get(3).equals(new IntValue(33)) && output.get(4).equals(new IntValue(30))) || 
+						(output.get(3).equals(new IntValue(30)) && output.get(4).equals(new IntValue(33))));
 			assertEquals(output.get(5), new IntValue(34));
 		} 
 		catch (Exception e) {
