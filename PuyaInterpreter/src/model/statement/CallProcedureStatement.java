@@ -37,7 +37,6 @@ public class CallProcedureStatement implements StatementInterface {
 		ArrayList<TypeInterface> argumentTypes = procedureFrame.getArgumentTypes();
 		ArrayList<String> argumentNames = procedureFrame.getArgumentNames();
 		
-
 		DictionaryInterface<String, ValueInterface> procedureSymbolTable = new MyDictionary<String, ValueInterface>();
 		for (int pos = 0; pos < this.argumentValuesExpression.size(); pos++) {
 			ValueInterface argumentValue = this.argumentValuesExpression.get(pos).evaluate(symbolTable, heap);

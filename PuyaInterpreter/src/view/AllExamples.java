@@ -680,6 +680,7 @@ public class AllExamples {
 	
 		statementList.addLast(new VariableDeclarationStatement("v", new IntType()));
 		statementList.addLast(new AssignmentStatement("v", new ValueExpression(new IntValue(20))));
+		statementList.addLast(new PrintStatement(new VariableExpression("v")));
 		statementList.addLast(new WaitStatement(new ValueExpression(new IntValue(10))));
 		statementList.addLast(new PrintStatement(new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(10)), "*")));
 		
