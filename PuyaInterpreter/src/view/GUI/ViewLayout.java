@@ -6,9 +6,11 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -43,6 +45,7 @@ class ViewLayout {
 	private TableView<Integer> lockTableTableView;
 	private TableView<String> procedureTableTableView;
 	private TextField programStateCountTextField;
+	private HBox lockMechanismAreaLayout;
 	
 	public ViewLayout(GUIController controller) {
 		this.controller = controller;
@@ -123,13 +126,6 @@ class ViewLayout {
 		firstAvailableThread.getLockTable().forEachKey(lockAddress -> this.lockTableTableView.getItems().add(lockAddress));
 	}
 	
-	private void updateLockMechanismView() {
-		//this.updateSemaphoreTableTableView();
-		//this.updateLatchTableTableView();
-		//this.updateBarrierTableTableView();
-		this.updateLockTableTableView();
-	}
-	
 	private void updateOutputListView() {
 		this.outputListView.getItems().clear();
 		ProgramState firstAvailableThread = this.controller.getFirstAvailableThread();
@@ -161,10 +157,13 @@ class ViewLayout {
 	}
 	
 	// threadList, heap, output, filetable, lock tables, procedure table - they don't depend on the current thread
-	private void updateGlobalStructures() {
+	private void updateGlobalStructures() {		
 		this.updateThreadListView();
 		this.updateHeapTableView();
-		this.updateLockMechanismView();
+		this.updateSemaphoreTableTableView();
+		this.updateLatchTableTableView();
+		this.updateBarrierTableTableView();
+		this.updateLockTableTableView();
 		this.updateOutputListView();
 		this.updateFileTableListView();
 		this.updateProcedureTableTableView();
@@ -388,14 +387,7 @@ class ViewLayout {
 		this.lockTableTableView.getColumns().add(lockOwnerColumn);
 		this.lockTableTableView.setMaxWidth(Double.MAX_VALUE);
 	}
-	
-	private void initialiseLockMechanismView() {
-		//this.initialiseSemaphoreTableTableView();
-		//this.initialiseLatchTableTableView();
-		//this.initialiseBarrierTableTableView();
-		this.initialiseLockTableTableView();
-	}
-	
+
 	private void initialiseFileTableListView() {
 		this.fileTableListView = new ListView<String>();
 		this.fileTableListView.setMaxWidth(Double.MAX_VALUE);
@@ -442,11 +434,66 @@ class ViewLayout {
 		this.initialiseSymbolTableTableView();
 		this.initialiseOutputListView();
 		this.initialiseHeapTableTableView();
-		this.initialiseLockMechanismView();
+		this.initialiseSemaphoreTableTableView();
+		this.initialiseLatchTableTableView();
+		this.initialiseBarrierTableTableView();
+		this.initialiseLockTableTableView();
 		this.initialiseFileTableListView();
 		this.initialiseStackListView();
 		this.initialiseProcedureTableTableView();
 		this.initialiseThreadCountTextField();
+	}
+	
+	private void radioButtonChangedAction(Boolean previousState, Boolean newState, TableView<Integer> newTableView) {
+		if (newState == true && previousState == false) {
+			this.lockMechanismAreaLayout.getChildren().clear();
+			this.lockMechanismAreaLayout.getChildren().add(newTableView);
+		}
+	}
+	
+	private VBox createLockMechanismTableViewSelectArea() {
+		VBox layout = new VBox(5);
+		
+		RadioButton selectSemaphore = new RadioButton("Semaphore");
+		RadioButton selectLatch = new RadioButton("Latch");
+		RadioButton selectBarrier = new RadioButton("Barrier");
+		RadioButton selectLock = new RadioButton("Lock");
+		ToggleGroup lockMechanismTableViewToggleGroup = new ToggleGroup();
+		
+		selectSemaphore.setToggleGroup(lockMechanismTableViewToggleGroup);
+		selectLatch.setToggleGroup(lockMechanismTableViewToggleGroup);
+		selectBarrier.setToggleGroup(lockMechanismTableViewToggleGroup);
+		selectLock.setToggleGroup(lockMechanismTableViewToggleGroup);
+		
+		selectSemaphore.setSelected(true); // by default, the semaphore table view is displayed
+		selectSemaphore.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean previousState, Boolean newState) {
+				radioButtonChangedAction(previousState, newState, semaphoreTableTableView);
+			}
+		});
+		selectLatch.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> arg0, Boolean previousState, Boolean newState) {
+				radioButtonChangedAction(previousState, newState, latchTableTableView);
+			}
+		});
+		selectBarrier.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> arg0, Boolean previousState, Boolean newState) {
+				radioButtonChangedAction(previousState, newState, barrierTableTableView);
+			}
+		});
+		selectLock.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> arg0, Boolean previousState, Boolean newState) {
+				radioButtonChangedAction(previousState, newState, lockTableTableView);
+			}
+		});
+		
+		layout.getChildren().addAll(selectSemaphore, selectLatch, selectBarrier, selectLock);
+		
+		return layout;
 	}
 	
 	public HBox createViewLayout() {
@@ -465,9 +512,9 @@ class ViewLayout {
 		VBox.setVgrow(leftLayout, Priority.ALWAYS);
 		
 		HBox.setHgrow(this.heapTableView, Priority.ALWAYS);
-		//HBox.setHgrow(this.semaphoreTableTableView, Priority.ALWAYS);
-		//HBox.setHgrow(this.latchTableTableView, Priority.ALWAYS);
-		//HBox.setHgrow(this.barrierTableTableView, Priority.ALWAYS);
+		HBox.setHgrow(this.semaphoreTableTableView, Priority.ALWAYS);
+		HBox.setHgrow(this.latchTableTableView, Priority.ALWAYS);
+		HBox.setHgrow(this.barrierTableTableView, Priority.ALWAYS);
 		HBox.setHgrow(this.lockTableTableView, Priority.ALWAYS);
 		HBox.setHgrow(this.symbolTableTableView, Priority.ALWAYS);
 		HBox.setHgrow(upperMidLayout, Priority.ALWAYS);
@@ -481,13 +528,11 @@ class ViewLayout {
 		VBox.setVgrow(this.procedureTableTableView, Priority.ALWAYS);
 		VBox.setVgrow(rightLayout, Priority.ALWAYS);
 		
-		leftLayout.getChildren().addAll(this.programStateCountTextField, this.threadListView);
+		leftLayout.getChildren().addAll(this.programStateCountTextField, this.threadListView, this.createLockMechanismTableViewSelectArea());
 		
-		upperMidLayout.getChildren().addAll(this.symbolTableTableView, this.heapTableView);
-		//upperRightLayout.getChildren().add(this.semaphoreTableTableView);
-		//upperMidLayout.getChildren().add(this.latchTableTableView);
-		//upperMidLayout.getChildren().add(this.barrierTableTableView);
-		upperMidLayout.getChildren().add(this.lockTableTableView);
+		this.lockMechanismAreaLayout = new HBox(5);
+		this.lockMechanismAreaLayout.getChildren().add(this.semaphoreTableTableView); // by default, the semaphore table view is displayed
+		upperMidLayout.getChildren().addAll(this.symbolTableTableView, this.heapTableView, this.lockMechanismAreaLayout);
 		lowerMidLayout.getChildren().addAll(this.stackListView, this.fileTableListView, this.outputListView);
 		midLayout.getChildren().addAll(upperMidLayout, lowerMidLayout);
 		
