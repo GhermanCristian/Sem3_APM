@@ -76,97 +76,62 @@ class ViewLayout {
 		this.controller.getThreadList().forEach(thread -> this.threadListView.getItems().add(thread.getThreadID()));
 	}
 	
-	private void updateHeapTableView() {
+	private void updateHeapTableView(ProgramState firstAvailableThread) {
 		this.heapTableView.getItems().clear();
-		ProgramState firstAvailableThread = this.controller.getFirstAvailableThread();
-		if (firstAvailableThread == null) {
-			return ;
-		}
-		
 		firstAvailableThread.getHeap().forEachKey(variableAddress -> this.heapTableView.getItems().add(variableAddress));
 	}
 	
-	private void updateSemaphoreTableTableView() {
+	private void updateSemaphoreTableTableView(ProgramState firstAvailableThread) {
 		this.semaphoreTableTableView.getItems().clear();
-		ProgramState firstAvailableThread = this.controller.getFirstAvailableThread();
-		if (firstAvailableThread == null) {
-			return ;
-		}
-		
 		firstAvailableThread.getSemaphoreTable().forEachKey(semaphoreAddress -> this.semaphoreTableTableView.getItems().add(semaphoreAddress));
 	}
 	
-	private void updateLatchTableTableView() {
+	private void updateLatchTableTableView(ProgramState firstAvailableThread) {
 		this.latchTableTableView.getItems().clear();
-		ProgramState firstAvailableThread = this.controller.getFirstAvailableThread();
-		if (firstAvailableThread == null) {
-			return ;
-		}
-		
 		firstAvailableThread.getLatchTable().forEachKey(latchAddress -> this.latchTableTableView.getItems().add(latchAddress));
 	}
 	
-	private void updateBarrierTableTableView() {
+	private void updateBarrierTableTableView(ProgramState firstAvailableThread) {
 		this.barrierTableTableView.getItems().clear();
-		ProgramState firstAvailableThread = this.controller.getFirstAvailableThread();
-		if (firstAvailableThread == null) {
-			return ;
-		}
-		
 		firstAvailableThread.getBarrierTable().forEachKey(barrierAddress -> this.barrierTableTableView.getItems().add(barrierAddress));
 	}
 	
-	private void updateLockTableTableView() {
+	private void updateLockTableTableView(ProgramState firstAvailableThread) {
 		this.lockTableTableView.getItems().clear();
-		ProgramState firstAvailableThread = this.controller.getFirstAvailableThread();
-		if (firstAvailableThread == null) {
-			return ;
-		}
-		
 		firstAvailableThread.getLockTable().forEachKey(lockAddress -> this.lockTableTableView.getItems().add(lockAddress));
 	}
 	
-	private void updateOutputListView() {
+	private void updateOutputListView(ProgramState firstAvailableThread) {
 		this.outputListView.getItems().clear();
-		ProgramState firstAvailableThread = this.controller.getFirstAvailableThread();
-		if (firstAvailableThread == null) {
-			return ;
-		}
-		
 		firstAvailableThread.getOutput().forEach(message -> this.outputListView.getItems().add(message.toString()));
 	}
 	
-	private void updateFileTableListView() {
+	private void updateFileTableListView(ProgramState firstAvailableThread) {
 		this.fileTableListView.getItems().clear();
-		ProgramState firstAvailableThread = this.controller.getFirstAvailableThread();
-		if (firstAvailableThread == null) {
-			return ;
-		}
-		
 		firstAvailableThread.getFileTable().forEachKey(fileName -> this.fileTableListView.getItems().add(fileName.toString()));
 	}
 	
-	private void updateProcedureTableTableView() {
+	private void updateProcedureTableTableView(ProgramState firstAvailableThread) {
 		this.procedureTableTableView.getItems().clear();
-		ProgramState firstAvailableThread = this.controller.getFirstAvailableThread();
-		if (firstAvailableThread == null) {
-			return ;
-		}
-		
 		firstAvailableThread.getProcedureTable().forEachKey(procedureName -> this.procedureTableTableView.getItems().add(procedureName));
 	}
 	
 	// threadList, heap, output, filetable, lock tables, procedure table - they don't depend on the current thread
-	private void updateGlobalStructures() {		
+	private void updateGlobalStructures() {
+		ProgramState firstAvailableThread = this.controller.getFirstAvailableThread();
+		if (firstAvailableThread == null) {
+			return ;
+		}
+		
 		this.updateThreadListView();
-		this.updateHeapTableView();
-		this.updateSemaphoreTableTableView();
-		this.updateLatchTableTableView();
-		this.updateBarrierTableTableView();
-		this.updateLockTableTableView();
-		this.updateOutputListView();
-		this.updateFileTableListView();
-		this.updateProcedureTableTableView();
+		this.updateHeapTableView(firstAvailableThread);
+		this.updateSemaphoreTableTableView(firstAvailableThread);
+		this.updateLatchTableTableView(firstAvailableThread);
+		this.updateBarrierTableTableView(firstAvailableThread);
+		this.updateLockTableTableView(firstAvailableThread);
+		this.updateOutputListView(firstAvailableThread);
+		this.updateFileTableListView(firstAvailableThread);
+		this.updateProcedureTableTableView(firstAvailableThread);
 		
 		// update the textfield for the thread count; only after the threadListView is updated in updateGlobalStructures()
 		this.programStateCountTextField.setText("Threads: " + Integer.toString(this.threadListView.getItems().size()));
@@ -193,21 +158,19 @@ class ViewLayout {
 			public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
 				// It's no use to pass the currently selected thread to the controller (and back again to the GUI)
 				// because the currentThread doesn't affect the program execution, just the content displayed in the GUI
-				
 				// also, if I click on the ID that's already clicked, there's no use in updating anything
 				if (newValue == oldValue) {
 					return;
 				}
 				
 				if (newValue == null || newValue < 0) {
-					// by doing this we reduce the possibility of not having a thread selected at a time, which did occur frequently for some reason
+					// by doing this we reduce the possibility of not having a thread selected, which did occur frequently for some reason
 					ProgramState firstAvailableThread = controller.getFirstAvailableThread();
 					if (firstAvailableThread == null) {
 						; // what happens if there are no threads left ?
 					}
 					newValue = firstAvailableThread.getThreadID();
 				}
-				
 				selectedThread = controller.getThreadByID(newValue);
 				updateThreadDependantStructures();
 			}
@@ -217,8 +180,6 @@ class ViewLayout {
 	private void initialiseSymbolTableTableView() {
 		this.symbolTableTableView = new TableView<String>();
 		this.symbolTableTableView.setEditable(false);
-		
-		this.symbolTableTableView.setMaxWidth(Double.MAX_VALUE);
 		
 		TableColumn<String, String> variableNameColumn = new TableColumn<String, String>("Variable name");
 		variableNameColumn.prefWidthProperty().bind(this.symbolTableTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH_2_COLUMN_TABLE_VIEW));
@@ -240,7 +201,6 @@ class ViewLayout {
 	
 	private void initialiseOutputListView() {
 		this.outputListView = new ListView<String>();
-		this.outputListView.setMaxWidth(Double.MAX_VALUE);
 	}
 	
 	private void initialiseHeapTableTableView() {
@@ -263,7 +223,6 @@ class ViewLayout {
 		
 		this.heapTableView.getColumns().add(variableAddressColumn);
 		this.heapTableView.getColumns().add(variableValueColumn);
-		this.heapTableView.setMaxWidth(Double.MAX_VALUE);
 	}
 	
 	private void initialiseSemaphoreTableTableView() {
@@ -281,7 +240,6 @@ class ViewLayout {
 			if (this.selectedThread == null) {
 				return null;
 			}
-			
 			Pair<Integer, ArrayList<Integer>> currentSemaphoreValue = this.selectedThread.getSemaphoreTable().getValue(currentSemaphoreKey.getValue());
 			return new ReadOnlyStringWrapper(currentSemaphoreValue.getKey().toString());
 		});
@@ -292,7 +250,6 @@ class ViewLayout {
 			if (this.selectedThread == null) {
 				return null;
 			}
-			
 			Pair<Integer, ArrayList<Integer>> currentSemaphoreValue = this.selectedThread.getSemaphoreTable().getValue(currentSemaphoreKey.getValue());
 			return new ReadOnlyStringWrapper(currentSemaphoreValue.getValue().toString());
 		});
@@ -300,7 +257,6 @@ class ViewLayout {
 		this.semaphoreTableTableView.getColumns().add(semaphoreAddressColumn);
 		this.semaphoreTableTableView.getColumns().add(semaphoreCapacityColumn);
 		this.semaphoreTableTableView.getColumns().add(semaphoreThreadListColumn);
-		this.semaphoreTableTableView.setMaxWidth(Double.MAX_VALUE);
 	}
 	
 	private void initialiseLatchTableTableView() {
@@ -318,13 +274,11 @@ class ViewLayout {
 			if (this.selectedThread == null) {
 				return null;
 			}
-			
 			return new ReadOnlyStringWrapper(this.selectedThread.getLatchTable().getValue(currentLatchKey.getValue()).toString());
 		});
 		
 		this.latchTableTableView.getColumns().add(latchAddressColumn);
 		this.latchTableTableView.getColumns().add(latchCountColumn);
-		this.latchTableTableView.setMaxWidth(Double.MAX_VALUE);
 	}
 	
 	private void initialiseBarrierTableTableView() {
@@ -342,7 +296,6 @@ class ViewLayout {
 			if (this.selectedThread == null) {
 				return null;
 			}
-			
 			Pair<Integer, ArrayList<Integer>> currentBarrierValue = this.selectedThread.getBarrierTable().getValue(currentBarrierKey.getValue());
 			return new ReadOnlyStringWrapper(currentBarrierValue.getKey().toString());
 		});
@@ -353,7 +306,6 @@ class ViewLayout {
 			if (this.selectedThread == null) {
 				return null;
 			}
-			
 			Pair<Integer, ArrayList<Integer>> currentBarrierValue = this.selectedThread.getBarrierTable().getValue(currentBarrierKey.getValue());
 			return new ReadOnlyStringWrapper(currentBarrierValue.getValue().toString());
 		});
@@ -361,7 +313,6 @@ class ViewLayout {
 		this.barrierTableTableView.getColumns().add(barrierAddressColumn);
 		this.barrierTableTableView.getColumns().add(barrierCapacityColumn);
 		this.barrierTableTableView.getColumns().add(barrierThreadListColumn);
-		this.barrierTableTableView.setMaxWidth(Double.MAX_VALUE);
 	}
 	
 	private void initialiseLockTableTableView() {
@@ -379,30 +330,24 @@ class ViewLayout {
 			if (this.selectedThread == null) {
 				return null;
 			}
-			
 			return new ReadOnlyStringWrapper(this.selectedThread.getLockTable().getValue(currentLockKey.getValue()).toString());
 		});
 		
 		this.lockTableTableView.getColumns().add(lockAddressColumn);
 		this.lockTableTableView.getColumns().add(lockOwnerColumn);
-		this.lockTableTableView.setMaxWidth(Double.MAX_VALUE);
 	}
 
 	private void initialiseFileTableListView() {
 		this.fileTableListView = new ListView<String>();
-		this.fileTableListView.setMaxWidth(Double.MAX_VALUE);
 	}
 	
 	private void initialiseStackListView() {
 		this.stackListView = new ListView<String>();
-		this.stackListView.setMaxWidth(Double.MAX_VALUE);
 	}
 	
 	private void initialiseProcedureTableTableView() {
 		this.procedureTableTableView = new TableView<String>();
 		this.procedureTableTableView.setEditable(false);
-		
-		this.procedureTableTableView.setMaxWidth(Double.MAX_VALUE);
 		
 		TableColumn<String, String> procedureNameColumn = new TableColumn<String, String>("Procedure name");
 		procedureNameColumn.prefWidthProperty().bind(this.procedureTableTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH_2_COLUMN_TABLE_VIEW));
@@ -426,7 +371,7 @@ class ViewLayout {
 		this.programStateCountTextField = new TextField("Threads: 0");
 		this.programStateCountTextField.setEditable(false);
 		this.programStateCountTextField.setMaxWidth(this.MAXIMUM_PROGRAM_STATE_COUNT_FIELD_WIDTH);
-		this.programStateCountTextField.setId("threadCountTextField");
+		this.programStateCountTextField.setId("threadCountTextField"); // css stuff
 	}
 	
 	private void initialiseAllStructures() {
@@ -444,11 +389,16 @@ class ViewLayout {
 		this.initialiseThreadCountTextField();
 	}
 	
-	private void radioButtonChangedAction(Boolean previousState, Boolean newState, TableView<Integer> newTableView) {
-		if (newState == true && previousState == false) {
-			this.lockMechanismAreaLayout.getChildren().clear();
-			this.lockMechanismAreaLayout.getChildren().add(newTableView);
-		}
+	private void setRadioButtonChangedAction(RadioButton currentButton, TableView<Integer> newTableView) {
+		currentButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean previousState, Boolean newState) {
+				if (newState == true && previousState == false) {
+					lockMechanismAreaLayout.getChildren().clear();
+					lockMechanismAreaLayout.getChildren().add(newTableView);
+				}
+			}
+		});
 	}
 	
 	private VBox createLockMechanismTableViewSelectArea() {
@@ -466,30 +416,10 @@ class ViewLayout {
 		selectLock.setToggleGroup(lockMechanismTableViewToggleGroup);
 		
 		selectSemaphore.setSelected(true); // by default, the semaphore table view is displayed
-		selectSemaphore.selectedProperty().addListener(new ChangeListener<Boolean>() {
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean previousState, Boolean newState) {
-				radioButtonChangedAction(previousState, newState, semaphoreTableTableView);
-			}
-		});
-		selectLatch.selectedProperty().addListener(new ChangeListener<Boolean>() {
-			@Override
-			public void changed(ObservableValue<? extends Boolean> arg0, Boolean previousState, Boolean newState) {
-				radioButtonChangedAction(previousState, newState, latchTableTableView);
-			}
-		});
-		selectBarrier.selectedProperty().addListener(new ChangeListener<Boolean>() {
-			@Override
-			public void changed(ObservableValue<? extends Boolean> arg0, Boolean previousState, Boolean newState) {
-				radioButtonChangedAction(previousState, newState, barrierTableTableView);
-			}
-		});
-		selectLock.selectedProperty().addListener(new ChangeListener<Boolean>() {
-			@Override
-			public void changed(ObservableValue<? extends Boolean> arg0, Boolean previousState, Boolean newState) {
-				radioButtonChangedAction(previousState, newState, lockTableTableView);
-			}
-		});
+		this.setRadioButtonChangedAction(selectSemaphore, this.semaphoreTableTableView);
+		this.setRadioButtonChangedAction(selectLatch, this.latchTableTableView);
+		this.setRadioButtonChangedAction(selectBarrier, this.barrierTableTableView);
+		this.setRadioButtonChangedAction(selectLock, this.lockTableTableView);
 		
 		layout.getChildren().addAll(selectSemaphore, selectLatch, selectBarrier, selectLock);
 		
