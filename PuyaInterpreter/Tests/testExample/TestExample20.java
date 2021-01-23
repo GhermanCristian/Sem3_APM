@@ -29,18 +29,23 @@ public class TestExample20 extends TestExample {
 	
 	@Test
 	public void FullProgramExecution_Example20_CorrectOutput() {
+		int parentThreadID = crtState.getThreadID();
+		int nextThreadID = crtState.getThreadCount();
+		StringValue thread1Latch = new StringValue("(latch) " + Integer.toString(parentThreadID));
+		StringValue thread2Latch = new StringValue("(latch) " + Integer.toString(nextThreadID));
+		StringValue thread3Latch = new StringValue("(latch) " + Integer.toString(nextThreadID + 1));
 		super.executeProgram();
 		
 		assertEquals(output.size(), 9);
 		try {
 			assertEquals(output.get(0), new IntValue(20));
-			assertEquals(output.get(1), new IntValue(30));
-			assertEquals(output.get(2), new StringValue("(latch) 2"));
-			assertEquals(output.get(3), new StringValue("(latch) 3"));
-			assertEquals(output.get(4), new IntValue(40));
-			assertEquals(output.get(5), new StringValue("(latch) 4"));
+			assertTrue((output.get(1).equals(thread2Latch) && output.get(2).equals(new IntValue(30))) || 
+						(output.get(1).equals(new IntValue(30)) && output.get(2).equals(thread2Latch)));
+			assertTrue((output.get(3).equals(thread3Latch) && output.get(4).equals(new IntValue(40))) || 
+						(output.get(3).equals(new IntValue(40)) && output.get(4).equals(thread3Latch)));
+			assertEquals(output.get(5), new StringValue("(latch) " + Integer.toString(nextThreadID + 2)));
 			assertEquals(output.get(6), new IntValue(100));
-			assertEquals(output.get(7), new StringValue("(latch) 1"));
+			assertEquals(output.get(7), thread1Latch);
 			assertEquals(output.get(8), new IntValue(100));
 		} 
 		catch (Exception e) {

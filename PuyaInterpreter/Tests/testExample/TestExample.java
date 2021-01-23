@@ -89,7 +89,6 @@ public class TestExample {
 	@After
 	public void clearAndCloseData() {
 		crtState.clear();
-		crtState.resetThreadID();
 		symbolTable = new MyDictionary<String, ValueInterface>();
 		symbolTableStack.push(symbolTable);
 		typeEnvironment.clear();

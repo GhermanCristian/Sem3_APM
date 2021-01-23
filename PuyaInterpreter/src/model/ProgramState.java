@@ -64,6 +64,10 @@ public class ProgramState {
 		return this.threadID;
 	}
 	
+	public int getThreadCount() {
+		return ProgramState.globalThreadCount;
+	}
+	
 	public StackInterface<StatementInterface> getExecutionStack() {
 		return this.executionStack;
 	}
@@ -151,10 +155,6 @@ public class ProgramState {
 		this.barrierTable.clear();
 		this.lockTable.clear();
 		this.procedureTable.clear();
-	}
-	
-	public synchronized void resetThreadID() {
-		//ProgramState.globalThreadCount = 2;
 	}
 	
 	public String toString() {

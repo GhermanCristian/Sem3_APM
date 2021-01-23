@@ -91,16 +91,17 @@ public class TestExample22 extends TestExample {
 	
 	@Test
 	public void FullProgramExecution_Example22_CorrectLockMechanisms() {
+		int parentThreadID = crtState.getThreadID();
+		int nextThreadID = crtState.getThreadCount();
 		super.executeProgram();
 		
 		assertTrue(semaphoreTable.isEmpty());
 		assertTrue(latchTable.isEmpty());
 		assertEquals(1, barrierTable.size());
 		assertEquals(3, barrierTable.getValue(1).getKey());
-		// threadIDs are broken in the tests rn
-		//assertEquals(2, barrierTable.getValue(1).getValue().get(0));
-		//assertEquals(1, barrierTable.getValue(1).getValue().get(1));
-		//assertEquals(3, barrierTable.getValue(1).getValue().get(2));
+		assertEquals(nextThreadID, barrierTable.getValue(1).getValue().get(0));
+		assertEquals(parentThreadID, barrierTable.getValue(1).getValue().get(1));
+		assertEquals(nextThreadID + 1, barrierTable.getValue(1).getValue().get(2));
 		assertTrue(lockTable.isEmpty());
 	}
 	
