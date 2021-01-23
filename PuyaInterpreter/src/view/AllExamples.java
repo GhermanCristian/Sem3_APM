@@ -1,5 +1,6 @@
 package view;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import model.Example;
@@ -54,7 +55,7 @@ import model.value.IntValue;
 import model.value.StringValue;
 
 public class AllExamples {
-	private final String SRC_FOLDER_PATH = "C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter\\logs";
+	private final String SRC_FOLDER_PATH = System.getProperty("user.dir") + File.separator + "logs";
 	
 	private StatementInterface composeStatement(MyList<StatementInterface> crtList){
 		if (crtList.size() == 0) {

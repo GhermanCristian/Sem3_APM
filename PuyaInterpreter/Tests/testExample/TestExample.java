@@ -2,6 +2,7 @@ package testExample;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import org.junit.*;
@@ -43,6 +44,7 @@ public class TestExample {
 	static ProgramState crtState;
 	static RepositoryInterface repo;
 	static Controller controller;
+	static String SRC_FOLDER_PATH = System.getProperty("user.dir") + File.separator + "logs" + File.separator;
 
 	@BeforeClass
 	public static void initialiseData() {

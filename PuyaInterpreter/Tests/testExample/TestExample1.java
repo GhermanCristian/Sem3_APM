@@ -7,7 +7,7 @@ import model.value.IntValue;
 import view.AllExamples;
 
 public class TestExample1 extends TestExample {
-	private static final String REPOSITORY_PATH = "C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter\\logs\\log1.in";
+	private static final String REPOSITORY_PATH = TestExample.SRC_FOLDER_PATH + "log1.in";
 	
 	@BeforeClass
 	public static void initialiseData() {

@@ -1,6 +1,7 @@
 package testStatement;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.io.File;
 import org.junit.*;
 import baseTest.BaseTest;
 import model.ProgramState;
@@ -11,7 +12,8 @@ import model.value.IntValue;
 import model.value.StringValue;
 
 public class TestOpenReadFileStatement extends BaseTest {
-	private final String SRC_FOLDER_PATH = "C:\\Users\\gherm\\Documents\\EclipseWorkspace\\APM\\PuyaInterpreter\\logs";
+	private final String SRC_FOLDER_PATH = System.getProperty("user.dir") + File.separator + "logs";
+	
 	@BeforeClass
 	public static void initialiseData() {
 		BaseTest.initialiseData();
