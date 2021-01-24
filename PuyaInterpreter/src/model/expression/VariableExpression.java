@@ -29,6 +29,9 @@ public class VariableExpression implements ExpressionInterface{
 
 	@Override
 	public TypeInterface typeCheck(DictionaryInterface<String, TypeInterface> typeEnvironment) throws Exception {
+		if (typeEnvironment.isDefined(this.variableName) == false) {
+			throw new UndefinedVariableException("VariableExpression: variable " + this.variableName + " is undefined in the type environment");
+		}
 		return typeEnvironment.getValue(this.variableName);
 	}
 }
