@@ -5,6 +5,7 @@ import controller.GUIController;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
@@ -52,6 +53,11 @@ class ViewLayout {
 		this.controller = controller;
 	}
 	
+	private void updateSymbolTableTableView() {
+		this.symbolTableTableView.getItems().clear();
+		this.selectedThread.getSymbolTable().forEachKey(variableName -> this.symbolTableTableView.getItems().add(variableName));
+	}
+	
 	private void updateStackListView() {
 		this.stackListView.getItems().clear();
 		this.selectedThread.getExecutionStack().forEach(statement -> {
@@ -59,11 +65,6 @@ class ViewLayout {
 				this.stackListView.getItems().add(statement.toString());
 			}
 		});
-	}
-	
-	private void updateSymbolTableTableView() {
-		this.symbolTableTableView.getItems().clear();
-		this.selectedThread.getSymbolTable().forEachKey(variableName -> this.symbolTableTableView.getItems().add(variableName));
 	}
 	
 	private void updateThreadDependantStructures() {
@@ -431,12 +432,30 @@ class ViewLayout {
 		return layout;
 	}
 	
+	private HBox createLowerMidLayout() {
+		HBox lowerMidLayout = new HBox(5);
+		
+		VBox stackListViewBox = new VBox(5);
+		stackListViewBox.getChildren().addAll(new Label("Stack"), this.stackListView);
+		VBox fileTableListViewBox = new VBox(5);
+		fileTableListViewBox.getChildren().addAll(new Label("File table"), this.fileTableListView);
+		VBox outputListViewBox = new VBox(5);
+		outputListViewBox.getChildren().addAll(new Label("Output"), this.outputListView);
+		HBox.setHgrow(stackListViewBox, Priority.ALWAYS);
+		HBox.setHgrow(outputListViewBox, Priority.ALWAYS);
+		HBox.setHgrow(fileTableListViewBox, Priority.ALWAYS);
+		
+		lowerMidLayout.getChildren().addAll(stackListViewBox, fileTableListViewBox, outputListViewBox);
+		HBox.setHgrow(lowerMidLayout, Priority.ALWAYS);
+		return lowerMidLayout;
+	}
+	
 	public HBox createViewLayout() {
 		HBox mainStructuresLayout = new HBox(5);
 		VBox leftLayout = new VBox(5);
 		VBox midLayout = new VBox(5);
 		HBox upperMidLayout = new HBox(5);
-		HBox lowerMidLayout = new HBox(5);
+		
 		VBox rightLayout = new VBox(5);
 		
 		this.initialiseAllStructures();
@@ -454,10 +473,6 @@ class ViewLayout {
 		HBox.setHgrow(this.symbolTableTableView, Priority.ALWAYS);
 		HBox.setHgrow(upperMidLayout, Priority.ALWAYS);
 		
-		HBox.setHgrow(this.outputListView, Priority.ALWAYS);
-		HBox.setHgrow(this.stackListView, Priority.ALWAYS);
-		HBox.setHgrow(this.fileTableListView, Priority.ALWAYS);
-		HBox.setHgrow(lowerMidLayout, Priority.ALWAYS);
 		HBox.setHgrow(midLayout, Priority.ALWAYS);
 		
 		VBox.setVgrow(this.procedureTableTableView, Priority.ALWAYS);
@@ -468,8 +483,8 @@ class ViewLayout {
 		this.lockMechanismAreaLayout = new HBox(5);
 		this.lockMechanismAreaLayout.getChildren().add(this.semaphoreTableTableView); // by default, the semaphore table view is displayed
 		upperMidLayout.getChildren().addAll(this.symbolTableTableView, this.heapTableView, this.lockMechanismAreaLayout);
-		lowerMidLayout.getChildren().addAll(this.stackListView, this.fileTableListView, this.outputListView);
-		midLayout.getChildren().addAll(upperMidLayout, lowerMidLayout);
+		
+		midLayout.getChildren().addAll(upperMidLayout, this.createLowerMidLayout());
 		
 		rightLayout.getChildren().addAll(this.procedureTableTableView);
 		
