@@ -1,5 +1,8 @@
 package model.statement;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
 import model.type.TypeInterface;
@@ -28,8 +31,11 @@ public class ClearOutOfScopeVariablesStatement implements StatementInterface {
 	
 	@Override
 	public ProgramState execute(ProgramState crtState) throws Exception {
-		DictionaryInterface<String, ValueInterface> symbolTable = crtState.getSymbolTable(); // the sym table after executing the inner scope
-		symbolTable.forEachKey(variableName -> {if(initialSymbolTable.isDefined(variableName) == false) symbolTable.remove(variableName);});
+		DictionaryInterface<String, ValueInterface> symbolTable = crtState.getSymbolTable(); // the sym table after executing the inner scope		
+		symbolTable.setContent((HashMap<String, ValueInterface>)symbolTable.getAllPairs().entrySet()
+					.stream()
+					.filter(nameTypePair -> this.initialSymbolTable.isDefined(nameTypePair.getKey()))
+					.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
 		
 		// this is a "free" statement <=> it doesn't require an entire step to be executed
 		// it really shouldn't even be seen in the execution stack, it's like a garbage collector

@@ -1,6 +1,7 @@
 package model.statement;
 
 import exception.InvalidTypeException;
+import exception.StackOverflowException;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
 import model.ADT.StackInterface;
@@ -35,7 +36,15 @@ public class WhileStatement implements StatementInterface {
 		
 		ValueInterface conditionalExpressionValue = this.conditionalExpression.evaluate(symbolTable, heap);
 		if (((BoolValue)conditionalExpressionValue).getValue() == expectedLogicalValue) {
+			if (stack.size() >= CallProcedureStatement.STACK_PROCEDURE_LIMIT) {
+				throw new StackOverflowException("WhileStatement: stack overflow");
+			}
+			
 			stack.push(this);
+			// for the while statement, we always have at least 1 last step (sees that the condition is false and exits, without creating those variables)
+			// so variables defined inside the scope of the while will not be visible in the outer symbol table, regardless of whether
+			// there is anything to do after it
+			stack.push(new ClearOutOfScopeVariablesStatement(symbolTable.clone()));
 			return this.statement.execute(crtState);
 		}
 		

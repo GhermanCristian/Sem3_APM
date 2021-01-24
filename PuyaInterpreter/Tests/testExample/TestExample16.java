@@ -29,13 +29,12 @@ public class TestExample16 extends TestExample {
 	public void FullProgramExecution_Example16_CorrectOutput() {
 		super.executeProgram();
 		
-		assertEquals(output.size(), 5);
+		assertEquals(output.size(), 4);
 		try {
 			assertEquals(output.get(0), new IntValue(4));
 			assertEquals(output.get(1), new IntValue(3));
 			assertEquals(output.get(2), new IntValue(2));
 			assertEquals(output.get(3), new IntValue(1));
-			assertEquals(output.get(4), new IntValue(0));
 		} 
 		catch (Exception e) {
 			fail(e.getMessage());

@@ -29,11 +29,10 @@ public class TestExample17 extends TestExample {
 	public void FullProgramExecution_Example17_CorrectOutput() {
 		super.executeProgram();
 		
-		assertEquals(output.size(), 3);
+		assertEquals(output.size(), 2);
 		try {
 			assertEquals(output.get(0), new IntValue(25));
 			assertEquals(output.get(1), new IntValue(24));
-			assertEquals(output.get(2), new IntValue(0));
 		} 
 		catch (Exception e) {
 			fail(e.getMessage());

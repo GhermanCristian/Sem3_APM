@@ -1,5 +1,6 @@
 package model.statement;
 
+import exception.AlreadyDefinedVariableException;
 import exception.InvalidTypeException;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
@@ -34,15 +35,21 @@ public class ForStatement implements StatementInterface {
 	
 	@Override
 	public ProgramState execute(ProgramState crtState) throws Exception {
-		// we need a rel. expr because it checks if its operands are interers
+		// we need a rel. expr because it checks if its operands are integers
 		if (this.conditionalExpression instanceof RelationalExpression == false) {
-			throw new InvalidTypeException("ForStatement: Conditional expression is not an RelationalExpression");
+			throw new InvalidTypeException("ForStatement: Conditional expression is not a RelationalExpression");
 		}
 		if (this.finalStatement instanceof IncrementStatement == false) {
 			throw new InvalidTypeException("ForStatement: FinalStatement is not an IncrementStatement");
 		}
 		
 		StackInterface<StatementInterface> stack = crtState.getExecutionStack();
+		if (stack.size() > 0) {
+			stack.push(new ClearOutOfScopeVariablesStatement(crtState.getSymbolTable().clone()));
+			// this is used to remove the variable that we create (for int = var..) after we finish the for execution
+			// if there are no statements after this for => thread ends => no use in removing those variables
+		}
+			
 		stack.push(new WhileStatement(
 				this.conditionalExpression,
 				new CompoundStatement(this.bodyStatement, this.finalStatement)
@@ -73,7 +80,11 @@ public class ForStatement implements StatementInterface {
 	@Override
 	public DictionaryInterface<String, TypeInterface> getTypeEnvironment(
 			DictionaryInterface<String, TypeInterface> initialTypeEnvironment) throws Exception {
+		if (initialTypeEnvironment.isDefined(this.variableName) == true) {
+			throw new AlreadyDefinedVariableException("ForStatement: variable " + this.variableName + " is already defined in the type environment");
+		}
 		initialTypeEnvironment = this.variableDeclarationStatement.getTypeEnvironment(initialTypeEnvironment);
+		
 		if (this.initialExpression.typeCheck(initialTypeEnvironment).equals(new IntType()) == false) {
 			throw new InvalidTypeException("ForStatement: Initial assignment expression is not integer");
 		}

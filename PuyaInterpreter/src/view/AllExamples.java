@@ -399,7 +399,7 @@ public class AllExamples {
 	public Example getExample16() {
 		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
 		
-		// for(int v = 4; v > 0; v--) {print(v);} print(v);
+		// for(int v = 4; v > 0; v--) {print(v);}
 		statementList.addLast(new ForStatement(
 								"v",
 								new ValueExpression(new IntValue(4)), 
@@ -410,9 +410,8 @@ public class AllExamples {
 								new IncrementStatement("v", "-"), 
 								new PrintStatement(new VariableExpression("v"))
 							));
-		statementList.addLast(new PrintStatement(new VariableExpression("v")));
 		
-		return new Example(this.composeStatement(statementList), "for(int v = 4; v > 0; v--) {print(v);} print(v);", this.SRC_FOLDER_PATH + "\\log16.in");
+		return new Example(this.composeStatement(statementList), "for(int v = 4; v > 0; v--) {print(v);}", this.SRC_FOLDER_PATH + "\\log16.in");
 	}
 	
 	public Example getExample17() {
@@ -433,9 +432,8 @@ public class AllExamples {
 														new ValueExpression(new IntValue(23)), 
 														"+")))
 							));
-		statementList.addLast(new PrintStatement(new VariableExpression("v")));
 		
-		return new Example(this.composeStatement(statementList), "for(int v = 2; v > 0; v--) {fork(print(v + 23);} print(v);", this.SRC_FOLDER_PATH + "\\log17.in");
+		return new Example(this.composeStatement(statementList), "for(int v = 2; v > 0; v--) {fork(print(v + 23);}", this.SRC_FOLDER_PATH + "\\log17.in");
 	}
 	
 	public Example getExample18() {

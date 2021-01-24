@@ -6,7 +6,9 @@ import baseTest.BaseTest;
 import model.ProgramState;
 import model.expression.LogicalExpression;
 import model.expression.ValueExpression;
+import model.statement.AssignmentStatement;
 import model.statement.IfStatement;
+import model.statement.IncrementStatement;
 import model.statement.PrintStatement;
 import model.statement.StatementInterface;
 import model.statement.VariableDeclarationStatement;
@@ -152,6 +154,53 @@ public class TestIfStatement extends BaseTest {
 		}
 		
 		assertTrue(symbolTable.isEmpty());
+	}
+	
+	@Test
+	public void Execute_ValidValueConditionAndIsNotLastStatement_OuterVariableModifiedInsideScopeAndChangesAreVisibleOutside() {
+		StatementInterface s3 = new VariableDeclarationStatement("a", new IntType());
+		StatementInterface s4 = new AssignmentStatement("a", new ValueExpression(new IntValue(5)));
+		StatementInterface s1 = new IfStatement(new ValueExpression(new BoolValue(false)), 
+			new VariableDeclarationStatement("v1", new IntType()), 
+			new IncrementStatement("a", "-")
+		);
+		StatementInterface s2 = new PrintStatement(new ValueExpression(new StringValue("hello")));
+		
+		try {
+			s3.execute(crtState);
+			s4.execute(crtState);
+			// we don't even have to execute this statement, as long as it is in the stack, the out of scope variables are removed
+			crtState.getExecutionStack().push(s2); 
+			// "if" will place the correct branch on the exe stack;
+			s1.execute(crtState);
+			crtState.getExecutionStack().pop().execute(crtState); // the if branch
+			crtState.getExecutionStack().pop().execute(crtState); // the clear out of scope variable
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertEquals(symbolTable.getValue("a"), new IntValue(4));
+	}
+	
+	@Test
+	public void Execute_DeclaringVariableWithSameNameAsOutsideVariable_ThrowsException() {
+		StatementInterface s3 = new VariableDeclarationStatement("a", new IntType());
+		StatementInterface s1 = new IfStatement(new ValueExpression(new BoolValue(false)), 
+			new VariableDeclarationStatement("v1", new IntType()), 
+			new VariableDeclarationStatement("a", new IntType())
+		);
+		
+		try {
+			s3.execute(crtState);
+			// "if" will place the correct branch on the exe stack;
+			s1.execute(crtState);
+			crtState.getExecutionStack().pop().execute(crtState); // the if branch - will throw the exception
+			fail("Variable a is already defined");
+		}
+		catch (Exception e) {
+			assertTrue(true);
+		}
 	}
 	
 	@Test

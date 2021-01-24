@@ -141,6 +141,88 @@ public class TestWhileStatement extends BaseTest {
 	}
 	
 	@Test
+	public void Execute_5IterationsCompoundStatement_VariableNotDefinedInOuterSymbolTable() {
+		StatementInterface s1 = new VariableDeclarationStatement("a", new IntType());
+		StatementInterface s2 = new AssignmentStatement("a", new ValueExpression(new IntValue(5)));
+		StatementInterface s3 = new WhileStatement(
+									new RelationalExpression(
+											new VariableExpression("a"), 
+											new ValueExpression(new IntValue()), 
+											">"), 
+									new CompoundStatement(
+											new VariableDeclarationStatement("x", new IntType()), 
+											new IncrementStatement("a", "-")));
+		assertFalse(symbolTable.isDefined("x"));
+		try {
+			s1.execute(crtState);
+			s2.execute(crtState);
+			s3.execute(crtState);
+			while (crtState.getExecutionStack().size() > 0) {
+				crtState.getExecutionStack().pop().execute(crtState);
+			}
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertFalse(symbolTable.isDefined("x"));
+	}
+	
+	@Test
+	public void Execute_5IterationsCompoundStatement_OuterVariableModifiedInsideScopeAndChangesAreVisibleOutside() {
+		StatementInterface s1 = new VariableDeclarationStatement("a", new IntType());
+		StatementInterface s11 = new VariableDeclarationStatement("x", new IntType());
+		StatementInterface s2 = new AssignmentStatement("a", new ValueExpression(new IntValue(5)));
+		StatementInterface s22 = new AssignmentStatement("x", new ValueExpression(new IntValue(10)));
+		StatementInterface s3 = new WhileStatement(
+									new RelationalExpression(
+											new VariableExpression("a"), 
+											new ValueExpression(new IntValue()), 
+											">"), 
+									new CompoundStatement(
+											new IncrementStatement("x", "-"),
+											new IncrementStatement("a", "-")));
+		try {
+			s1.execute(crtState);
+			s2.execute(crtState);
+			s11.execute(crtState);
+			s22.execute(crtState);
+			s3.execute(crtState);
+			while (crtState.getExecutionStack().size() > 0) {
+				crtState.getExecutionStack().pop().execute(crtState);
+			}
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		assertEquals(symbolTable.getValue("x"), new IntValue(5));
+	}
+	
+	@Test
+	public void Execute_DeclaringVariableWithSameNameAsOutsideVariable_ThrowsException() {
+		StatementInterface s1 = new VariableDeclarationStatement("a", new IntType());
+		StatementInterface s11 = new VariableDeclarationStatement("x", new IntType());
+		StatementInterface s2 = new AssignmentStatement("a", new ValueExpression(new IntValue(1)));
+		StatementInterface s3 = new WhileStatement(
+									new RelationalExpression(
+											new VariableExpression("a"), 
+											new ValueExpression(new IntValue()), 
+											">"), 
+									new CompoundStatement(
+											new VariableDeclarationStatement("x", new IntType()),
+											new IncrementStatement("a", "-")));
+		try {
+			s1.execute(crtState);
+			s2.execute(crtState);
+			s11.execute(crtState);
+			s3.execute(crtState);
+			fail ("Variable x is already defined");
+		}
+		catch (Exception e) {
+			assertTrue(true);
+		}
+	}
+	
+	@Test
 	public void Execute_5IterationsCompoundStatement_CorrectOutputSize() {
 		StatementInterface s1 = new VariableDeclarationStatement("a", new IntType());
 		StatementInterface s2 = new AssignmentStatement("a", new ValueExpression(new IntValue(5)));

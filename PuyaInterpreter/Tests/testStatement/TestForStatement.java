@@ -7,6 +7,8 @@ import model.ProgramState;
 import model.expression.RelationalExpression;
 import model.expression.ValueExpression;
 import model.expression.VariableExpression;
+import model.statement.AssignmentStatement;
+import model.statement.EmptyStatement;
 import model.statement.ForStatement;
 import model.statement.IncrementStatement;
 import model.statement.PrintStatement;
@@ -80,6 +82,28 @@ public class TestForStatement extends BaseTest {
 		try {
 			s1.getTypeEnvironment(typeEnvironment);
 			fail("Right operand of the relational expression should be an integer");
+		}
+		catch (Exception e) {
+			assertTrue(true);
+		}
+	}
+	
+	@Test
+	public void GetTypeEnvironment_DeclaringVariableWithSameNameAsOutsideVariable_ThrowsException() {
+		StatementInterface s1 = new ForStatement(
+									"v",
+									new ValueExpression(new IntValue(5)), 
+									new RelationalExpression(
+											new VariableExpression("v"), 
+											new ValueExpression(new IntValue(0)), 
+											">"), 
+									new IncrementStatement("v", "-"), 
+									new VariableDeclarationStatement("x", new IntType())
+								);
+		try {
+			typeEnvironment = new VariableDeclarationStatement("v", new IntType()).getTypeEnvironment(typeEnvironment);
+			s1.getTypeEnvironment(typeEnvironment);
+			fail("Variable v is already defined in the type environment");
 		}
 		catch (Exception e) {
 			assertTrue(true);
@@ -225,6 +249,89 @@ public class TestForStatement extends BaseTest {
 			fail(e.getMessage());
 		}
 		assertNull(result);
+	}
+	
+	@Test
+	public void Execute_5Iterations_VariablesNotDefinedInOuterSymbolTable() {
+		StatementInterface s1 = new ForStatement(
+									"v",
+									new ValueExpression(new IntValue(5)), 
+									new RelationalExpression(
+											new VariableExpression("v"), 
+											new ValueExpression(new IntValue(0)), 
+											">"), 
+									new IncrementStatement("v", "-"), 
+									new VariableDeclarationStatement("x", new IntType())
+								);
+		try {
+			crtState.getExecutionStack().push(new EmptyStatement()); // as long as there's something left in the stack, the out of scope variables will be removed
+			s1.execute(crtState);
+			while (crtState.getExecutionStack().size() > 0) {
+				crtState.getExecutionStack().pop().execute(crtState);
+			}
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertFalse(symbolTable.isDefined("v"));
+		assertFalse(symbolTable.isDefined("x"));
+	}
+	
+	@Test
+	public void Execute_DeclaringVariableWithSameNameAsOutsideVariable_ThrowsException() {
+		StatementInterface s1 = new ForStatement(
+									"v",
+									new ValueExpression(new IntValue(5)), 
+									new RelationalExpression(
+											new VariableExpression("v"), 
+											new ValueExpression(new IntValue(0)), 
+											">"), 
+									new IncrementStatement("v", "-"), 
+									new VariableDeclarationStatement("x", new IntType())
+								);
+		try {
+			new VariableDeclarationStatement("v", new IntType()).execute(crtState);
+			crtState.getExecutionStack().push(new EmptyStatement()); // as long as there's something left in the stack, the out of scope variables will be removed
+			s1.execute(crtState);
+			while (crtState.getExecutionStack().size() > 0) {
+				crtState.getExecutionStack().pop().execute(crtState);
+			}
+			fail("Variable v is already defined in the symbol table");
+		}
+		catch (Exception e) {
+			assertTrue(true);
+		}
+	}
+	
+	@Test
+	public void Execute_5Iterations_OuterVariableModifiedInsideScopeAndChangesAreVisibleOutside() {
+		StatementInterface s0 = new VariableDeclarationStatement("x", new IntType());
+		StatementInterface s01 = new AssignmentStatement("x", new ValueExpression(new IntValue(10)));
+		StatementInterface s1 = new ForStatement(
+									"v",
+									new ValueExpression(new IntValue(5)), 
+									new RelationalExpression(
+											new VariableExpression("v"), 
+											new ValueExpression(new IntValue(0)), 
+											">"), 
+									new IncrementStatement("v", "-"), 
+									new IncrementStatement("x", "-")
+								);
+		try {
+			crtState.getExecutionStack().push(new EmptyStatement()); // as long as there's something left in the stack, the out of scope variables will be removed
+			s0.execute(crtState);
+			s01.execute(crtState);
+			s1.execute(crtState);
+			while (crtState.getExecutionStack().size() > 0) {
+				crtState.getExecutionStack().pop().execute(crtState);
+			}
+		}
+		catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		assertEquals(symbolTable.getValue("x"), new IntValue(5));
 	}
 	
 	@Test
