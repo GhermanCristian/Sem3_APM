@@ -27,6 +27,11 @@ public class IfStatement implements StatementInterface{
 		DictionaryInterface<String, ValueInterface> symbolTable = crtState.getSymbolTable();
 		DictionaryInterface<Integer, ValueInterface> heap = crtState.getHeap();
 		
+		if (stack.size() > 0) {
+			stack.push(new ClearOutOfScopeVariablesStatement(symbolTable.clone()));
+			// it's only worth clearing out those variables if there's sth to do after this if statement
+		}
+		
 		ValueInterface conditionalExpressionValue = this.conditionalExpression.evaluate(symbolTable, heap);
 		if (((BoolValue)conditionalExpressionValue).getValue() == true) { // the expression is true => go to the first branch
 			stack.push(this.trueConditionStatement);

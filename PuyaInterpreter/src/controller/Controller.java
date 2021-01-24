@@ -44,7 +44,7 @@ public abstract class Controller {
 	}
 	
 	protected HashMap<Integer, ValueInterface> getGarbageCollectedHeap(List<ProgramState> threadList) {
-		// the heap is the same for all threads, so we just pick one from which to get the heap
+		// the heap is the same for all threads, so we just pick one thread from which to get the heap
 		DictionaryInterface<Integer, ValueInterface> heap = this.getFirstAvailableThread().getHeap();
 		
 		List<Integer> symbolTableAddresses = new ArrayList<Integer>();
@@ -76,7 +76,7 @@ public abstract class Controller {
 															return future.get();
 														}
 														catch (Exception e) {
-															// I have to throw a runtime exception because fuck you functional programming
+															// I have to throw a runtime exception because reasons
 															throw new RuntimeException(e.getMessage());
 														}
 													})
