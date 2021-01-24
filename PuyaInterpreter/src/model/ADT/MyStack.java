@@ -4,6 +4,8 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.function.Consumer;
 
+import model.statement.ClearOutOfScopeVariablesStatement;
+
 public class MyStack<TElem> implements StackInterface<TElem>{
 	private Deque<TElem> stack;
 	
@@ -40,7 +42,9 @@ public class MyStack<TElem> implements StackInterface<TElem>{
 	public String toString() {
 		String representation = "";
 		for (TElem crtElem : this.stack) {
-			representation += (crtElem.toString());
+			if (crtElem instanceof ClearOutOfScopeVariablesStatement == false) {
+				representation += (crtElem.toString());
+			}
 		}
 		return representation;
 	}

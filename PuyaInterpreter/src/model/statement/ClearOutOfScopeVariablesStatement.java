@@ -43,6 +43,11 @@ public class ClearOutOfScopeVariablesStatement implements StatementInterface {
 		// use doing this if the program just ends after it
 		return crtState.getExecutionStack().pop().execute(crtState);
 	}
+	
+	@Override
+	public String toString() {
+		return "";
+	}
 
 	@Override
 	public DictionaryInterface<String, TypeInterface> getTypeEnvironment(

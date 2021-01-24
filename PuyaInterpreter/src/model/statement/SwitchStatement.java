@@ -23,12 +23,16 @@ public class SwitchStatement implements StatementInterface {
 	@Override
 	public ProgramState execute(ProgramState crtState) throws Exception {
 		if (this.caseExpressionList.size() + 1 != this.caseStatementList.size()) {
-			throw new Exception("SwitchStatement: number of case expression does not match the number of case statements");
+			throw new Exception("SwitchStatement: number of case expressions does not match the number of case statements");
 		}
 		
 		DictionaryInterface<String, ValueInterface> symbolTable = crtState.getSymbolTable();
 		DictionaryInterface<Integer, ValueInterface> heap = crtState.getHeap();
 		StackInterface<StatementInterface> stack = crtState.getExecutionStack();
+		
+		if (stack.size() > 0) {
+			stack.push(new ClearOutOfScopeVariablesStatement(symbolTable.clone()));
+		}
 		
 		int pos;
 		ValueInterface switchExpressionValue = this.switchExpression.evaluate(symbolTable, heap);

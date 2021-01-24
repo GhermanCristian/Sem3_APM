@@ -16,6 +16,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 import model.ProgramState;
+import model.statement.ClearOutOfScopeVariablesStatement;
 
 class ViewLayout {
 	private GUIController controller;
@@ -53,7 +54,11 @@ class ViewLayout {
 	
 	private void updateStackListView() {
 		this.stackListView.getItems().clear();
-		this.selectedThread.getExecutionStack().forEach(statement -> this.stackListView.getItems().add(statement.toString()));
+		this.selectedThread.getExecutionStack().forEach(statement -> {
+			if (statement instanceof ClearOutOfScopeVariablesStatement == false) {
+				this.stackListView.getItems().add(statement.toString());
+			}
+		});
 	}
 	
 	private void updateSymbolTableTableView() {
