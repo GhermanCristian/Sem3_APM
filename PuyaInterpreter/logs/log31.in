@@ -1,0 +1,2913 @@
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+int v;
+int x;
+int y;
+v = 0;
+repeat {
+fork
+(
+print (v);
+v--;
+)
+v++;
+}  until (v == 3);
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+int x;
+int y;
+v = 0;
+repeat {
+fork
+(
+print (v);
+v--;
+)
+v++;
+}  until (v == 3);
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+int x;
+int y;
+v = 0;
+repeat {
+fork
+(
+print (v);
+v--;
+)
+v++;
+}  until (v == 3);
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+int y;
+v = 0;
+repeat {
+fork
+(
+print (v);
+v--;
+)
+v++;
+}  until (v == 3);
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+x -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+int y;
+v = 0;
+repeat {
+fork
+(
+print (v);
+v--;
+)
+v++;
+}  until (v == 3);
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+x -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+v = 0;
+repeat {
+fork
+(
+print (v);
+v--;
+)
+v++;
+}  until (v == 3);
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+v = 0;
+repeat {
+fork
+(
+print (v);
+v--;
+)
+v++;
+}  until (v == 3);
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+repeat {
+fork
+(
+print (v);
+v--;
+)
+v++;
+}  until (v == 3);
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+repeat {
+fork
+(
+print (v);
+v--;
+)
+v++;
+}  until (v == 3);
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+fork
+(
+print (v);
+v--;
+)
+v++;
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+fork
+(
+print (v);
+v--;
+)
+v++;
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+v++;
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+v++;
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 2========
+ExecutionStack:
+print (v);
+v--;
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 1
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 2========
+ExecutionStack:
+v--;
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 1
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 2========
+ExecutionStack:
+v--;
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+v++;
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 1
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 2========
+ExecutionStack:
+
+SymbolTable:
+v -> -1
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+v++;
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 1
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 3========
+ExecutionStack:
+print (v);
+v--;
+
+SymbolTable:
+v -> 1
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 2
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 3========
+ExecutionStack:
+v--;
+
+SymbolTable:
+v -> 1
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 2
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 3========
+ExecutionStack:
+v--;
+
+SymbolTable:
+v -> 1
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+v++;
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 2
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 3========
+ExecutionStack:
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+v++;
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 2
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 4========
+ExecutionStack:
+print (v);
+v--;
+
+SymbolTable:
+v -> 2
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 3
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 4========
+ExecutionStack:
+v--;
+
+SymbolTable:
+v -> 2
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 3
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 4========
+ExecutionStack:
+v--;
+
+SymbolTable:
+v -> 2
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 3
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 4========
+ExecutionStack:
+
+SymbolTable:
+v -> 1
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 3
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 3
+x -> 1
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 3
+x -> 1
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 3
+x -> 1
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 3
+x -> 1
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 3
+x -> 1
+y -> 3
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 3
+x -> 1
+y -> 3
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+print (v * 10);
+
+SymbolTable:
+v -> 3
+x -> 1
+y -> 3
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+print (v * 10);
+
+SymbolTable:
+v -> 3
+x -> 1
+y -> 3
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+
+SymbolTable:
+v -> 3
+x -> 1
+y -> 3
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+30
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+int v;
+int x;
+int y;
+v = 0;
+repeat {
+fork
+(
+print (v);
+v--;
+)
+v++;
+}  until (v == 3);
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+int x;
+int y;
+v = 0;
+repeat {
+fork
+(
+print (v);
+v--;
+)
+v++;
+}  until (v == 3);
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+int x;
+int y;
+v = 0;
+repeat {
+fork
+(
+print (v);
+v--;
+)
+v++;
+}  until (v == 3);
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+int y;
+v = 0;
+repeat {
+fork
+(
+print (v);
+v--;
+)
+v++;
+}  until (v == 3);
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+x -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+int y;
+v = 0;
+repeat {
+fork
+(
+print (v);
+v--;
+)
+v++;
+}  until (v == 3);
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+x -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+v = 0;
+repeat {
+fork
+(
+print (v);
+v--;
+)
+v++;
+}  until (v == 3);
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+v = 0;
+repeat {
+fork
+(
+print (v);
+v--;
+)
+v++;
+}  until (v == 3);
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+repeat {
+fork
+(
+print (v);
+v--;
+)
+v++;
+}  until (v == 3);
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+repeat {
+fork
+(
+print (v);
+v--;
+)
+v++;
+}  until (v == 3);
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+fork
+(
+print (v);
+v--;
+)
+v++;
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+fork
+(
+print (v);
+v--;
+)
+v++;
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+v++;
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+v++;
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 2========
+ExecutionStack:
+print (v);
+v--;
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 1
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 2========
+ExecutionStack:
+v--;
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 1
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 2========
+ExecutionStack:
+v--;
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+v++;
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 1
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 2========
+ExecutionStack:
+
+SymbolTable:
+v -> -1
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+v++;
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 1
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 3========
+ExecutionStack:
+print (v);
+v--;
+
+SymbolTable:
+v -> 1
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 2
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 3========
+ExecutionStack:
+v--;
+
+SymbolTable:
+v -> 1
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 2
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 3========
+ExecutionStack:
+v--;
+
+SymbolTable:
+v -> 1
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+v++;
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 2
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 3========
+ExecutionStack:
+
+SymbolTable:
+v -> 0
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+v++;
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 2
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 4========
+ExecutionStack:
+print (v);
+v--;
+
+SymbolTable:
+v -> 2
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 3
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 4========
+ExecutionStack:
+v--;
+
+SymbolTable:
+v -> 2
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+while (! v == 3) {
+	fork
+(
+print (v);
+v--;
+)
+v++;
+}
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 3
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 4========
+ExecutionStack:
+v--;
+
+SymbolTable:
+v -> 2
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 3
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 4========
+ExecutionStack:
+
+SymbolTable:
+v -> 1
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+x = 1;
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 3
+x -> 0
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+empty_statement
+y = 3;
+empty_statement
+print (v * 10);
+
+SymbolTable:
+v -> 3
+x -> 1
+y -> 0
+
+FileTable:
+
+OutputTable:
+0
+1
+2
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:

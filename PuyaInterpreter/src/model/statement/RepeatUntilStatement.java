@@ -21,7 +21,9 @@ public class RepeatUntilStatement implements StatementInterface {
 	public ProgramState execute(ProgramState crtState) throws Exception {
 		StackInterface<StatementInterface> stack = crtState.getExecutionStack();
 		stack.push(new WhileStatement(this.conditionalExpression, this.statement, false));
-		return this.statement.execute(crtState);
+		// we want the while condition to be false (<=> not true)
+		stack.push(this.statement); // the first step is always executed regardless of the condition
+		return null;
 	}
 	
 	public String toString() {

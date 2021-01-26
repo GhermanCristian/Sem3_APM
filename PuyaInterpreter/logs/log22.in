@@ -1,0 +1,1706 @@
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+Ref(int) v1;
+Ref(int) v2;
+Ref(int) v3;
+int cnt;
+new(v1, 2);
+new(v2, 3);
+new(v3, 4);
+createBarrier(cnt, *(v2));
+fork
+(
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+)
+fork
+(
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+)
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+Ref(int) v2;
+Ref(int) v3;
+int cnt;
+new(v1, 2);
+new(v2, 3);
+new(v3, 4);
+createBarrier(cnt, *(v2));
+fork
+(
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+)
+fork
+(
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+)
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+v1 -> (0x0, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+Ref(int) v2;
+Ref(int) v3;
+int cnt;
+new(v1, 2);
+new(v2, 3);
+new(v3, 4);
+createBarrier(cnt, *(v2));
+fork
+(
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+)
+fork
+(
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+)
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+v1 -> (0x0, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+Ref(int) v3;
+int cnt;
+new(v1, 2);
+new(v2, 3);
+new(v3, 4);
+createBarrier(cnt, *(v2));
+fork
+(
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+)
+fork
+(
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+)
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+v1 -> (0x0, int)
+v2 -> (0x0, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+Ref(int) v3;
+int cnt;
+new(v1, 2);
+new(v2, 3);
+new(v3, 4);
+createBarrier(cnt, *(v2));
+fork
+(
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+)
+fork
+(
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+)
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+v1 -> (0x0, int)
+v2 -> (0x0, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+int cnt;
+new(v1, 2);
+new(v2, 3);
+new(v3, 4);
+createBarrier(cnt, *(v2));
+fork
+(
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+)
+fork
+(
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+)
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+v1 -> (0x0, int)
+v2 -> (0x0, int)
+v3 -> (0x0, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+int cnt;
+new(v1, 2);
+new(v2, 3);
+new(v3, 4);
+createBarrier(cnt, *(v2));
+fork
+(
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+)
+fork
+(
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+)
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+v1 -> (0x0, int)
+v2 -> (0x0, int)
+v3 -> (0x0, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+new(v1, 2);
+new(v2, 3);
+new(v3, 4);
+createBarrier(cnt, *(v2));
+fork
+(
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+)
+fork
+(
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+)
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+cnt -> 0
+v1 -> (0x0, int)
+v2 -> (0x0, int)
+v3 -> (0x0, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+new(v1, 2);
+new(v2, 3);
+new(v3, 4);
+createBarrier(cnt, *(v2));
+fork
+(
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+)
+fork
+(
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+)
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+cnt -> 0
+v1 -> (0x0, int)
+v2 -> (0x0, int)
+v3 -> (0x0, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+new(v2, 3);
+new(v3, 4);
+createBarrier(cnt, *(v2));
+fork
+(
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+)
+fork
+(
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+)
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+cnt -> 0
+v1 -> (0x1, int)
+v2 -> (0x0, int)
+v3 -> (0x0, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+new(v2, 3);
+new(v3, 4);
+createBarrier(cnt, *(v2));
+fork
+(
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+)
+fork
+(
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+)
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+cnt -> 0
+v1 -> (0x1, int)
+v2 -> (0x0, int)
+v3 -> (0x0, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+new(v3, 4);
+createBarrier(cnt, *(v2));
+fork
+(
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+)
+fork
+(
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+)
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+cnt -> 0
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x0, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+new(v3, 4);
+createBarrier(cnt, *(v2));
+fork
+(
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+)
+fork
+(
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+)
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+cnt -> 0
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x0, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+createBarrier(cnt, *(v2));
+fork
+(
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+)
+fork
+(
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+)
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+cnt -> 0
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+createBarrier(cnt, *(v2));
+fork
+(
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+)
+fork
+(
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+)
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+cnt -> 0
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+fork
+(
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+)
+fork
+(
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+)
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[]
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+fork
+(
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+)
+fork
+(
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+)
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+fork
+(
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+)
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[]
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+fork
+(
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+)
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 2========
+ExecutionStack:
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 2========
+ExecutionStack:
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2]
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 2========
+ExecutionStack:
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 3========
+ExecutionStack:
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2, 1, 3]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 2========
+ExecutionStack:
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2, 1, 3]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 3========
+ExecutionStack:
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2, 1, 3]
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+awaitBarrier(cnt);
+print (*(v3));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2, 1, 3]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 2========
+ExecutionStack:
+awaitBarrier(cnt);
+*(v1) = *(v1) * 10;
+print (*(v1));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2, 1, 3]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 3========
+ExecutionStack:
+awaitBarrier(cnt);
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2, 1, 3]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+print (*(v3));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2, 1, 3]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 2========
+ExecutionStack:
+*(v1) = *(v1) * 10;
+print (*(v1));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2, 1, 3]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 3========
+ExecutionStack:
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2, 1, 3]
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 1========
+ExecutionStack:
+print (*(v3));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2, 1, 3]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 2========
+ExecutionStack:
+*(v1) = *(v1) * 10;
+print (*(v1));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2, 1, 3]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 3========
+ExecutionStack:
+*(v2) = *(v2) * 10;
+*(v2) = *(v2) * 10;
+print (*(v2));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+
+Heap:
+1 -> 2
+2 -> 3
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2, 1, 3]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 1========
+ExecutionStack:
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+4
+
+Heap:
+1 -> 20
+2 -> 30
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2, 1, 3]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 2========
+ExecutionStack:
+print (*(v1));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+4
+
+Heap:
+1 -> 20
+2 -> 30
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2, 1, 3]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 3========
+ExecutionStack:
+*(v2) = *(v2) * 10;
+print (*(v2));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+4
+
+Heap:
+1 -> 20
+2 -> 30
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2, 1, 3]
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 2========
+ExecutionStack:
+print (*(v1));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+4
+
+Heap:
+1 -> 20
+2 -> 30
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2, 1, 3]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 3========
+ExecutionStack:
+*(v2) = *(v2) * 10;
+print (*(v2));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+4
+
+Heap:
+1 -> 20
+2 -> 30
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2, 1, 3]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 2========
+ExecutionStack:
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+4
+20
+
+Heap:
+1 -> 20
+2 -> 300
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2, 1, 3]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 3========
+ExecutionStack:
+print (*(v2));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+4
+20
+
+Heap:
+1 -> 20
+2 -> 300
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2, 1, 3]
+
+LockTable:
+
+ProcedureTable:
+
+======== New step ========
+
+======== ThreadID: 3========
+ExecutionStack:
+print (*(v2));
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+4
+20
+
+Heap:
+1 -> 20
+2 -> 300
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2, 1, 3]
+
+LockTable:
+
+ProcedureTable:
+
+======== ThreadID: 3========
+ExecutionStack:
+
+SymbolTable:
+cnt -> 1
+v1 -> (0x1, int)
+v2 -> (0x2, int)
+v3 -> (0x3, int)
+
+FileTable:
+
+OutputTable:
+4
+20
+300
+
+Heap:
+1 -> 20
+2 -> 300
+3 -> 4
+
+SemaphoreTable:
+
+LatchTable:
+
+BarrierTable:
+1 -> 3=[2, 1, 3]
+
+LockTable:
+
+ProcedureTable:

@@ -88,6 +88,7 @@ public class TestRepeatUntilStatement extends BaseTest {
 		assertTrue(output.isEmpty());
 		try {
 			s1.execute(crtState);
+			stack.pop().execute(crtState);
 		}
 		catch (Exception e) {
 			fail(e.getMessage());

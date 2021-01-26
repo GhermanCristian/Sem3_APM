@@ -3,7 +3,9 @@ package model.statement;
 import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
 import exception.InvalidTypeException;
+import exception.UndefinedVariableException;
 import javafx.util.Pair;
 import model.ProgramState;
 import model.ADT.DictionaryInterface;
@@ -15,9 +17,9 @@ import model.value.IntValue;
 import model.value.ValueInterface;
 
 public class CreateBarrierStatement implements StatementInterface {
-	private final String indexVariableName;
+	private final String indexVariableName; // "cnt"
 	private final ExpressionInterface capacityExpression;
-	private static Lock lock = new ReentrantLock(); 
+	private static Lock lock = new ReentrantLock();
 
 	public CreateBarrierStatement(String indexVariableName, ExpressionInterface capacityExpression) {
 		this.indexVariableName = indexVariableName;
@@ -28,19 +30,18 @@ public class CreateBarrierStatement implements StatementInterface {
 	public ProgramState execute(ProgramState crtState) throws Exception {
 		DictionaryInterface<String, ValueInterface> symbolTable = crtState.getSymbolTable();
 		DictionaryInterface<Integer, ValueInterface> heap = crtState.getHeap();
-		DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> barrierTable = crtState.getBarrierTable();
-		
+
 		ValueInterface capacity = this.capacityExpression.evaluate(symbolTable, heap);
+		
 		lock.lock();
+		DictionaryInterface<Integer, Pair<Integer, ArrayList<Integer>>> barrierTable = crtState.getBarrierTable();
 		int newPositionInBarrierTable = ((MyLockTable<Integer, Pair<Integer, ArrayList<Integer>>>)(barrierTable)).getFirstAvailablePosition();
 		barrierTable.insert(newPositionInBarrierTable, new Pair<Integer, ArrayList<Integer>>(((IntValue)capacity).getValue(), new ArrayList<Integer>()));
 		
 		if (symbolTable.isDefined(this.indexVariableName) == false) {
-			symbolTable.insert(this.indexVariableName, new IntValue(newPositionInBarrierTable));
+			throw new UndefinedVariableException("CreateBarrierStatement: variable " + this.indexVariableName + " is not defined in the symbol table");
 		}
-		else {
-			symbolTable.update(this.indexVariableName, new IntValue(newPositionInBarrierTable));
-		}
+		symbolTable.update(this.indexVariableName, new IntValue(newPositionInBarrierTable));
 		lock.unlock();
 		
 		return null;
@@ -57,7 +58,7 @@ public class CreateBarrierStatement implements StatementInterface {
 	public DictionaryInterface<String, TypeInterface> getTypeEnvironment(
 			DictionaryInterface<String, TypeInterface> initialTypeEnvironment) throws Exception {
 		if (initialTypeEnvironment.isDefined(this.indexVariableName) == false) {
-			initialTypeEnvironment.insert(this.indexVariableName, new IntType());
+			throw new UndefinedVariableException("CreateBarrierStatement: variable " + this.indexVariableName + " is not defined in the type environment");
 		}
 		if (initialTypeEnvironment.getValue(this.indexVariableName).equals(new IntType()) == false) {
 			throw new InvalidTypeException("CreateBarrierStatement: Variable " + this.indexVariableName + " is not an integer");

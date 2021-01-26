@@ -583,6 +583,7 @@ public class AllExamples {
 		statementList.addLast(new VariableDeclarationStatement("v1", new ReferenceType(new IntType())));
 		statementList.addLast(new VariableDeclarationStatement("v2", new ReferenceType(new IntType())));
 		statementList.addLast(new VariableDeclarationStatement("v3", new ReferenceType(new IntType())));
+		statementList.addLast(new VariableDeclarationStatement("cnt", new IntType()));
 		statementList.addLast(new HeapAllocationStatement("v1", new ValueExpression(new IntValue(2))));
 		statementList.addLast(new HeapAllocationStatement("v2", new ValueExpression(new IntValue(3))));
 		statementList.addLast(new HeapAllocationStatement("v3", new ValueExpression(new IntValue(4))));
@@ -852,6 +853,30 @@ public class AllExamples {
 		return new Example(this.composeStatement(statementList), "procedure rec(int a) {if(a > 0) {print(a); rec(a - 1);}} rec(5);", this.SRC_FOLDER_PATH + "\\log30.in");
 	}
 	
+	public Example getExample31() {
+		MyList<StatementInterface> statementList = new MyList<StatementInterface>();
+		
+		statementList.addLast(new VariableDeclarationStatement("v", new IntType()));
+		statementList.addLast(new VariableDeclarationStatement("x", new IntType()));
+		statementList.addLast(new VariableDeclarationStatement("y", new IntType()));
+		statementList.addLast(new AssignmentStatement("v", new ValueExpression(new IntValue(0))));
+		
+		MyList<StatementInterface> threadStatementList = new MyList<StatementInterface>();
+		threadStatementList.addLast(new PrintStatement(new VariableExpression("v")));
+		threadStatementList.addLast(new IncrementStatement("v", "-"));
+		
+		statementList.addLast(new RepeatUntilStatement(
+				new CompoundStatement(new ForkStatement(this.composeStatement(threadStatementList)), new IncrementStatement("v", "+")), 
+				new RelationalExpression(new VariableExpression("v"), new ValueExpression(new IntValue(3)), "==")));
+		statementList.addLast(new AssignmentStatement("x", new ValueExpression(new IntValue(1))));
+		statementList.addLast(new EmptyStatement());
+		statementList.addLast(new AssignmentStatement("y", new ValueExpression(new IntValue(3))));
+		statementList.addLast(new EmptyStatement());
+		statementList.addLast(new PrintStatement(new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(10)), "*")));
+		
+		return new Example(this.composeStatement(statementList), "repeat until", this.SRC_FOLDER_PATH + "\\log31.in");
+	}
+	
 	public MyList<Example> getAllExamples() {
 		MyList<Example> exampleList = new MyList<Example>();
 		
@@ -883,8 +908,10 @@ public class AllExamples {
 		exampleList.addLast(this.getExample26());
 		exampleList.addLast(this.getExample27());
 		exampleList.addLast(this.getExample28());
-		exampleList.addLast(this.getExample29());*/
-		exampleList.addLast(this.getExample30());
+		exampleList.addLast(this.getExample29());
+		exampleList.addLast(this.getExample30());*/
+		exampleList.addLast(this.getExample31());
+		exampleList.addLast(this.getExample22());
 		
 		return exampleList;
 	}

@@ -7,6 +7,7 @@ public class MyLockTable<TKey, TValue> extends MyDictionary<TKey, TValue> {
 		super();
 	}
 	
+	// I'm not sure this had to be synchronized as well, bc it's only called inside the other, already synchronized, method
 	private synchronized int setNextAvailablePosition() {
 		return this.firstAvailablePosition + 1;
 	}
@@ -20,7 +21,6 @@ public class MyLockTable<TKey, TValue> extends MyDictionary<TKey, TValue> {
 	@Override
 	public void clear() {
 		this.dictionary.clear();
-		// TO-DO: go through all semaphores currently in the table and release them
 		this.firstAvailablePosition = 1;
 	}
 }

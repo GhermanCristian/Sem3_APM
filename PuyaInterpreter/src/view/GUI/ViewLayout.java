@@ -79,7 +79,11 @@ class ViewLayout {
 	// the thread list view will change when a new thread is introduced / a thread is completed => taken out of the repo
 	private void updateThreadListView() {
 		this.threadListView.getItems().clear();
-		this.controller.getThreadList().forEach(thread -> this.threadListView.getItems().add(thread.getThreadID()));
+		this.controller.getThreadList().forEach(thread -> {
+			if (thread.isCompleted() == false) {
+				this.threadListView.getItems().add(thread.getThreadID());
+			}
+		});
 	}
 	
 	private void updateHeapTableView(ProgramState firstAvailableThread) {
@@ -291,7 +295,7 @@ class ViewLayout {
 		this.barrierTableTableView = new TableView<Integer>();
 		this.barrierTableTableView.setEditable(false);
 		
-		TableColumn<Integer, String> barrierAddressColumn = new TableColumn<Integer, String>("Barrier address");
+		TableColumn<Integer, String> barrierAddressColumn = new TableColumn<Integer, String>("Barrier ID");
 		barrierAddressColumn.prefWidthProperty().bind(this.barrierTableTableView.widthProperty().multiply(this.COLUMN_WIDTH_AS_PERCENTAGE_OF_TOTAL_TABLE_WIDTH_3_COLUMN_TABLE_VIEW));
 		// this approach should only be used as long as the table is non-editable (which it is in this app)
 		barrierAddressColumn.setCellValueFactory(currentBarrierKey -> new ReadOnlyStringWrapper(currentBarrierKey.getValue().toString()));
@@ -421,7 +425,7 @@ class ViewLayout {
 		selectBarrier.setToggleGroup(lockMechanismTableViewToggleGroup);
 		selectLock.setToggleGroup(lockMechanismTableViewToggleGroup);
 		
-		selectSemaphore.setSelected(true); // by default, the semaphore table view is displayed
+		selectBarrier.setSelected(true); // by default, the barrier table view is displayed
 		this.setRadioButtonChangedAction(selectSemaphore, this.semaphoreTableTableView);
 		this.setRadioButtonChangedAction(selectLatch, this.latchTableTableView);
 		this.setRadioButtonChangedAction(selectBarrier, this.barrierTableTableView);
@@ -481,7 +485,7 @@ class ViewLayout {
 		leftLayout.getChildren().addAll(this.programStateCountTextField, this.threadListView, this.createLockMechanismTableViewSelectArea());
 		
 		this.lockMechanismAreaLayout = new HBox(5);
-		this.lockMechanismAreaLayout.getChildren().add(this.semaphoreTableTableView); // by default, the semaphore table view is displayed
+		this.lockMechanismAreaLayout.getChildren().add(this.barrierTableTableView); // by default, the barrier table view is displayed
 		upperMidLayout.getChildren().addAll(this.symbolTableTableView, this.heapTableView, this.lockMechanismAreaLayout);
 		
 		midLayout.getChildren().addAll(upperMidLayout, this.createLowerMidLayout());
